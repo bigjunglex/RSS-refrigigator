@@ -1,3 +1,4 @@
 node_modules/
 dist/
-.gatorconfig.json
+.gatorconfig.json/
+src/lib/db/out

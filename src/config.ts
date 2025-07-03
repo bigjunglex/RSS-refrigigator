@@ -33,15 +33,9 @@ function validateConfig(rawConfig:any):Config {
 
 }
 
-export function setUser(config:Config):void {
-    try {
-        // correct id guess for me, should check username secarhc in linux 
-        const user = homedir().split('/')[2]
-        const cfg:Config = {...config, currentUserName: user}
-        writeConfig(cfg)
-    } catch (error) {
-        console.error(`Failed to set user in config ${error}`)
-    }
+export function setUser(user:string):void {
+    const cfg = readConfig();
+    writeConfig({...cfg, currentUserName: user})
 }
 
 export function readConfig():Config {
