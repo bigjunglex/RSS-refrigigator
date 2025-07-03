@@ -1,5 +1,5 @@
-import { setUser } from "../config";
-import { createUser, getUser } from "../lib/db/queries/users";
+import { readConfig, setUser } from "../config";
+import { createUser, getUser, dropUsers, getUsers } from "../lib/db/queries/users";
 
 
 export async function hadlerLogin(cmd:string, ...args: string[]) {
@@ -10,7 +10,7 @@ export async function hadlerLogin(cmd:string, ...args: string[]) {
     if (!check) throw Error('[LOGIN]: user dosent exist');
     
     setUser(username)
-    
+
     console.log('[CONFIG]: user has been set to %s', username);
 }
 
@@ -29,4 +29,24 @@ export async function handlerRegister(cmd:string, ...args:string[]) {
     console.log(result)
 }
 
+export async function handleReset(cmd:string, ...args:string[]) {
+    try {
+        const res = await dropUsers()
+        console.log('Drop was ' + `${res ? 'successfull' : 'unsuccessfull'}`)
+    } catch (error) {
+        throw error
+    }
+}
 
+export async function handleUsers(cmd:string, ...args:string[]) {
+    const current = readConfig().currentUserName
+    try {
+        const res = (await getUsers()).map(user => user.name)
+        for (const user of res) {
+            const fl = user === current
+            console.log(user + `${fl ? ' (current)' : ''}`)
+        }
+    } catch (err) {
+        throw err
+    }
+}
