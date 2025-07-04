@@ -10,3 +10,8 @@ export const users = pgTable("users", {
     name: text("name").notNull().unique(),
 })
 
+export const feeds = pgTable("feeds", {
+    name: text("name").notNull(),
+    url: text("url").notNull().unique(),
+    user_id: uuid("user_id").references(() => users.id, {onDelete: 'cascade'}).notNull(), 
+})

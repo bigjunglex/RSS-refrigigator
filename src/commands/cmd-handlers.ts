@@ -1,8 +1,9 @@
 import { readConfig, setUser } from "../config";
 import { createUser, getUser, dropUsers, getUsers } from "../lib/db/queries/users";
+import { createFeed, getFeeds } from "src/lib/db/queries/feed";
+import { fetchFeed } from "src/lib/fetchFeed";
 
-
-export async function hadlerLogin(cmd:string, ...args: string[]) {
+export async function hadleLogin(cmd:string, ...args: string[]) {
     if (args.length < 1) throw Error('[LOGIN]: expected argument username');
     const username = args.join('').replace(/\s/g, '');
 
@@ -14,7 +15,7 @@ export async function hadlerLogin(cmd:string, ...args: string[]) {
     console.log('[CONFIG]: user has been set to %s', username);
 }
 
-export async function handlerRegister(cmd:string, ...args:string[]) {
+export async function handleRegister(cmd:string, ...args:string[]) {
     if (args.length < 1) throw Error('[REGISTER]: expected argument username');
 
     const username = args.join('').replace(/\s/g, '');
@@ -50,3 +51,18 @@ export async function handleUsers(cmd:string, ...args:string[]) {
         throw err
     }
 }
+
+
+export async function handleAgg(cmd:string, ...args:string[]) {
+    // const url = args[0]
+    const url = 'https://www.wagslane.dev/index.xml';
+    const res = await fetchFeed(url);
+    
+    console.log(res)
+}
+
+export async function handleAddFeed(cmd:string, ...args:string[]) {
+    const [name, url] = args.slice(1,3)
+    const res = await createFeed(name, url)
+}
+

@@ -1,14 +1,16 @@
 import { registerCommand, runCommand, type CommnandRegistry } from "./commands/commands";
-import { hadlerLogin, handlerRegister, handleReset, handleUsers } from "./commands/cmd-handlers";
+import { hadleLogin, handleRegister, handleReset, handleUsers, handleAgg } from "./commands/cmd-handlers";
+
 
 (async function main() {
     const [cmd, ...args] = process.argv.slice(2)
     const registry:CommnandRegistry = {};
     
-    registerCommand(registry , 'login', hadlerLogin);
-    registerCommand(registry, 'register', handlerRegister)
+    registerCommand(registry , 'login', hadleLogin);
+    registerCommand(registry, 'register', handleRegister)
     registerCommand(registry, 'reset', handleReset)
     registerCommand(registry, 'users', handleUsers)
+    registerCommand(registry, 'agg', handleAgg)
 
     try {
         await runCommand(registry, cmd, ...args)
@@ -16,6 +18,10 @@ import { hadlerLogin, handlerRegister, handleReset, handleUsers } from "./comman
         console.error('[COMAND]: ', error.message)
         process.exit(1)
     }
-    // fix async exit without 
+
+    /**
+     * Exits before drizzle followthrough
+     * fix async exit without setTimeout 
+     *  */ 
     setTimeout(() => process.exit(0), 1000)
 })()
