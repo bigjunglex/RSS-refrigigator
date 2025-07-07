@@ -1,11 +1,11 @@
 import { eq } from "drizzle-orm";
 import { readConfig } from "src/config";
 import { db } from "../db";
-import { users, feeds } from "../schema";
+import { users, feeds, feed_follows } from "../schema";
 import { type User } from "./users";
 
 export type Feed = typeof feeds.$inferSelect;
-type FeedTuple = [Feed, User]
+export type FeedTuple = [Feed, User]
 
 export async function createFeed(name:string, url: string):Promise<FeedTuple> {
     const user = readConfig().currentUserName;
@@ -15,6 +15,34 @@ export async function createFeed(name:string, url: string):Promise<FeedTuple> {
     return [result, user_rec]
 }
 
-export async function getFeeds(userName:string) {
+export async function getFeedByURL(url:string):Promise<Feed> {
+    const [result] = await db.select().from(feeds).where(eq(feeds.url, url))
+    return result
+} 
 
+export async function getAllFeeds(formatNames:boolean = true) {
+    let result;
+    if (formatNames) {
+        result = await db.select({
+            name: feeds.name,
+            url: feeds.url,
+            user: users.name
+        }).from(feeds).leftJoin(users, eq(users.id, feeds.user_id))
+    } else {
+        result = await db.select().from(feeds)
+    }
+
+    return result
 }
+
+
+export async function createFeedFollow(user:User, feed:Feed) {
+    const [newFollow] = await db
+        .insert(feed_follows)
+        .values({ feed_id: feed.id, user_id: String(user.id) })
+        .onConflictDoNothing()
+        .returning();
+    return newFollow
+}
+
+

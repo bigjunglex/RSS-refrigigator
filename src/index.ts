@@ -1,18 +1,21 @@
 import { registerCommand, runCommand, type CommnandRegistry } from "./commands/commands";
-import { hadleLogin, handleRegister, handleReset, handleUsers, handleAgg, handleAddFeed } from "./commands/cmd-handlers";
-
+import { hadleLogin, handleRegister, handleReset, handleUsers, handleAgg, handleAddFeed, handleFeeds, handleFollow, handleFollowing } from "./commands/cmd-handlers";
+import { isLogged } from "./commands/cmd-helpers";
 
 (async function main() {
     const [cmd, ...args] = process.argv.slice(2)
     const registry:CommnandRegistry = {};
     
-    registerCommand(registry , 'login', hadleLogin);
+    registerCommand(registry , 'login', hadleLogin)
     registerCommand(registry, 'register', handleRegister)
     registerCommand(registry, 'reset', handleReset)
-    registerCommand(registry, 'users', handleUsers)
     registerCommand(registry, 'agg', handleAgg)
-    registerCommand(registry, 'addfeed', handleAddFeed)
-
+    registerCommand(registry, 'feeds', handleFeeds)
+    registerCommand(registry, 'users', isLogged(handleUsers))
+    registerCommand(registry, 'addfeed', isLogged(handleAddFeed))
+    registerCommand(registry, 'follow', isLogged(handleFollow))
+    registerCommand(registry, 'following', isLogged(handleFollowing))
+    
     try {
         await runCommand(registry, cmd, ...args)
     } catch (error:any) {
@@ -25,4 +28,5 @@ import { hadleLogin, handleRegister, handleReset, handleUsers, handleAgg, handle
      * fix async exit without setTimeout 
      *  */ 
     setTimeout(() => process.exit(0), 1000)
+
 })()

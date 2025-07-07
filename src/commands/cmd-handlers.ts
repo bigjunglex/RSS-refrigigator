@@ -1,9 +1,14 @@
 import { readConfig, setUser } from "../config";
 import { createUser, getUser, dropUsers, getUsers } from "../lib/db/queries/users";
-import { createFeed, getFeeds } from "src/lib/db/queries/feed";
+import { createFeed, getAllFeeds, createFeedFollow, getFeedByURL } from "src/lib/db/queries/feed";
 import { fetchFeed } from "src/lib/fetchFeed";
 import { printFeed } from "./cmd-helpers";
+import { getFeedFollowsForUser } from "src/lib/db/queries/follows";
 
+
+/**
+ * change current user in .gator.config.json to registred user 
+ */
 export async function hadleLogin(cmd:string, ...args: string[]) {
     if (args.length < 1) throw Error('[LOGIN]: expected argument username');
     const username = args.join('').replace(/\s/g, '');
@@ -15,7 +20,9 @@ export async function hadleLogin(cmd:string, ...args: string[]) {
 
     console.log('[CONFIG]: user has been set to %s', username);
 }
-
+/**
+ * register user 
+ */
 export async function handleRegister(cmd:string, ...args:string[]) {
     if (args.length < 1) throw Error('[REGISTER]: expected argument username');
 
@@ -30,7 +37,9 @@ export async function handleRegister(cmd:string, ...args:string[]) {
     console.log(`[REGISTER]: %s was registred`, username)
     console.log(result)
 }
-
+/**
+ * reset db // dev fn 
+ */
 export async function handleReset(cmd:string, ...args:string[]) {
     try {
         const res = await dropUsers()
@@ -40,6 +49,10 @@ export async function handleReset(cmd:string, ...args:string[]) {
     }
 }
 
+
+/**
+ * print all users
+ */
 export async function handleUsers(cmd:string, ...args:string[]) {
     const current = readConfig().currentUserName
     try {
@@ -53,18 +66,56 @@ export async function handleUsers(cmd:string, ...args:string[]) {
     }
 }
 
-
+/**
+ * fetch feed 
+ */
 export async function handleAgg(cmd:string, ...args:string[]) {
-    // const url = args[0]
-    const url = 'https://www.wagslane.dev/index.xml';
+    const url = args[0]
     const res = await fetchFeed(url);
     
     console.log(res)
 }
 
+/**
+ * current user adds feed and follows 
+ */
 export async function handleAddFeed(cmd:string, ...args:string[]) {
     const [name, url] = args.slice(0,2);
     const [feed, user] = await createFeed(name, url);
-    printFeed(feed, user);
+    const follow = await createFeedFollow(user, feed)
+    
+    printFeed(feed, user, follow);
 }
 
+/**
+ * print all feeds 
+ */
+export async function handleFeeds(cmd:string, ...args:string[]) {
+    const feeds = await getAllFeeds()
+    console.log(feeds)
+}
+
+/**
+ * current user follows feed 
+ */
+export async function handleFollow(cmd:string, ...args:string[]) {
+    const url = args[0]
+    const user = await getUser(readConfig().currentUserName);
+    const feed = await getFeedByURL(url)
+    const follow = await createFeedFollow(user, feed);
+
+    console.log(`${user} followed ${feed.name}`)
+}
+
+/**
+ * print all feeds current user follows
+ */
+export async function handleFollowing(cmd:string, ...args:string[]) {
+    const user = readConfig().currentUserName
+    const feeds = (await getFeedFollowsForUser(user)).map(x => x.name)
+
+    console.log(`${user} follows:`)
+    for (const feed of feeds) {
+        console.log(`---- ${feed}`)
+    }
+}
