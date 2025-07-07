@@ -1,7 +1,6 @@
 import fs from "node:fs";
 import { homedir } from "node:os";
 import path from "node:path";
-import { cursorTo } from "node:readline";
 
 
 const CONFIG = '.gatorconfig.json'

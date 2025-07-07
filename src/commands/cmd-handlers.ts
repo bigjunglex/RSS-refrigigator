@@ -2,6 +2,7 @@ import { readConfig, setUser } from "../config";
 import { createUser, getUser, dropUsers, getUsers } from "../lib/db/queries/users";
 import { createFeed, getFeeds } from "src/lib/db/queries/feed";
 import { fetchFeed } from "src/lib/fetchFeed";
+import { printFeed } from "./cmd-helpers";
 
 export async function hadleLogin(cmd:string, ...args: string[]) {
     if (args.length < 1) throw Error('[LOGIN]: expected argument username');
@@ -62,7 +63,8 @@ export async function handleAgg(cmd:string, ...args:string[]) {
 }
 
 export async function handleAddFeed(cmd:string, ...args:string[]) {
-    const [name, url] = args.slice(1,3)
-    const res = await createFeed(name, url)
+    const [name, url] = args.slice(0,2);
+    const [feed, user] = await createFeed(name, url);
+    printFeed(feed, user);
 }
 

@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "start": "tsx ./src/index.ts",
+    "pg": "tsx ./cli-pg.ts",
     "generate": "drizzle-kit generate",
     "migrate": "drizzle-kit migrate"
   },

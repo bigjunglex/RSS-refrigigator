@@ -1,5 +1,5 @@
 import { registerCommand, runCommand, type CommnandRegistry } from "./commands/commands";
-import { hadleLogin, handleRegister, handleReset, handleUsers, handleAgg } from "./commands/cmd-handlers";
+import { hadleLogin, handleRegister, handleReset, handleUsers, handleAgg, handleAddFeed } from "./commands/cmd-handlers";
 
 
 (async function main() {
@@ -11,6 +11,7 @@ import { hadleLogin, handleRegister, handleReset, handleUsers, handleAgg } from 
     registerCommand(registry, 'reset', handleReset)
     registerCommand(registry, 'users', handleUsers)
     registerCommand(registry, 'agg', handleAgg)
+    registerCommand(registry, 'addfeed', handleAddFeed)
 
     try {
         await runCommand(registry, cmd, ...args)
