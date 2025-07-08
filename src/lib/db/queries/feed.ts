@@ -1,8 +1,9 @@
-import { eq } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { readConfig } from "src/config";
 import { db } from "../db";
 import { users, feeds, feed_follows } from "../schema";
 import { type User } from "./users";
+import { date } from "drizzle-orm/mysql-core";
 
 export type Feed = typeof feeds.$inferSelect;
 export type FeedTuple = [Feed, User]
@@ -46,3 +47,20 @@ export async function createFeedFollow(user:User, feed:Feed) {
 }
 
 
+export async function markFeedFetched(feed:Feed) {
+    const [update] = await db
+        .update(feeds)
+        .set({last_fetched_at: new Date()})
+        .where(eq(feeds.id, feed.id))
+        .returning()
+    return update
+}
+
+
+export async function getNextFeedToFetch() {
+    const [feed] = await db
+        .select()
+        .from(feeds)
+        .orderBy(desc(feeds.last_fetched_at))
+    return feed
+}

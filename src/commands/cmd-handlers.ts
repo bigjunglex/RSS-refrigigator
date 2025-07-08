@@ -2,7 +2,7 @@ import { readConfig, setUser } from "../config";
 import { createUser, getUser, dropUsers, getUsers } from "../lib/db/queries/users";
 import { createFeed, getAllFeeds, createFeedFollow, getFeedByURL } from "src/lib/db/queries/feed";
 import { fetchFeed } from "src/lib/fetchFeed";
-import { printFeed } from "./cmd-helpers";
+import { parseTime, printFeed } from "./cmd-helpers";
 import { deleteFollow, getFeedFollowsForUser } from "src/lib/db/queries/follows";
 
 
@@ -70,10 +70,10 @@ export async function handleUsers(cmd:string, ...args:string[]) {
  * fetch feed 
  */
 export async function handleAgg(cmd:string, ...args:string[]) {
-    const url = args[0]
-    const res = await fetchFeed(url);
-    
-    console.log(res)
+    const input = args.join('');
+    const [timeMS, msg] = parseTime(input)
+
+    console.log(msg)
 }
 
 /**
@@ -121,17 +121,18 @@ export async function handleFollowing(cmd:string, ...args:string[]) {
 }
 
 /**
- * current user unfollows feed 
+ * current user unfollows feed that matches url if there is one 
  */
 export async function handleUnfollow(cmd:string, ...args:string[]) {
     const url = args[0]
     const user = await getUser(readConfig().currentUserName)
     const feed = await getFeedByURL(url)
     if(!feed) {
-        throw new Error(`Feed with ${url} not found`)
+        console.log(`Feed with ${url} not found`)
+        return;
     }
     const result = await deleteFollow(user, feed)
     
-    console.log(`current user(${user.name}) unfollowed ${feed.name}`)
+    console.log(`current user(${user.name}) unfollowed ${feed.name} --- ${feed.url}`)
     console.log(result)
 }
