@@ -28,3 +28,4 @@ export function isLogged(handler:CommandHandler):CommandHandler {
         return handler(cmd, ...args)
     }
 }
+

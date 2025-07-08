@@ -1,5 +1,5 @@
 import { registerCommand, runCommand, type CommnandRegistry } from "./commands/commands";
-import { hadleLogin, handleRegister, handleReset, handleUsers, handleAgg, handleAddFeed, handleFeeds, handleFollow, handleFollowing } from "./commands/cmd-handlers";
+import { hadleLogin, handleRegister, handleReset, handleUsers, handleAgg, handleAddFeed, handleFeeds, handleFollow, handleFollowing, handleUnfollow } from "./commands/cmd-handlers";
 import { isLogged } from "./commands/cmd-helpers";
 
 (async function main() {
@@ -15,7 +15,8 @@ import { isLogged } from "./commands/cmd-helpers";
     registerCommand(registry, 'addfeed', isLogged(handleAddFeed))
     registerCommand(registry, 'follow', isLogged(handleFollow))
     registerCommand(registry, 'following', isLogged(handleFollowing))
-    
+    registerCommand(registry, 'unfollow', isLogged(handleUnfollow))
+
     try {
         await runCommand(registry, cmd, ...args)
     } catch (error:any) {

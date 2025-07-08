@@ -3,7 +3,7 @@ import { createUser, getUser, dropUsers, getUsers } from "../lib/db/queries/user
 import { createFeed, getAllFeeds, createFeedFollow, getFeedByURL } from "src/lib/db/queries/feed";
 import { fetchFeed } from "src/lib/fetchFeed";
 import { printFeed } from "./cmd-helpers";
-import { getFeedFollowsForUser } from "src/lib/db/queries/follows";
+import { deleteFollow, getFeedFollowsForUser } from "src/lib/db/queries/follows";
 
 
 /**
@@ -102,7 +102,7 @@ export async function handleFollow(cmd:string, ...args:string[]) {
     const url = args[0]
     const user = await getUser(readConfig().currentUserName);
     const feed = await getFeedByURL(url)
-    const follow = await createFeedFollow(user, feed);
+    await createFeedFollow(user, feed);
 
     console.log(`${user} followed ${feed.name}`)
 }
@@ -118,4 +118,20 @@ export async function handleFollowing(cmd:string, ...args:string[]) {
     for (const feed of feeds) {
         console.log(`---- ${feed}`)
     }
+}
+
+/**
+ * current user unfollows feed 
+ */
+export async function handleUnfollow(cmd:string, ...args:string[]) {
+    const url = args[0]
+    const user = await getUser(readConfig().currentUserName)
+    const feed = await getFeedByURL(url)
+    if(!feed) {
+        throw new Error(`Feed with ${url} not found`)
+    }
+    const result = await deleteFollow(user, feed)
+    
+    console.log(`current user(${user.name}) unfollowed ${feed.name}`)
+    console.log(result)
 }
