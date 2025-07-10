@@ -18,6 +18,7 @@ export type RSSItem = {
 
 
 export async function fetchFeed(feedUrl: string) {
+    console.log('[FETCHING]: %s', feedUrl)
     const res = await (await fetch(feedUrl, {
         headers: {
             'User-Agent': 'rssgator',
@@ -27,7 +28,15 @@ export async function fetchFeed(feedUrl: string) {
     const parser = new XMLParser()
 
     try {
-        const output = {} as RSSFeed;
+        const output:RSSFeed = {
+            channel: {
+                title:'',
+                link: '',
+                description: '',
+                item: []
+            }
+        };
+        
         const channel = parser.parse(res).rss?.channel
         if (!channel) throw new Error('[FEED]: no channel field in target url');
         output.channel['title'] = channel.title
@@ -39,8 +48,8 @@ export async function fetchFeed(feedUrl: string) {
         }
 
         return output
-    } catch (error) {
-        throw new Error('[PARSING]: error during XML parsing')
+    } catch (error: any) {
+        throw new Error(`[PARSING]: error during XML parsing:\n ${error.message}`)
     }
 }
 

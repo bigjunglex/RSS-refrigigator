@@ -40,6 +40,9 @@ class TimeOptions {
 
 type TimeOption = 'ms' | 's' | 'm' | 'h'
 
+/**
+ * @duration time in 123 ms | 333h format
+ */
 export function parseTime(duration:string):[number, string] {
     const regex = /^(\d+)(ms|s|m|h)$/;
     const match = duration.match(regex);

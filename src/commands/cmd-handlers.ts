@@ -4,6 +4,7 @@ import { createFeed, getAllFeeds, createFeedFollow, getFeedByURL } from "src/lib
 import { fetchFeed } from "src/lib/fetchFeed";
 import { parseTime, printFeed } from "./cmd-helpers";
 import { deleteFollow, getFeedFollowsForUser } from "src/lib/db/queries/follows";
+import { scrapeFeeds } from "src/lib/feedHelp";
 
 
 /**
@@ -67,23 +68,34 @@ export async function handleUsers(cmd:string, ...args:string[]) {
 }
 
 /**
- * fetch feed 
+ * get interval from input and fetch feeds on interval
  */
-export async function handleAgg(cmd:string, ...args:string[]) {
+export async function handleAgg(cmd: string, ...args: string[]) {
     const input = args.join('');
     const [timeMS, msg] = parseTime(input)
 
-    console.log(msg)
+    scrapeFeeds().catch(handleError)
+    const interval = setInterval(() => {
+        scrapeFeeds().catch(handleError)
+    }, timeMS);
+
+    await new Promise<void>((resolve) => {
+        process.on("SIGINT", () => {
+            console.log("Closing rssgator...");
+            clearInterval(interval);
+            resolve();
+        });
+    });
 }
 
 /**
  * current user adds feed and follows 
  */
-export async function handleAddFeed(cmd:string, ...args:string[]) {
-    const [name, url] = args.slice(0,2);
+export async function handleAddFeed(cmd: string, ...args: string[]) {
+    const [name, url] = args.slice(0, 2);
     const [feed, user] = await createFeed(name, url);
     const follow = await createFeedFollow(user, feed)
-    
+
     printFeed(feed, user, follow);
 }
 
@@ -92,7 +104,7 @@ export async function handleAddFeed(cmd:string, ...args:string[]) {
  */
 export async function handleFeeds(cmd:string, ...args:string[]) {
     const feeds = await getAllFeeds()
-    console.log(feeds)
+    console.log(`${feeds.length > 0 ? feeds : 'No added feeds yet'}`)
 }
 
 /**
@@ -135,4 +147,16 @@ export async function handleUnfollow(cmd:string, ...args:string[]) {
     
     console.log(`current user(${user.name}) unfollowed ${feed.name} --- ${feed.url}`)
     console.log(result)
+}
+
+
+/**
+ * @param reason Error  
+ */
+export async function handleError(reason:any) {
+    if(reason instanceof Error) {
+        console.error(reason.message)
+        console.error(reason.stack)
+    }
+    return null
 }

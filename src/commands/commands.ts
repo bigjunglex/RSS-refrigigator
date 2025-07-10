@@ -9,5 +9,5 @@ export function registerCommand(registry: CommnandRegistry, cmd:string, handler:
 
 export async function runCommand(registry: CommnandRegistry, cmd:string, ...args: string[]) {
     if (!registry.hasOwnProperty(cmd)) throw Error(`Command: ${cmd} is not registred`);
-    registry[cmd](cmd, ...args);
+    await registry[cmd](cmd, ...args);
 }

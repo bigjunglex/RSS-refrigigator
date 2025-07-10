@@ -1,9 +1,9 @@
-import { desc, eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import { readConfig } from "src/config";
 import { db } from "../db";
 import { users, feeds, feed_follows } from "../schema";
 import { type User } from "./users";
-import { date } from "drizzle-orm/mysql-core";
+
 
 export type Feed = typeof feeds.$inferSelect;
 export type FeedTuple = [Feed, User]
@@ -61,6 +61,6 @@ export async function getNextFeedToFetch() {
     const [feed] = await db
         .select()
         .from(feeds)
-        .orderBy(desc(feeds.last_fetched_at))
+        .orderBy(sql`${feeds.last_fetched_at} ASC NULLS FIRST`)
     return feed
 }

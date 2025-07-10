@@ -2,7 +2,7 @@ import { registerCommand, runCommand, type CommnandRegistry } from "./commands/c
 import { hadleLogin, handleRegister, handleReset, handleUsers, handleAgg, handleAddFeed, handleFeeds, handleFollow, handleFollowing, handleUnfollow } from "./commands/cmd-handlers";
 import { isLogged } from "./commands/cmd-helpers";
 
-(async function main() {
+async function main() {
     const [cmd, ...args] = process.argv.slice(2)
     const registry:CommnandRegistry = {};
     
@@ -19,15 +19,11 @@ import { isLogged } from "./commands/cmd-helpers";
 
     try {
         await runCommand(registry, cmd, ...args)
+        process.exit(0)
     } catch (error:any) {
         console.error('[COMAND]: ', error.message)
         process.exit(1)
     }
+}
 
-    /**
-     * Exits before drizzle followthrough
-     * fix async exit without setTimeout 
-     *  */ 
-    setTimeout(() => process.exit(0), 1000)
-
-})()
+main();
