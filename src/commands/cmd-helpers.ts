@@ -1,4 +1,4 @@
-import type { Feed } from "src/lib/db/queries/feed";
+import type { Feed } from "src/lib/db/queries/feeds";
 import { getUser, type User } from "src/lib/db/queries/users";
 import type { Follow } from "src/lib/db/queries/follows";
 import type { CommandHandler } from "./commands";

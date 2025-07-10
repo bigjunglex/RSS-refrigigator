@@ -1,10 +1,11 @@
 import { readConfig, setUser } from "../config";
 import { createUser, getUser, dropUsers, getUsers } from "../lib/db/queries/users";
-import { createFeed, getAllFeeds, createFeedFollow, getFeedByURL } from "src/lib/db/queries/feed";
+import { createFeed, getAllFeeds, createFeedFollow, getFeedByURL } from "src/lib/db/queries/feeds";
 import { fetchFeed } from "src/lib/fetchFeed";
 import { parseTime, printFeed } from "./cmd-helpers";
 import { deleteFollow, getFeedFollowsForUser } from "src/lib/db/queries/follows";
 import { scrapeFeeds } from "src/lib/feedHelp";
+import { getPostsForUser } from "src/lib/db/queries/posts";
 
 
 /**
@@ -159,4 +160,20 @@ export async function handleError(reason:any) {
         console.error(reason.stack)
     }
     return null
+}
+
+
+export async function handleBrowse(cmd:string, ...args:string[]) {
+    const user = await getUser(readConfig().currentUserName)
+    const limit = parseInt(args[0]) || 2
+    const posts = await getPostsForUser(user, limit);
+
+    for (const post of posts ) {
+        console.log('\n-------------------------------')
+        console.log('📌 %s \n', post.title)
+        console.log('📅 Published: %s\n', post.published_at?.toDateString())
+        console.log('🌐 %s\n', post.url)
+        console.log('📝 : %s', post.description)
+        console.log('\n-------------------------------')
+    }
 }

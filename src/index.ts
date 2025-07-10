@@ -1,5 +1,17 @@
 import { registerCommand, runCommand, type CommnandRegistry } from "./commands/commands";
-import { hadleLogin, handleRegister, handleReset, handleUsers, handleAgg, handleAddFeed, handleFeeds, handleFollow, handleFollowing, handleUnfollow } from "./commands/cmd-handlers";
+import { 
+    hadleLogin,
+    handleRegister,
+    handleReset,
+    handleUsers,
+    handleAgg,
+    handleAddFeed,
+    handleFeeds,
+    handleFollow,
+    handleFollowing,
+    handleUnfollow,
+    handleBrowse
+} from "./commands/cmd-handlers";
 import { isLogged } from "./commands/cmd-helpers";
 
 async function main() {
@@ -8,7 +20,7 @@ async function main() {
     
     registerCommand(registry , 'login', hadleLogin)
     registerCommand(registry, 'register', handleRegister)
-    registerCommand(registry, 'reset', handleReset)
+    registerCommand(registry, 'gigasecretmegacode', handleReset)
     registerCommand(registry, 'agg', handleAgg)
     registerCommand(registry, 'feeds', handleFeeds)
     registerCommand(registry, 'users', isLogged(handleUsers))
@@ -16,6 +28,7 @@ async function main() {
     registerCommand(registry, 'follow', isLogged(handleFollow))
     registerCommand(registry, 'following', isLogged(handleFollowing))
     registerCommand(registry, 'unfollow', isLogged(handleUnfollow))
+    registerCommand(registry, 'browse', isLogged(handleBrowse))
 
     try {
         await runCommand(registry, cmd, ...args)

@@ -2,7 +2,7 @@ import { db } from "../db";
 import { eq, and } from "drizzle-orm";
 import { users, feeds, feed_follows } from "../schema";
 import { getUser, User } from "./users";
-import { Feed } from "./feed";
+import { Feed } from "./feeds";
 
 export type Follow = typeof feed_follows.$inferInsert;
 
