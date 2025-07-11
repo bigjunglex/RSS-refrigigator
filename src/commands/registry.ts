@@ -1,4 +1,20 @@
-import { hadleLogin, handleAddFeed, handleAgg, handleBrowse, handleFeeds, handleFollow, handleFollowing, handleRegister, handleReset, handleSearch, handleUnfollow, handleUsers } from "./cmd-handlers";
+import { 
+    hadleLogin,
+    handleAddFeed,
+    handleAgg,
+    handleBrowse,
+    handleFavorites,
+    handleFeeds,
+    handleFollow,
+    handleFollowing,
+    handleRegister,
+    handleReset,
+    handleSearch,
+    handleUnfollow,
+    handleUsers,
+    handleAddFavorites,
+    handleRemoveFavorites
+    } from "./cmd-handlers";
 import { isLogged } from "./cmd-helpers";
 import { type CommnandRegistry, registerCommand } from "./commands";
 
@@ -17,6 +33,9 @@ export function initRegistry():CommnandRegistry {
     registerCommand(registry, 'unfollow', isLogged(handleUnfollow))
     registerCommand(registry, 'browse', isLogged(handleBrowse))
     registerCommand(registry, 'search', isLogged(handleSearch))
+    registerCommand(registry, 'favorites', isLogged(handleFavorites))
+    registerCommand(registry, 'addfavorites', isLogged(handleAddFavorites))
+    registerCommand(registry, 'unfavorite', isLogged(handleRemoveFavorites))
 
     return registry
 }

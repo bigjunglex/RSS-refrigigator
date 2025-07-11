@@ -3,6 +3,7 @@ import { createPost, PostInsert } from "./db/queries/posts";
 import { fetchFeed } from "./fetchFeed";
 
 export async function scrapeFeeds() {
+    let count = 0;
     const next = await getNextFeedToFetch();
     if (!next) throw Error('[FEEDS]: no feeds to fetch')
     await markFeedFetched(next);
@@ -18,9 +19,10 @@ export async function scrapeFeeds() {
             feed_id: next.id
         }
         const record = await createPost(post)
-        
-        if (record) {
-            console.log(record)
+        if(record) {
+            count++
         }
     }
+
+    console.log('Collected %d new posts', count)
 }

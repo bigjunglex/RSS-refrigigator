@@ -1,10 +1,11 @@
 import { readConfig, setUser } from "../config";
 import { createUser, getUser, dropUsers, getUsers } from "../lib/db/queries/users";
 import { createFeed, getAllFeeds, createFeedFollow, getFeedByURL } from "src/lib/db/queries/feeds";
-import { parseTime, printFeed } from "./cmd-helpers";
+import { getCurrentUser, parseTime, printFeed, printPosts } from "./cmd-helpers";
 import { deleteFollow, getFeedFollowsForUser } from "src/lib/db/queries/follows";
 import { scrapeFeeds } from "src/lib/feedHelp";
-import { getPostsForUser } from "src/lib/db/queries/posts";
+import { getPostByID, getPostsForUser } from "src/lib/db/queries/posts";
+import { createFavorite, deleteFavorite, getFavoritePostsForUser } from "src/lib/db/queries/favorites";
 
 
 /**
@@ -104,7 +105,10 @@ export async function handleAddFeed(cmd: string, ...args: string[]) {
  */
 export async function handleFeeds(cmd:string, ...args:string[]) {
     const feeds = await getAllFeeds()
-    console.log(`${feeds.length > 0 ? feeds : 'No added feeds yet'}`)
+    console.log(`${feeds.length > 0 ? '' : 'No added feeds yet'}`)
+    for (const feed of feeds) {
+        console.log('%s --> %s', feed.name, feed.url)
+    }
 }
 
 /**
@@ -112,7 +116,7 @@ export async function handleFeeds(cmd:string, ...args:string[]) {
  */
 export async function handleFollow(cmd:string, ...args:string[]) {
     const url = args[0]
-    const user = await getUser(readConfig().currentUserName);
+    const user = await getCurrentUser()
     const feed = await getFeedByURL(url)
     await createFeedFollow(user, feed);
 
@@ -123,7 +127,7 @@ export async function handleFollow(cmd:string, ...args:string[]) {
  * print all feeds current user follows
  */
 export async function handleFollowing(cmd:string, ...args:string[]) {
-    const user = readConfig().currentUserName
+    const user = (await getCurrentUser()).name
     const feeds = (await getFeedFollowsForUser(user)).map(x => x.name)
 
     console.log(`${user} follows:`)
@@ -137,7 +141,7 @@ export async function handleFollowing(cmd:string, ...args:string[]) {
  */
 export async function handleUnfollow(cmd:string, ...args:string[]) {
     const url = args[0]
-    const user = await getUser(readConfig().currentUserName)
+    const user = await getCurrentUser()
     const feed = await getFeedByURL(url)
     if(!feed) {
         console.log(`Feed with ${url} not found`)
@@ -163,18 +167,11 @@ export async function handleError(reason:any) {
 
 
 export async function handleBrowse(cmd:string, ...args:string[]) {
-    const user = await getUser(readConfig().currentUserName)
+    const user = await getCurrentUser()
     const limit = parseInt(args[0]) || 2
     const posts = await getPostsForUser(user, limit);
-
-    for (const post of posts ) {
-        console.log('\n-------------------------------')
-        console.log('📌 %s \n', post.title)
-        console.log('📅 Published: %s\n', post.published_at?.toDateString())
-        console.log('🌐 %s\n', post.url)
-        console.log('📝 : %s', post.description)
-        console.log('\n-------------------------------')
-    }
+    
+    printPosts(posts)
 }
 
 /**
@@ -187,7 +184,7 @@ export async function handleSearch(cmd:string, ...args:string[]) {
         return;
     }
     const query = (args.length > 1 ? args.join(' ') : args[0]).toLowerCase()
-    const user = await getUser(readConfig().currentUserName)
+    const user = await getCurrentUser()
     const posts = await getPostsForUser(user, 1000);
 
     // TODO: IMPLEMENT SEARCH THROUGH ARRAY WITH SCORE MAP FOR RESULTS
@@ -200,13 +197,60 @@ export async function handleSearch(cmd:string, ...args:string[]) {
         }
         return false
     })
+    
+    printPosts(filtered)
+}
 
-    for (const post of filtered) {
-        console.log('\n-------------------------------')
-        console.log('📌 %s \n', post.title)
-        console.log('📅 Published: %s\n', post.published_at?.toDateString())
-        console.log('🌐 %s\n', post.url)
-        console.log('📝 : %s', post.description)
-        console.log('\n-------------------------------')
+/**
+ * Print all favorite posts for current user
+ */
+export async function handleFavorites(cmd:string, ...args:string[]) {
+    const user = await getCurrentUser()
+    const posts = await getFavoritePostsForUser(user)
+    if(posts.length < 1 ) {
+        console.log('[FAVORITES]: no post add to favorites yet')
+        return;
     }
+
+    printPosts(posts)
+}
+
+/**
+ * Adds post by provided ID to favorites for current user 
+ */
+export async function handleAddFavorites(cmd:string, ...args:string[]) {
+    if (args.length < 1) {
+        console.log('[FAVORITES]: provide Post ID to add in favorites')
+        return;
+    }
+    const id = args[0]
+    const post = await getPostByID(id)
+    const user = await getCurrentUser()
+
+    const record = await createFavorite(user, post)
+    if(record) {
+        console.log(`Added " ${post.title} " to favorites for ${user.name}`)
+        console.log(record)
+    }else{
+        console.log('[FAVORITES]: coudn\'t find post with %s: id', id)
+    } 
+}
+
+
+export async function handleRemoveFavorites(cmd:string, ...args:string[]) {
+    if (args.length < 1) {
+        console.log('[FAVORITES]: provide Post ID to add in favorites')
+        return;
+    }
+    const id = args[0]
+    const post = await getPostByID(id)
+    const user = await getCurrentUser()
+    
+    const record = await deleteFavorite(user, post)
+    if(record) {
+        console.log(`Deleted " ${post.title} " from favorites for ${user.name}`)
+        console.log(record)
+    }else{
+        console.log('[FAVORITES]: coudn\'t find favorite post with %s: id', id)
+    } 
 }

@@ -53,3 +53,11 @@ export const posts = pgTable("posts", {
     published_at: timestamp("published_at").defaultNow(),
     feed_id: uuid("feed_id").references(() => feeds.id).notNull()
 })
+
+
+export const post_favorites = pgTable("post_favorites", {
+    id: uuid("id").primaryKey().defaultRandom().notNull(),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+    user_id: uuid("user_id").references(() => users.id, {onDelete: 'cascade'}).notNull(),
+    post_id: uuid("post_id").references(() => posts.id, {onDelete: 'cascade'}).notNull()
+}, (t) => [unique().on(t.post_id, t.user_id)]);

@@ -3,6 +3,7 @@ import { getUser, type User } from "src/lib/db/queries/users";
 import type { Follow } from "src/lib/db/queries/follows";
 import type { CommandHandler } from "./commands";
 import { readConfig } from "src/config";
+import { Post } from "src/lib/db/queries/posts";
 
 
 
@@ -60,4 +61,23 @@ export function parseTime(duration:string):[number, string] {
     const interval = parseInt(num) * TimeOptions[option as TimeOption]
 
     return [interval, msg]
+}
+
+
+export function printPosts(posts: Post[]): void {
+    for (const post of posts) {
+        console.log('\n-------------------------------')
+        console.log('📌 %s \n', post.title)
+        console.log('📅 Published: %s\n', post.published_at?.toDateString())
+        console.log('🌐 %s\n', post.url)
+        console.log('📝 : %s', post.description)
+        console.log('\n🌟: ---- %s ----', post.id)
+        console.log('\n-------------------------------')
+    }
+}
+
+
+export async function getCurrentUser():Promise<User> {
+    const result = await getUser(readConfig().currentUserName)
+    return result
 }

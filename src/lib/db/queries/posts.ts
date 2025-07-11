@@ -23,20 +23,21 @@ export async function createPost(post:PostInsert):Promise<Post> {
 
 
 export async function getPostsForUser(user:User, limit:number):Promise<Post[]> {
-    const user_id = (await getUser(user.name)).id
-    const feeds = await db
-        .select({feed_id:feed_follows.feed_id})
-        .from(feed_follows)
-        .where(eq(feed_follows.user_id, user_id))
+    const user_id = String(user.id)
     const result = await db
-        .select()
-        .from(posts)
-        .where(inArray(posts.feed_id, feeds.map(i => i.feed_id)))
+        .select({ post: posts })
+        .from(feed_follows)
+        .innerJoin(posts, eq(feed_follows.feed_id, posts.feed_id))
+        .where(eq(feed_follows.user_id, user_id))
         .orderBy(desc(posts.published_at))
-        .limit(limit)
-    return result
+        .limit(limit);
+    return result.map(p => p.post)
 }
 
+export async function getPostByID(id:string):Promise<Post> {
+    const [result] = await db.select().from(posts).where(eq(posts.id, id))
+    return result
+}
 
 export async function getAllPosts():Promise<Post[]> {
     const result = await db.select().from(posts)

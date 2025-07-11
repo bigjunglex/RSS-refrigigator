@@ -1,6 +1,6 @@
 import { db } from "../db";
 import { eq, and } from "drizzle-orm";
-import { users, feeds, feed_follows } from "../schema";
+import { feeds, feed_follows } from "../schema";
 import { getUser, User } from "./users";
 import { Feed } from "./feeds";
 
