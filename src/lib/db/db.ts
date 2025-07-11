@@ -5,6 +5,5 @@ import { readConfig } from "src/config";
 
 const cfg = readConfig();
 const connection = postgres(cfg.dbUrl);
-
 export const db = drizzle(connection, { schema })
 

@@ -36,3 +36,9 @@ export async function getPostsForUser(user:User, limit:number):Promise<Post[]> {
         .limit(limit)
     return result
 }
+
+
+export async function getAllPosts():Promise<Post[]> {
+    const result = await db.select().from(posts)
+    return result
+}

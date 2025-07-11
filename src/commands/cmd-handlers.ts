@@ -1,7 +1,6 @@
 import { readConfig, setUser } from "../config";
 import { createUser, getUser, dropUsers, getUsers } from "../lib/db/queries/users";
 import { createFeed, getAllFeeds, createFeedFollow, getFeedByURL } from "src/lib/db/queries/feeds";
-import { fetchFeed } from "src/lib/fetchFeed";
 import { parseTime, printFeed } from "./cmd-helpers";
 import { deleteFollow, getFeedFollowsForUser } from "src/lib/db/queries/follows";
 import { scrapeFeeds } from "src/lib/feedHelp";
@@ -169,6 +168,40 @@ export async function handleBrowse(cmd:string, ...args:string[]) {
     const posts = await getPostsForUser(user, limit);
 
     for (const post of posts ) {
+        console.log('\n-------------------------------')
+        console.log('📌 %s \n', post.title)
+        console.log('📅 Published: %s\n', post.published_at?.toDateString())
+        console.log('🌐 %s\n', post.url)
+        console.log('📝 : %s', post.description)
+        console.log('\n-------------------------------')
+    }
+}
+
+/**
+ * Searches user's posts for match with query
+ * Case insensitive, strict matching
+ */
+export async function handleSearch(cmd:string, ...args:string[]) {
+    if(args.length < 1) {
+        console.log('[SEARCH]: need to specfy search query')
+        return;
+    }
+    const query = (args.length > 1 ? args.join(' ') : args[0]).toLowerCase()
+    const user = await getUser(readConfig().currentUserName)
+    const posts = await getPostsForUser(user, 1000);
+
+    // TODO: IMPLEMENT SEARCH THROUGH ARRAY WITH SCORE MAP FOR RESULTS
+    const filtered = posts.filter(p => {
+        for (const key in p) {
+            const val = (p as Record<string, any>)[key]
+            if (typeof val === 'string' && val.toLowerCase().includes(query)) {
+                return true
+            }
+        }
+        return false
+    })
+
+    for (const post of filtered) {
         console.log('\n-------------------------------')
         console.log('📌 %s \n', post.title)
         console.log('📅 Published: %s\n', post.published_at?.toDateString())
