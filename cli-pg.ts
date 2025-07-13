@@ -13,3 +13,5 @@ const db = spawn(cmd, {shell: true, stdio: [0, 0, 0]})
 process.on('SIGINT', () => { db.kill() })
 process.on('SIGTERM', () => { db.kill() })
 process.on('SIGTSTP', () => { db.kill() })
+
+

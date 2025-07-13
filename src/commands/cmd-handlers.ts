@@ -1,12 +1,12 @@
 import { readConfig, setUser } from "../config";
 import { createUser, getUser, dropUsers, getUsers } from "../lib/db/queries/users";
 import { createFeed, getAllFeeds, createFeedFollow, getFeedByURL } from "src/lib/db/queries/feeds";
-import { browseNav, clearTerminal, getCurrentUser, parseTime, printFeed, printPosts } from "./cmd-helpers";
+import { browseNav, clearTerminal, getCurrentUser, getLimitByTerminalStats, parseTime, printFeed, printPosts } from "./cmd-helpers";
 import { deleteFollow, getFeedFollowsForUser } from "src/lib/db/queries/follows";
 import { scrapeFeeds } from "src/lib/feedHelp";
-import { getPostByID, getPostsForUser } from "src/lib/db/queries/posts";
+import { getAllPosts, getPostByID, getPostsForUser } from "src/lib/db/queries/posts";
 import { createFavorite, deleteFavorite, getFavoritePostsForUser } from "src/lib/db/queries/favorites";
-import { off } from "node:process";
+
 
 
 /**
@@ -41,7 +41,7 @@ export async function handleRegister(cmd:string, ...args:string[]) {
     console.log(result)
 }
 /**
- * reset db // dev fn 
+ * drop users table   
  */
 export async function handleReset(cmd:string, ...args:string[]) {
     try {
@@ -167,12 +167,13 @@ export async function handleError(reason:any) {
 }
 
 /**
- * Browwse posts from followed feeds of current user
- * accepts limit with default to 2, limit is the offset step value
+ * Browse posts from followed feeds of current user
+ * accepts limit as "browse X" number or calculates by terminal size if theres none
+ * limit is also the offset step value
  */
 export async function handleBrowse(cmd:string, ...args:string[]) {
     const user = await getCurrentUser()
-    const limit = parseInt(args[0]) || 2
+    const limit = parseInt(args[0]) || await getLimitByTerminalStats()
     let offset = 0
     while(true) {
         const posts = await getPostsForUser(user, limit, offset);
@@ -188,7 +189,7 @@ export async function handleBrowse(cmd:string, ...args:string[]) {
  * Searches user's posts for match with query
  * Case insensitive, strict matching
  * TODO: IMPLEMENT SEARCH THROUGH ARRAY WITH SCORE MAP FOR RESULTS
- * TODO: CHANGE hardcoded limit for flag
+ * TODO: CHANGE hardcoded limit for flag Date
  */
 export async function handleSearch(cmd:string, ...args:string[]) {
     if(args.length < 1) {

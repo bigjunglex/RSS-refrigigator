@@ -3,7 +3,7 @@ import { getUser, type User } from "src/lib/db/queries/users";
 import type { Follow } from "src/lib/db/queries/follows";
 import type { CommandHandler } from "./commands";
 import { readConfig } from "src/config";
-import { Post } from "src/lib/db/queries/posts";
+import { getAllPosts, Post } from "src/lib/db/queries/posts";
 import * as readline from "node:readline"
 import { stdin as input, stdout as output } from "node:process";
 
@@ -114,4 +114,14 @@ export function clearTerminal() {
     console.log(space)
     readline.cursorTo(output, 0, 0)
     readline.clearScreenDown(output)
+}
+
+export async function getLimitByTerminalStats() {
+    const postsArr = await getAllPosts()
+    const descAvg = Math.floor(postsArr.reduce((acc, p) => acc += p.description?.length || 0, 0) / postsArr.length)
+    let [rows, cols] = [output.rows, output.columns]
+    const avgPrintPostsRows = 12 + Math.ceil(descAvg / cols) 
+    const limit = Math.floor(rows / avgPrintPostsRows)
+
+    return limit
 }
