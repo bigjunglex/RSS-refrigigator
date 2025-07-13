@@ -1,11 +1,12 @@
 import { readConfig, setUser } from "../config";
 import { createUser, getUser, dropUsers, getUsers } from "../lib/db/queries/users";
 import { createFeed, getAllFeeds, createFeedFollow, getFeedByURL } from "src/lib/db/queries/feeds";
-import { getCurrentUser, parseTime, printFeed, printPosts } from "./cmd-helpers";
+import { browseNav, clearTerminal, getCurrentUser, parseTime, printFeed, printPosts } from "./cmd-helpers";
 import { deleteFollow, getFeedFollowsForUser } from "src/lib/db/queries/follows";
 import { scrapeFeeds } from "src/lib/feedHelp";
 import { getPostByID, getPostsForUser } from "src/lib/db/queries/posts";
 import { createFavorite, deleteFavorite, getFavoritePostsForUser } from "src/lib/db/queries/favorites";
+import { off } from "node:process";
 
 
 /**
@@ -165,13 +166,22 @@ export async function handleError(reason:any) {
     return null
 }
 
-
+/**
+ * Browwse posts from followed feeds of current user
+ * accepts limit with default to 2, limit is the offset step value
+ */
 export async function handleBrowse(cmd:string, ...args:string[]) {
     const user = await getCurrentUser()
     const limit = parseInt(args[0]) || 2
-    const posts = await getPostsForUser(user, limit);
-    
-    printPosts(posts)
+    let offset = 0
+    while(true) {
+        const posts = await getPostsForUser(user, limit, offset);
+        printPosts(posts)
+        const move = await browseNav()
+        clearTerminal()
+        offset = move === 'forward' ? offset + limit : offset - limit;
+        if ( offset < 0 ) offset = 0;
+    }
 }
 
 /**

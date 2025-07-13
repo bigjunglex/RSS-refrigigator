@@ -4,8 +4,8 @@ import type { Follow } from "src/lib/db/queries/follows";
 import type { CommandHandler } from "./commands";
 import { readConfig } from "src/config";
 import { Post } from "src/lib/db/queries/posts";
-
-
+import * as readline from "node:readline"
+import { stdin as input, stdout as output } from "node:process";
 
 export function printFeed(feed:Feed, user: User, follow: Follow | undefined):void {
     const a = `\nAdded feed: \n--${feed.name} : ${feed.url} `;
@@ -80,4 +80,38 @@ export function printPosts(posts: Post[]): void {
 export async function getCurrentUser():Promise<User> {
     const result = await getUser(readConfig().currentUserName)
     return result
+}
+
+/**
+
+ *  @return String For forward / backward to for offset direction 
+ */
+export async function browseNav(): Promise<string> {
+    console.log('(prev) Q | E (next)')
+    return new Promise((resolve) => {
+        readline.emitKeypressEvents(input)
+        if (input.isTTY) input.setRawMode(true)
+        input.on('keypress', (_, key:readline.Key) => {
+            if (key.name === 'e') {
+                input.removeAllListeners("keypress")
+                resolve('forward')
+            } else if (key.name === 'q') {
+                input.removeAllListeners("keypress")
+                resolve('backward')
+            } else if (key.name === 'c') {
+                console.log('Exit browse')
+                process.exit(0)
+            }
+        })
+    })
+}
+
+/**
+ * clear terminal without wiping its history
+ */
+export function clearTerminal() {
+    const space = '\n'.repeat(output.rows)
+    console.log(space)
+    readline.cursorTo(output, 0, 0)
+    readline.clearScreenDown(output)
 }

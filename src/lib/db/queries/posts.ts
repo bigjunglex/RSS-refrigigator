@@ -22,7 +22,7 @@ export async function createPost(post:PostInsert):Promise<Post> {
 }
 
 
-export async function getPostsForUser(user:User, limit:number):Promise<Post[]> {
+export async function getPostsForUser(user:User, limit:number, offset = 0):Promise<Post[]> {
     const user_id = String(user.id)
     const result = await db
         .select({ post: posts })
@@ -30,7 +30,8 @@ export async function getPostsForUser(user:User, limit:number):Promise<Post[]> {
         .innerJoin(posts, eq(feed_follows.feed_id, posts.feed_id))
         .where(eq(feed_follows.user_id, user_id))
         .orderBy(desc(posts.published_at))
-        .limit(limit);
+        .limit(limit)
+        .offset(offset);
     return result.map(p => p.post)
 }
 
