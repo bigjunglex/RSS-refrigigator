@@ -129,11 +129,11 @@ export async function handleFollow(cmd:string, ...args:string[]) {
  */
 export async function handleFollowing(cmd:string, ...args:string[]) {
     const user = (await getCurrentUser()).name
-    const feeds = (await getFeedFollowsForUser(user)).map(x => x.name)
+    const feeds = await getFeedFollowsForUser(user)
 
     console.log(`${user} follows:`)
     for (const feed of feeds) {
-        console.log(`---- ${feed}`)
+        console.log(`---- ${feed.name} : ${feed.url}`)
     }
 }
 
@@ -187,17 +187,17 @@ export async function handleBrowse(cmd:string, ...args:string[]) {
 /**
  * Searches user's posts for match with query
  * Case insensitive, strict matching
+ * TODO: IMPLEMENT SEARCH THROUGH ARRAY WITH SCORE MAP FOR RESULTS
+ * TODO: CHANGE hardcoded limit for flag
  */
 export async function handleSearch(cmd:string, ...args:string[]) {
     if(args.length < 1) {
-        console.log('[SEARCH]: need to specfy search query')
+        console.log('[SEARCH]: need to specify search query')
         return;
     }
     const query = (args.length > 1 ? args.join(' ') : args[0]).toLowerCase()
     const user = await getCurrentUser()
     const posts = await getPostsForUser(user, 1000);
-
-    // TODO: IMPLEMENT SEARCH THROUGH ARRAY WITH SCORE MAP FOR RESULTS
     const filtered = posts.filter(p => {
         for (const key in p) {
             const val = (p as Record<string, any>)[key]
@@ -207,7 +207,10 @@ export async function handleSearch(cmd:string, ...args:string[]) {
         }
         return false
     })
-    
+    if (filtered.length < 1) {
+        console.log('[SEARCH]: no items that match |%s| was found', query)
+        return;
+    }
     printPosts(filtered)
 }
 
