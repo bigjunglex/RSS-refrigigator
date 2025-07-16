@@ -1,14 +1,13 @@
-import { getNextFeedToFetch, markFeedFetched } from "./db/queries/feeds";
+import { Feed, getAllFeeds, getNextFeedToFetch, markFeedFetched } from "./db/queries/feeds";
 import { createPost, PostInsert } from "./db/queries/posts";
 import { fetchFeed } from "./fetchFeed";
 
-export async function scrapeFeeds() {
+export async function scrapeFeed(target:Feed) {
     let count = 0;
-    const next = await getNextFeedToFetch();
-    if (!next) throw Error('[FEEDS]: no feeds to fetch')
-    await markFeedFetched(next);
-    const feed = await fetchFeed(next.url);
-    console.log('Collecting %s at %s', next.name, next.url)
+    if (!target) throw Error('[FEEDS]: no feeds to fetch')
+    await markFeedFetched(target);
+    const feed = await fetchFeed(target.url);
+    console.log('Collecting %s at %s', target.name, target.url)
     for (const item of feed.channel.item) {
         const pub = new Date(item.pubDate)
         const post:PostInsert = {
@@ -16,7 +15,7 @@ export async function scrapeFeeds() {
             url:item.link,
             description:item.description,
             published_at: pub,
-            feed_id: next.id
+            feed_id: target.id
         }
         const record = await createPost(post)
         if(record) {
@@ -25,4 +24,32 @@ export async function scrapeFeeds() {
     }
 
     console.log('Collected %d new posts', count)
+}
+
+/**
+ * @param limit Concurency limit, default = 2
+ */
+export async function scrapeFeeds(limit = 2) {
+    const feeds = (await getAllFeeds(false)).map((feed) => () => scrapeFeed(feed as Feed))
+    await promisePool(feeds, 6)
+}
+
+async function promisePool(functions:(() => Promise<any>)[], limit:number) {
+    let i = 0;
+    const limitedPromises = Array(limit).fill(0).map(() => callback());
+    await Promise.all(limitedPromises)
+    
+    async function callback() {
+        if (i === functions.length) {
+            return;
+        }
+        try {
+            await functions[i++]();
+        } catch (error) {
+            let msg = '[FETCHING]: '
+            console.log(msg, `${error instanceof Error ? error.message : 'unknown error'}`)
+        } finally {
+            callback();
+        }
+    }
 }

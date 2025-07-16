@@ -4,7 +4,7 @@ import { createFeed, getAllFeeds, createFeedFollow, getFeedByURL } from "src/lib
 import { browseNav, clearTerminal, getCurrentUser, getLimitByTerminalStats, parseTime, printFeed, printPosts } from "./cmd-helpers";
 import { deleteFollow, getFeedFollowsForUser } from "src/lib/db/queries/follows";
 import { scrapeFeeds } from "src/lib/feedHelp";
-import { getAllPosts, getPostByID, getPostsForUser } from "src/lib/db/queries/posts";
+import {getPostByID, getPostsForUser } from "src/lib/db/queries/posts";
 import { createFavorite, deleteFavorite, getFavoritePostsForUser } from "src/lib/db/queries/favorites";
 
 
@@ -70,7 +70,8 @@ export async function handleUsers(cmd:string, ...args:string[]) {
 }
 
 /**
- * get interval from input and fetch feeds on interval
+ * Get interval from input and fetch feeds concurently
+ *  on interval
  */
 export async function handleAgg(cmd: string, ...args: string[]) {
     const input = args.join('');
@@ -170,11 +171,13 @@ export async function handleError(reason:any) {
  * Browse posts from followed feeds of current user
  * accepts limit as "browse X" number or calculates by terminal size if theres none
  * limit is also the offset step value
+ * TODO (OPTIONAL) : add RESIZE listener to recalc limit
  */
 export async function handleBrowse(cmd:string, ...args:string[]) {
     const user = await getCurrentUser()
     const limit = parseInt(args[0]) || await getLimitByTerminalStats()
     let offset = 0
+    clearTerminal()
     while(true) {
         const posts = await getPostsForUser(user, limit, offset);
         printPosts(posts)
@@ -225,7 +228,6 @@ export async function handleFavorites(cmd:string, ...args:string[]) {
         console.log('[FAVORITES]: no post add to favorites yet')
         return;
     }
-
     printPosts(posts)
 }
 

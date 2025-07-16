@@ -38,7 +38,7 @@ export async function fetchFeed(feedUrl: string) {
         };
         
         const channel = parser.parse(res).rss?.channel
-        if (!channel) throw new Error('[FEED]: no channel field in target url');
+        if (!channel) throw new Error(`[FEED]: no channel field in target [${feedUrl}]`);
         output.channel['title'] = channel.title
         output.channel['link'] = channel.link
         output.channel['description'] = channel.description
@@ -49,7 +49,7 @@ export async function fetchFeed(feedUrl: string) {
 
         return output
     } catch (error: any) {
-        throw new Error(`[PARSING]: error during XML parsing:\n ${error.message}`)
+        throw new Error(`[PARSING]:[${feedUrl}] error during XML parsing :\n ${error.message}`)
     }
 }
 
