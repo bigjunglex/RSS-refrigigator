@@ -6,6 +6,7 @@ import { deleteFollow, getFeedFollowsForUser } from "src/lib/db/queries/follows"
 import { scrapeFeeds } from "src/lib/feedHelp";
 import {getPostByID, getPostsForUser } from "src/lib/db/queries/posts";
 import { createFavorite, deleteFavorite, getFavoritePostsForUser } from "src/lib/db/queries/favorites";
+import { off } from "process";
 
 
 
@@ -219,16 +220,34 @@ export async function handleSearch(cmd:string, ...args:string[]) {
 }
 
 /**
- * Print all favorite posts for current user
+ * Print all favorite posts for current user 
  */
 export async function handleFavorites(cmd:string, ...args:string[]) {
     const user = await getCurrentUser()
-    const posts = await getFavoritePostsForUser(user)
-    if(posts.length < 1 ) {
-        console.log('[FAVORITES]: no post add to favorites yet')
-        return;
+    const limit = await getLimitByTerminalStats()
+    let offset = 0
+    clearTerminal()
+    while(true) {
+        const posts = await getFavoritePostsForUser(user, limit, offset);
+     
+        if(posts.length < 1 && offset === 0 ) {
+            console.log('[FAVORITES]: no post add to favorites yet')
+            return;
+        }
+        
+        if (posts.length < 1) {
+            
+            offset = offset - limit
+            clearTerminal()
+
+        } else {
+            printPosts(posts)
+            const move = await browseNav()
+            clearTerminal()
+            offset = move === 'forward' ? offset + limit : offset - limit;
+            if ( offset < 0 ) offset = 0;
+        }
     }
-    printPosts(posts)
 }
 
 /**

@@ -33,12 +33,14 @@ export async function deleteFavorite(user:User, post:Post) {
 }
 
 
-export async function getFavoritePostsForUser(user:User):Promise<Post[]> {
+export async function getFavoritePostsForUser(user:User, limit:number, offset = 0):Promise<Post[]> {
     const result = await db
         .select({post: posts})
         .from(post_favorites)
         .innerJoin(posts, eq(post_favorites.post_id, posts.id))
         .where(eq(post_favorites.user_id, String(user.id)))
         .orderBy(desc(posts.published_at))
+        .limit(limit)
+        .offset(offset);
     return result.map(p => p.post)
 }

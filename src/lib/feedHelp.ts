@@ -23,28 +23,28 @@ export async function scrapeFeed(target:Feed) {
         }
     }
 
-    console.log('Collected %d new posts', count)
+    console.log('Collected %d new posts form %s', count, target.name)
 }
 
 /**
- * @param limit Concurency limit, default = 2
+ * @param limit Concurency limit, default = 4
  */
-export async function scrapeFeeds(limit = 2) {
+export async function scrapeFeeds(limit = 4) {
     const feeds = (await getAllFeeds(false)).map((feed) => () => scrapeFeed(feed as Feed))
-    await promisePool(feeds, 6)
+    await promisePool(feeds, limit)
 }
 
-async function promisePool(functions:(() => Promise<any>)[], limit:number) {
+async function promisePool(tasks:(() => Promise<any>)[], limit:number) {
     let i = 0;
     const limitedPromises = Array(limit).fill(0).map(() => callback());
     await Promise.all(limitedPromises)
     
     async function callback() {
-        if (i === functions.length) {
+        if (i === tasks.length) {
             return;
         }
         try {
-            await functions[i++]();
+            await tasks[i++]();
         } catch (error) {
             let msg = '[FETCHING]: '
             console.log(msg, `${error instanceof Error ? error.message : 'unknown error'}`)
