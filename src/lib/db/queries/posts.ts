@@ -44,3 +44,12 @@ export async function getAllPosts():Promise<Post[]> {
     const result = await db.select().from(posts)
     return result
 }
+
+export async function getPostsByFeed(feedId:string) {
+    const result = await db
+        .select()
+        .from(posts)
+        .where(eq(posts.feed_id, feedId))
+        .orderBy(posts.published_at)
+    return result
+}

@@ -30,6 +30,7 @@ export async function getAllFeeds(formatNames:boolean = true) {;
         const result = await db.select({
             name: feeds.name,
             url: feeds.url,
+            id: feeds.id,
             user: users.name
         }).from(feeds).leftJoin(users, eq(users.id, feeds.user_id)) 
         return result
@@ -68,3 +69,5 @@ export async function getNextFeedToFetch(limit = 1) {
         .limit(limit)
     return feed
 }
+
+

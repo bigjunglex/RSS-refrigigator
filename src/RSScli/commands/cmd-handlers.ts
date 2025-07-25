@@ -1,5 +1,5 @@
-import { readConfig, setUser } from "../config";
-import { createUser, getUser, dropUsers, getUsers } from "../lib/db/queries/users";
+import { readConfig, setUser } from "../../config";
+import { createUser, getUser, dropUsers, getUsers } from "../../lib/db/queries/users";
 import { createFeed, getAllFeeds, createFeedFollow, getFeedByURL } from "src/lib/db/queries/feeds";
 import { browseNav, clearTerminal, getCurrentUser, getLimitByTerminalStats, parseTime, printFeed, printPosts } from "./cmd-helpers";
 import { deleteFollow, getFeedFollowsForUser } from "src/lib/db/queries/follows";
@@ -110,7 +110,7 @@ export async function handleFeeds(cmd:string, ...args:string[]) {
     const feeds = await getAllFeeds()
     console.log(`${feeds.length > 0 ? '' : 'No added feeds yet'}`)
     for (const feed of feeds) {
-        console.log('%s --> %s', feed.name, feed.url)
+        console.log('%s --> %s ---> %s', feed.name, feed.url, feed.id)
     }
 }
 

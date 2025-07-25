@@ -9,7 +9,7 @@ export async function scrapeFeed(target:Feed) {
     const feed = await fetchFeed(target.url);
     console.log('Collecting %s at %s', target.name, target.url)
     for (const item of feed.channel.item) {
-        const pub = new Date(item.pubDate)
+        const pub = new Date(item.pubDate).toISOString()
         const post:PostInsert = {
             title: item.title,
             url:item.link,

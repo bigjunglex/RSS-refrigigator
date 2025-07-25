@@ -4,7 +4,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "tsx ./src/index.ts",
+    "start": "tsx ./src/RSScli/index.ts",
+    "dev-server": "tsx ./src/server/index.ts",
     "pg": "tsx ./cli-pg.ts",
     "generate": "drizzle-kit generate",
     "migrate": "drizzle-kit migrate"
@@ -14,16 +15,22 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
+    "@types/express": "^5.0.3",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^22.15.30",
     "tsx": "^4.19.4",
     "typescript": "^5.8.3"
   },
   "dependencies": {
     "@libsql/client": "^0.15.10",
+    "bcrypt": "^6.0.0",
     "drizzle-kit": "^0.31.4",
     "drizzle-orm": "^0.44.3",
+    "express": "^5.1.0",
     "fast-xml-parser": "^5.2.5",
-    "nanoid": "^5.1.5",
-    "postgres": "^3.4.7"
+    "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "nanoid": "^5.1.5"
   }
 }
