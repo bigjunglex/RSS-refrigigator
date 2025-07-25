@@ -1,9 +1,7 @@
-import { drizzle } from "drizzle-orm/postgres-js";
-import postgres from "postgres";
+import { drizzle } from 'drizzle-orm/libsql';
 import * as schema from './schema'
-import { readConfig } from "src/config";
+process.loadEnvFile()
 
-const cfg = readConfig();
-const connection = postgres(cfg.dbUrl);
+const connection = process.env.DATABASE_URL as string
 export const db = drizzle(connection, { schema })
 

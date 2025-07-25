@@ -66,9 +66,10 @@ export function parseTime(duration:string):[number, string] {
 
 export function printPosts(posts: Post[]): void {
     for (const post of posts) {
+        const date = new Date(String(post.published_at)).toDateString()
         console.log('\n-------------------------------')
         console.log('📌 %s \n', post.title)
-        console.log('📅 Published: %s\n', post.published_at?.toDateString())
+        console.log('📅 Published: %s\n', date)
         console.log('🌐 %s\n', post.url)
         console.log('📝 : %s', post.description)
         console.log('\n🌟: ---- %s ----', post.id)

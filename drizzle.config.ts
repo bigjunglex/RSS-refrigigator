@@ -1,11 +1,13 @@
 import { defineConfig } from "drizzle-kit";
-import { readConfig } from './src/config'
+process.loadEnvFile()
+
+const dbUrl = String(process.env.DATABASE_URL)
 
 export default defineConfig({
     schema: "src/lib/db/schema.ts",
-    out: "src/lib/db/out",
-    dialect: 'postgresql',
+    out: "./drizzle",
+    dialect: 'sqlite',
     dbCredentials: {
-        url: readConfig().dbUrl
+        url: dbUrl,
     },
 });

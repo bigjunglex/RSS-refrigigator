@@ -53,7 +53,7 @@ export async function createFeedFollow(user:User, feed:Feed) {
 export async function markFeedFetched(feed:Feed):Promise<Feed> {
     const [update] = await db
         .update(feeds)
-        .set({last_fetched_at: new Date()})
+        .set({last_fetched_at: new Date().toISOString()})
         .where(eq(feeds.id, feed.id))
         .returning()
     return update 

@@ -1,4 +1,6 @@
 node_modules/
 dist/
 .gatorconfig.json/
-src/lib/db/out
+drizzle/
+.env
+local.db
