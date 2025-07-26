@@ -1,14 +1,15 @@
-import express from "express"
-import helmet from "helmet"
+import express from "express";
 import { rssRouter } from "./routes/rssRouter";
+import { errorCatcher, middleWares } from "./middlewares";
+import { authRouter } from "./routes/authRouter";
 
-const app = express();
-const PORT = 8080;
+const app = express()
+const PORT = 8080
 
-app.use(helmet())
-app.use(express.json())
+app.use(middleWares)
 app.use(rssRouter)
-
+app.use(authRouter)
+app.use(errorCatcher)
 
 app.listen(PORT, () => {
     console.log('API listining on ', PORT)

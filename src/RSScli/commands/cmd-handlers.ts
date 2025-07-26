@@ -6,7 +6,8 @@ import { deleteFollow, getFeedFollowsForUser } from "src/lib/db/queries/follows"
 import { scrapeFeeds } from "src/lib/feedHelp";
 import {getPostByID, getPostsForUser } from "src/lib/db/queries/posts";
 import { createFavorite, deleteFavorite, getFavoritePostsForUser } from "src/lib/db/queries/favorites";
-import { off } from "process";
+import { hashPassword } from "src/server/auth";
+import { formatUserRegResponse } from "src/server/helpers";
 
 
 
@@ -25,21 +26,23 @@ export async function hadleLogin(cmd:string, ...args: string[]) {
     console.log('[CONFIG]: user has been set to %s', username);
 }
 /**
- * register user 
+ * register user "NAME" : "PASSWORD"
  */
 export async function handleRegister(cmd:string, ...args:string[]) {
     if (args.length < 1) throw Error('[REGISTER]: expected argument username');
+    if (args.length > 2) throw Error('[REGISTER]: expected "USERNAME" "PASSWORD" format for arguments');
 
-    const username = args.join('').replace(/\s/g, '');
+    const [username, password] = [args[0], args[1]]
+    const hashed = await hashPassword(password);
     const check = await getUser(username);
 
     if (check) throw Error('[REGISTER]: user already registred');
     
-    const result = await createUser(username);
+    const result = await createUser(username, hashed);
     setUser(username)
 
     console.log(`[REGISTER]: %s was registred`, username)
-    console.log(result)
+    console.log(formatUserRegResponse(result))
 }
 /**
  * drop users table   

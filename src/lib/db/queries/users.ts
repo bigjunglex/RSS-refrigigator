@@ -4,8 +4,8 @@ import { users } from "../schema";
 
 export type User = typeof users.$inferInsert;
 
-export async function createUser(name:string) {
-    const [result] = await db.insert(users).values({name:name}).returning()
+export async function createUser(name:string, hashed:string) {
+    const [result] = await db.insert(users).values({name:name, hashedPassword: hashed}).returning()
     return result
 }
 

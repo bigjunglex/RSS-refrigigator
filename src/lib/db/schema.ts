@@ -9,6 +9,7 @@ export const users = sqliteTable("users", {
         .$defaultFn(() => new Date().toISOString())
         .$onUpdate(() => new Date().toISOString()),
     name: text("name").notNull().unique(),
+    hashedPassword: text("hashed_password").notNull()
 })
 
 export const feeds = sqliteTable("feeds", {

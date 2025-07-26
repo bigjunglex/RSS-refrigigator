@@ -1,5 +1,7 @@
+
 /**
  * script to connect to postgress through cli for debugging
+ * WAS USED IN PREVIUOS ITERATION WITH PostGRES
  */
 
 import { readConfig } from './src/config'

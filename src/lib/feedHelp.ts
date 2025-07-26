@@ -31,6 +31,9 @@ export async function scrapeFeed(target:Feed) {
  */
 export async function scrapeFeeds(limit = 4) {
     const feeds = (await getAllFeeds(false)).map((feed) => () => scrapeFeed(feed as Feed))
+    if (feeds.length < 1) {
+        throw Error('[FEEDS]: no feeds to fetch')
+    }
     await promisePool(feeds, limit)
 }
 
