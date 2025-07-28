@@ -23,3 +23,13 @@ export async function getUsers() {
     const result = await db.select().from(users)
     return result
 }
+
+
+export async function updateUserPasswordById(id:string, hashed:string) {
+    const [result] = await db
+        .update(users)
+        .set({hashedPassword:hashed})
+        .where(eq(users.id, id))
+        .returning()
+    return result
+}

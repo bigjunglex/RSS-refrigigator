@@ -59,3 +59,16 @@ export const post_favorites = sqliteTable("post_favorites", {
     user_id: text("user_id").references(() => users.id, {onDelete: 'cascade'}).notNull(),
     post_id: text("post_id").references(() => posts.id, {onDelete: 'cascade'}).notNull()
 }, (t) => [unique().on(t.post_id, t.user_id)]);
+
+
+export const refresh_tokens = sqliteTable("refresh_tokens", {
+    token: text("token").primaryKey(),
+    createdAt: text("created_at").$defaultFn(() => new Date().toISOString()).notNull(),
+    updatedAt: text("updated_at")
+        .notNull()
+        .$defaultFn(() => new Date().toISOString())
+        .$onUpdate(() => new Date().toISOString()),
+    userId: text("user_id").references(() => users.id, { onDelete: 'cascade' }).notNull(),
+    expires: text("expires").notNull(),
+    revoked: text("revoked")
+})

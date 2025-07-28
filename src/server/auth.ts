@@ -52,6 +52,12 @@ export function getBearerToken(req:Request):string {
     }
 }
 
-export function makeRefreshToklen() {
-    return crypto.randomBytes(32).toString('hex')
+/**
+ * @param expiresIn Number of days for token to expire
+ */
+export function makeRefreshToken(expiresIn:number): [string, Date]{
+    const time = 60 * 60 * 24 * expiresIn
+    const token = crypto.randomBytes(32).toString('hex')
+    const date = new Date(Date.now() + time)
+    return [token, date]
 }

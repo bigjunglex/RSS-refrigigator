@@ -13,6 +13,6 @@ export function errorCatcher(err:any, req:Request, res:Response, next: NextFunct
     if (err instanceof Error) {
         const [msg, stack] = [err.message, err.stack]
         console.log('[ERROR]: %s\n%s', msg, stack)     
-        res.status(500).end(msg)
+        res.status(500).json({ error: msg })
     }
 }
