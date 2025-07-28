@@ -134,11 +134,11 @@ export async function handleFollow(cmd:string, ...args:string[]) {
  */
 export async function handleFollowing(cmd:string, ...args:string[]) {
     const user = (await getCurrentUser()).name
-    const feeds = await getFeedFollowsForUser(user)
+    const feeds = (await getFeedFollowsForUser(user)).map(entry => entry.feeds)
 
     console.log(`${user} follows:`)
     for (const feed of feeds) {
-        console.log(`---- ${feed.name} : ${feed.url}`)
+        console.log(`---- ${feed.name} : ${feed.url} --- ${feed.id}`)
     }
 }
 

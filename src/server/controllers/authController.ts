@@ -85,6 +85,7 @@ export async function updateUser(req:Request, res:Response, next:NextFunction) {
 
 export async function refreshJwt(req: Request, res: Response, next: NextFunction) {
     const { refToken } = req.cookies
+    const {target, method} = req.query
     try {
         const { userId } = await getRefreshToken(refToken)
         if (!userId) throw new Error('[AUTH]: Invalid Refresh TOken');
@@ -99,7 +100,12 @@ export async function refreshJwt(req: Request, res: Response, next: NextFunction
 
         res.cookie('accToken', accessToken, { maxAge: JWTexpires * 1000, httpOnly: true })
         res.cookie('refToken', token, { maxAge: REFexpires * 24 * 60 * 60 * 1000, httpOnly: true })
-        res.status(200).end()
+
+        if (target && method) {
+            res.redirect(method === "POST" ? 307 : 301 , String(target))
+        } else {
+            res.status(200).json({target, method})
+        }
 
     } catch (error) {
         next(error)

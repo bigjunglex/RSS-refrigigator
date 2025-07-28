@@ -70,4 +70,10 @@ export async function getNextFeedToFetch(limit = 1) {
     return feed
 }
 
-
+export async function getFeedById(id:string) {
+    const [result] = await db
+        .select()
+        .from(feeds)
+        .where(eq(feeds.id, id))
+    return result
+}

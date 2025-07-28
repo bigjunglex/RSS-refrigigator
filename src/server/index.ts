@@ -7,9 +7,10 @@ const app = express()
 const PORT = 8080
 
 app.use(middleWares)
-app.use(rssRouter)
 app.use(authRouter)
+app.use(rssRouter)
 app.use(errorCatcher)
+
 
 app.listen(PORT, () => {
     console.log('API listining on ', PORT)
