@@ -3,6 +3,7 @@ import { db } from "../db";
 import { users } from "../schema";
 
 export type User = typeof users.$inferInsert;
+export type UserSelect = typeof users.$inferSelect;
 
 export async function createUser(name:string, hashed:string) {
     const [result] = await db.insert(users).values({name:name, hashedPassword: hashed}).returning()
@@ -33,7 +34,7 @@ export async function updateUserPasswordById(id:string, hashed:string) {
     return result
 }
 
-export async function getUserByID(id:string) {
+export async function getUserByID(id:string):Promise<UserSelect> {
     const [result] = await db
         .select()
         .from(users)

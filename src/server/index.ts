@@ -1,5 +1,5 @@
 import express from "express";
-import { rssRouter } from "./routes/rssRouter";
+import { rssRouter, protectedRouter } from "./routes/rssRouter";
 import { errorCatcher, middleWares } from "./middlewares";
 import { authRouter } from "./routes/authRouter";
 
@@ -9,6 +9,7 @@ const PORT = 8080
 app.use(middleWares)
 app.use(authRouter)
 app.use(rssRouter)
+app.use('/api/feeds', protectedRouter)
 app.use(errorCatcher)
 
 

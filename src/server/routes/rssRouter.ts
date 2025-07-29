@@ -3,23 +3,19 @@ import { favoritePost, followFeed, getFavorites, getFeeds, getFeedWithID, getFol
 import { authMiddleware } from "../middlewares";
 
 
-export const rssRouter = Router()
 
+export const rssRouter = Router()
+export const protectedRouter = Router()
 
 rssRouter.get('/api/feeds', getFeeds)
 rssRouter.get('/api/feeds/:id', getFeedWithID)
 
-// auth req paths
-const protectedRouter = Router()
-
 protectedRouter.use(authMiddleware)
+protectedRouter.post('/:id/follow', followFeed)
+protectedRouter.delete('/:id/follow', unfollowFeed)
+protectedRouter.get('/posts/followed', getFollowed)
 
-protectedRouter.post('/api/feeds/:id/follow', followFeed)
-protectedRouter.delete('/api/feeds/:id/follow', unfollowFeed)
-protectedRouter.get('/api/feeds/followed', getFollowed)
+protectedRouter.post('/:id/favorite', favoritePost)
+protectedRouter.delete('/:id/favorite', unfavoritePost)
+protectedRouter.get('/posts/favorites', getFavorites)
 
-protectedRouter.post('/api/feeds/:postId/favorite', (favoritePost))
-protectedRouter.delete('/api/feeds/:postId/favorite', unfavoritePost)
-protectedRouter.get('/api/feeds/favorites', getFavorites)
-
-rssRouter.use(protectedRouter)
