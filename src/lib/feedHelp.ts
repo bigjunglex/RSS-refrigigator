@@ -56,3 +56,30 @@ async function promisePool(tasks:(() => Promise<any>)[], limit:number) {
         }
     }
 }
+
+/**
+ * @param url of fetch target
+ * @param options fetch options object
+ * @param delay base delay before retry, in ms
+ * @param retries number of retries before failure
+ */
+export async function fetchRetry(url:string, options = {} as RequestInit, delay:number, retries:number) {
+    let throwed;
+    for (let i = 0; i < retries; i++) {
+        try {
+            console.log('[FETCHING]: %s', url)
+            return await fetch(url, options)
+        } catch (error) {
+            if(error instanceof Error) {
+                if (i < retries) {
+                    console.log('[FETCHING]: %s failed, attempting to retry', url)
+                    await new Promise((resolve) => setTimeout(resolve, delay))
+                    delay + 100
+                } else {
+                    throwed = new Error(`[FETCHING]: FAILED to fetch ${url} in ${retries} retries`)
+                }
+            }
+        }
+    }
+    throw throwed
+}

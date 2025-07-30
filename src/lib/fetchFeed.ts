@@ -1,4 +1,5 @@
 import { XMLParser } from "fast-xml-parser";
+import { fetchRetry } from "./feedHelp";
 
 export type RSSFeed = {
     channel: {
@@ -18,13 +19,12 @@ export type RSSItem = {
 
 
 export async function fetchFeed(feedUrl: string) {
-    console.log('[FETCHING]: %s', feedUrl)
-    const res = await (await fetch(feedUrl, {
+    const res = await (await fetchRetry(feedUrl, {
         headers: {
             'User-Agent': 'rssgator',
             accept: 'aplication/rss+xml',
         }
-    })).text()
+    }, 200, 5)).text()
     const parser = new XMLParser()
 
     try {

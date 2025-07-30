@@ -7,5 +7,5 @@ export const authRouter = Router();
 authRouter.post('/api/users', regNewUser)
 authRouter.put('/api/users', updateUser)
 authRouter.post('/api/login', userLogIn)
-authRouter.post('/api/refresh', refreshJwt)
+authRouter.get('/api/refresh', refreshJwt)
 authRouter.post('/api/logout', userLogOut)

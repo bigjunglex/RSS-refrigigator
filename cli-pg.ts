@@ -16,4 +16,3 @@ process.on('SIGINT', () => { db.kill() })
 process.on('SIGTERM', () => { db.kill() })
 process.on('SIGTSTP', () => { db.kill() })
 
-
