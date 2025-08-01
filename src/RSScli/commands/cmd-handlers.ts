@@ -1,7 +1,7 @@
 import { readConfig, setUser } from "../../config";
 import { createUser, getUser, dropUsers, getUsers } from "../../lib/db/queries/users";
 import { createFeed, getAllFeeds, createFeedFollow, getFeedByURL } from "src/lib/db/queries/feeds";
-import { browseNav, clearTerminal, getCurrentUser, getLimitByTerminalStats, parseTime, printFeed, printPosts } from "./cmd-helpers";
+import { browseNav, clearTerminal, createResizeController, getCurrentUser, getLimitByTerminalStats, parseTime, printFeed, printPosts } from "./cmd-helpers";
 import { deleteFollow, getFeedFollowsForUser } from "src/lib/db/queries/follows";
 import { scrapeFeeds } from "src/lib/feedHelp";
 import {getPostByID, getPostsForUser } from "src/lib/db/queries/posts";
@@ -173,19 +173,21 @@ export async function handleError(reason:any) {
 
 /**
  * Browse posts from followed feeds of current user
- * accepts limit as "browse X" number or calculates by terminal size if theres none
+ * Calculates number o
  * limit is also the offset step value
- * TODO (OPTIONAL) : add RESIZE listener to recalc limit
  */
 export async function handleBrowse(cmd:string, ...args:string[]) {
     const user = await getCurrentUser()
-    const limit = parseInt(args[0]) || await getLimitByTerminalStats()
+    const resizeController = await createResizeController()
+    
     let offset = 0
     clearTerminal()
+    
     while(true) {
+        const limit = resizeController.limit()
         const posts = await getPostsForUser(user, limit, offset);
         printPosts(posts)
-        const move = await browseNav()
+        const move = await browseNav(resizeController.constroller)
         clearTerminal()
         offset = move === 'forward' ? offset + limit : offset - limit;
         if ( offset < 0 ) offset = 0;
@@ -227,12 +229,12 @@ export async function handleSearch(cmd:string, ...args:string[]) {
  */
 export async function handleFavorites(cmd:string, ...args:string[]) {
     const user = await getCurrentUser()
-    const limit = await getLimitByTerminalStats()
+    const controller = await createResizeController()
     let offset = 0
     clearTerminal()
     while(true) {
+        const limit = controller.limit()    
         const posts = await getFavoritePostsForUser(user, limit, offset);
-     
         if(posts.length < 1 && offset === 0 ) {
             console.log('[FAVORITES]: no post add to favorites yet')
             return;
@@ -245,7 +247,7 @@ export async function handleFavorites(cmd:string, ...args:string[]) {
 
         } else {
             printPosts(posts)
-            const move = await browseNav()
+            const move = await browseNav(controller.constroller)
             clearTerminal()
             offset = move === 'forward' ? offset + limit : offset - limit;
             if ( offset < 0 ) offset = 0;

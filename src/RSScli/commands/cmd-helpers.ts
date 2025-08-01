@@ -87,7 +87,7 @@ export async function getCurrentUser():Promise<User> {
 
  *  @return String For forward / backward to for offset direction 
  */
-export async function browseNav(): Promise<string> {
+export async function browseNav(controller:AbortController): Promise<string> {
     console.log('(prev) Q | E (next)')
     return new Promise((resolve) => {
         readline.emitKeypressEvents(input)
@@ -101,6 +101,7 @@ export async function browseNav(): Promise<string> {
                 resolve('backward')
             } else if (key.name === 'c') {
                 console.log('Exit browse')
+                controller.abort()
                 process.exit(0)
             }
         })
@@ -122,7 +123,25 @@ export async function getLimitByTerminalStats() {
     const descAvg = Math.floor(postsArr.reduce((acc, p) => acc += p.description?.length || 0, 0) / postsArr.length)
     let [rows, cols] = [output.rows, output.columns]
     const avgPrintPostsRows = 12 + Math.ceil(descAvg / cols) 
-    const limit = Math.floor(rows / avgPrintPostsRows)
+    const limit = Math.floor(rows / avgPrintPostsRows) || 1
 
     return limit
 }
+
+
+export async function createResizeController() {
+    const controller = new AbortController()
+    let limit = await getLimitByTerminalStats()
+    const handler = () => getLimitByTerminalStats().then(val => limit = val)
+    
+    process.on('SIGWINCH', handler)
+    controller.signal.addEventListener('abort', () => {
+        process.off('SIGWINCH', handler)
+    })
+    
+    return {
+        constroller: controller,
+        limit: () => limit
+    }
+}
+
