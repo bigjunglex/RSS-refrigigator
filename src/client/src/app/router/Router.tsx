@@ -14,6 +14,13 @@ export function Router({ children }: {children: ReactNode}) {
         setPath(to)
     }
 
+    useEffect(() => {
+        const handler = () => setPath(window.location.pathname)
+
+        window.addEventListener('popstate', handler)
+        return () => window.removeEventListener('popstate', handler)
+    }, [])
+
     return (
         <routerContext.Provider value={{currentPath: path, navigate: (to:string) => navigate(to)}}>
             {children}
@@ -26,12 +33,18 @@ export function Route({path, children}: {path:String, children:ReactNode}) {
     return currentPath === path ?  children  : null 
 }
 
-
 export function Link({ children, to }: {children: ReactNode, to:string}) {
-    const { navigate } = useContext(routerContext)
+    const { navigate, currentPath } = useContext(routerContext)
+    const isActive = to === currentPath
     const linkClick = (e:React.MouseEvent<HTMLAnchorElement>) => {
         e.preventDefault()
         navigate(to)
     }
-    return <a href={to} onClick={linkClick}> {children} </a>
+    return (
+        <div className={isActive ? 'active-link-wrap' : 'link-wrap'}>
+            <a href={to} onClick={linkClick}>
+                {children}
+            </a>
+        </div>
+    )
 }

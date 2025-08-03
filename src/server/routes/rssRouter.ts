@@ -1,6 +1,7 @@
 import { Router } from "express";
-import { favoritePost, followFeed, getFavorites, getFeeds, getFeedWithID, getFollowed, unfavoritePost, unfollowFeed } from "../controllers/apiController";
+import { favoritePost, followFeed, getFavorites, getFeeds, getFeedWithID, getFollowed, getPosts, unfavoritePost, unfollowFeed } from "../controllers/apiController";
 import { authMiddleware } from "../middlewares";
+
 
 
 
@@ -9,6 +10,7 @@ export const protectedRouter = Router()
 
 rssRouter.get('/api/feeds', getFeeds)
 rssRouter.get('/api/feeds/:id', getFeedWithID)
+rssRouter.get('/api/posts', getPosts)
 
 protectedRouter.use(authMiddleware)
 protectedRouter.post('/:id/follow', followFeed)

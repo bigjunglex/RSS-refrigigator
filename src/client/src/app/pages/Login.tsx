@@ -1,4 +1,4 @@
-import { useState, type FC, type FormEvent} from "react";
+import { type FormEvent} from "react";
 
 
 export function Login() {
@@ -21,6 +21,7 @@ export function Login() {
     }
     return (
         <div className="loginWrapper">
+            <h1>login page</h1>
             <form onSubmit={logSubmit}>
                 <label htmlFor="name">name</label>
                 <input type="text" id="name" name="name" />

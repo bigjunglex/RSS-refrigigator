@@ -1,34 +1,71 @@
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+    --main-bg-color: #4b5340;
+    --main-text-color: #bd9764;
+    --main-suppor-color: #9b7348;
+    --nav-bar-bg-color: #525a48;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+    --nav-bar-width: 80px;
+    --nav-bar-padding-inner: 6px;
+    --nav-bar-padding-vert: 4px
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    color: var(--main-text-color);
+    background-color: var(--main-bg-color);
 }
 
 @media (prefers-color-scheme: light) {
   :root {
-    color: #213547;
-    background-color: #ffffff;
+    color: var(--main-bg-color);
+    background-color: var(--main-text-color);
   }
   a:hover {
-    color: #747bff;
+    color: var(--main-suppor-color);
   }
   button {
-    background-color: #f9f9f9;
+    background-color: var(--main-suppor-color)
   }
+}
+
+body {
+    height: 100vh;
+}
+
+.app-wrap {
+    height: 100%;
+    width: 100%;
+    display: grid;
+    grid-template-columns: calc(2 * var(--nav-bar-padding-inner) + var(--nav-bar-width)) 1fr ;
+}
+
+.browse {
+    padding-left: 6px;
+}
+
+nav {
+    background-color: var(--nav-bar-bg-color);
+    opacity: 0.8;
+    height: 100vh;
+    position: sticky;
+    top: 0px;
+    display: flex;
+    flex-direction: column;
+    padding: var(--nav-bar-padding-vert), var(--nav-bar-padding-inner) ;
+}
+
+nav div {
+    border-radius: 3px;
+    width: 100%;
+    height: 80px;
+    padding: var(--nav-bar-padding-vert) var(--nav-bar-padding-inner);
+}
+
+
+.active-link-wrap {
+    background-color: var(--main-suppor-color);
+    opacity: 1;
 }
 
 
 /* UKRADENO https://github.com/Kaweees/kaweees.github.io/commit/2f0a2b45b3c98f97f827d592e605d812f73c0ba3 */
-
 
 body::before {
     content: "";

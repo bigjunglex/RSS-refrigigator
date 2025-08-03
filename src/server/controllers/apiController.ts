@@ -2,7 +2,7 @@ import type { Response, Request, NextFunction } from "express"
 import { createFavorite, deleteFavorite, getFavoritePostsForUser } from "src/lib/db/queries/favorites";
 import { createFeedFollow, getAllFeeds, getFeedById } from "src/lib/db/queries/feeds"
 import { deleteFollow, getFeedFollowsForUser } from "src/lib/db/queries/follows";
-import { getPostByID, getPostsByFeed, getPostsForUser } from "src/lib/db/queries/posts";
+import { getAllPosts, getPostByID, getPostsByFeed, getPostsForUser } from "src/lib/db/queries/posts";
 import { type User } from "src/lib/db/queries/users";
 
 
@@ -114,6 +114,19 @@ export async function getFavorites(req:Request, res:Response, next: NextFunction
         const posts = await getFavoritePostsForUser(user, limit, offset)
         if (posts.length < 1) {
             throw new Error('[FAVORITES]: 0 posts added to favorite');
+        }
+        res.status(200).json(posts)
+    } catch (error) {
+        next(error)
+    }
+}
+
+
+export async function getPosts(req:Request, res:Response, next: NextFunction) {
+    try {
+        const posts = await getAllPosts()
+        if(posts.length < 1) {
+            throw new Error('[POSTS]: 0 post found');
         }
         res.status(200).json(posts)
     } catch (error) {
