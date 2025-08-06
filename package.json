@@ -5,9 +5,10 @@
   "type": "module",
   "scripts": {
     "start": "tsx ./src/RSScli/index.ts",
+    "dev": "tsx ./scripts/serve.ts",
     "dev-server": "tsx ./src/server/index.ts",
+    "dev-client": "cd ./src/client && npm run dev",
     "dev-server-db": "tsx --inspect-brk ./src/server/index.ts",
-    "pg": "tsx ./cli-pg.ts",
     "generate": "drizzle-kit generate",
     "migrate": "drizzle-kit migrate"
   },

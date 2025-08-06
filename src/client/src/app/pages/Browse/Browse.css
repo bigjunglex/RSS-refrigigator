@@ -1,0 +1,52 @@
+.browse ul {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: repeat(3, minmax(200px, 1fr));
+    padding: 0 24px;
+    max-width: 1200px;
+}
+
+.post {
+    color: var(--main-text-color);
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    height: auto;
+    /* border: solid 1px rgba(255, 255, 255, 0); */
+    border: solid 1px rgba(226, 232, 226, 0.5);
+    transition: transform 0.3s cubic-bezier(0, 0, 0.3, 1);
+    text-decoration: none;
+    padding: 10px;
+}
+
+.post h4 {
+    color: #fff;
+}
+
+.post a {
+    color: var(--main-text-color);
+}
+
+.post:hover {
+    transform: translateY(-5px);
+    background: radial-gradient(75% 75% at 50% 100%, var(--main-suppor-color) 0%, var(--main-bg-color) 100%);
+}
+
+.post button {
+    align-self: flex-end;
+}
+
+.post p {
+    flex: 2;
+    text-wrap: wrap;
+}
+
+.post:hover {
+    transform: translate(-5px);
+}
+
+.browse .getpost {
+    position: absolute;
+    top: 0px;
+}

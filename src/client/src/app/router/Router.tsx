@@ -1,8 +1,5 @@
 import { useContext, useState, createContext, type ReactNode, useEffect } from "react";
 
-type Navigate = (to:string) => void
-type RouterContext = { currentPath: string; navigate: Navigate }
-
 export const routerContext = createContext<RouterContext>({currentPath: '', navigate: (to:string) => null})
 
 export function Router({ children }: {children: ReactNode}) {
@@ -10,7 +7,6 @@ export function Router({ children }: {children: ReactNode}) {
 
     const navigate:Navigate = (to:string, params?: string) => {
         window.history.pushState({ params: params }, '', to)
-        console.log(window.location.pathname)
         setPath(to)
     }
 

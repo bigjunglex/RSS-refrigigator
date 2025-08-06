@@ -1,8 +1,7 @@
 import { Router, } from './router/Router'
-import { Nav } from './shared/Nav'
-import { Home } from './pages/Home'
-import { Browse } from './pages/Browse'
-
+import { Nav } from './shared/Nav/Nav'
+import { Browse } from './pages/Browse/Browse'
+import { Login } from './pages/Login'
 
 
 function App() {
@@ -11,17 +10,11 @@ function App() {
 		<div className='app-wrap'>
 			<Router>
 				<Nav/>
-				<Home />
 				<Browse />
+				<Login />
 			</Router>
 		</div>
 	)
 }
-
-
-
-
-
-
 
 export default App

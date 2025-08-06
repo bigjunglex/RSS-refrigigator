@@ -10,3 +10,6 @@ type Post = {
     description?: string | null | undefined;
     published_at?: string | Date | undefined | null;
 }
+
+type Navigate = (to:string) => void
+type RouterContext = { currentPath: string; navigate: Navigate }
