@@ -63,7 +63,9 @@ export async function unfollowFeed(req:Request, res:Response, next: NextFunction
 
 
 export async function getFollowed(req:Request, res:Response, next: NextFunction) {
-    const [ limit, offset ]  = [req.query.limit, req.query.offset].map(x => parseInt(x as string))
+    const limit = parseInt(String(req.query.limit)) || 100
+    const offset = parseInt(String(req.query.offset)) || 0
+
     try {
         const user = res.locals.user as User
         const feeds = await getPostsForUser(user, limit, offset)

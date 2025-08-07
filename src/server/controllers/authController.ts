@@ -1,5 +1,5 @@
 import type { Request, Response, NextFunction } from "express";
-import { createUser, getUser, updateUserPasswordById } from "src/lib/db/queries/users";
+import { createUser, getUser, getUserByID, updateUserPasswordById, UserSelect } from "src/lib/db/queries/users";
 import { hashPassword, makeJWT, makeRefreshToken, validateJWT, validatePassword } from "../auth";
 import { formatUserRegResponse } from "../helpers";
 import { getRefreshToken, newRefreshToken, revokeRefreshToken } from "src/lib/db/queries/refreshTokens";
@@ -38,7 +38,7 @@ export async function userLogIn(req:Request, res:Response, next:NextFunction) {
         const refreshToken = (await newRefreshToken(token, user.id, expires)).token
 
         res.cookie('accToken', accessToken, { maxAge: JWTexpires * 1000, httpOnly: true })
-        res.cookie('refToken', refreshToken, { maxAge: REFexpires * 24 * 60 * 60, httpOnly: true })
+        res.cookie('refToken', refreshToken, { maxAge: REFexpires * 24 * 60 * 60 * 1000, httpOnly: true })
         res.status(200).json(formatUserRegResponse(user))
 
     } catch (error) {
@@ -85,11 +85,12 @@ export async function updateUser(req:Request, res:Response, next:NextFunction) {
 
 export async function refreshJwt(req: Request, res: Response, next: NextFunction) {
     const { refToken } = req.cookies
-    const {target, method} = req.query
+    const { target, method } = req.query
     try {
         const { userId } = await getRefreshToken(refToken)
         if (!userId) throw new Error('[AUTH]: Invalid Refresh TOken');
         const revoked = await revokeRefreshToken(refToken)
+        const user = await getUserByID(userId)
 
         const [token, time] = makeRefreshToken(REFexpires)
         const accessToken = makeJWT(userId, JWTexpires, SECRET)
@@ -104,9 +105,30 @@ export async function refreshJwt(req: Request, res: Response, next: NextFunction
         if (target && method) {
             res.redirect(method === "POST" ? 307 : 301 , String(target))
         } else {
-            res.status(200).json({target, method})
+            res.status(200).json({ name:user.name })
         }
 
+    } catch (error) {
+        next(error)
+    }
+}
+
+
+export async function userCheck(req: Request, res: Response, next: NextFunction) {
+    const { accToken, refToken } = req.cookies
+    try {
+        if (!accToken) {
+            const refresh = await getRefreshToken(refToken)
+            if (!refresh) throw new Error('');
+            res.redirect(301, `/api/refresh`)
+        }
+        const userId = validateJWT(accToken, String(process.env.SECRET)) as string
+        const user = await getUserByID(userId) as UserSelect;
+        if(!user) {
+            throw new Error('')
+        }
+        res.status(200).json({ name:user.name })
+        
     } catch (error) {
         next(error)
     }

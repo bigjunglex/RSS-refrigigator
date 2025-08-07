@@ -2,15 +2,19 @@ import { useState, useRef } from "react"
 import { Route } from "../../router/Router"
 import { RSSItem } from "../../shared/RSSItem"
 import './Browse.css'
+import { API_BASE } from "../../config"
 
-export function Browse() {
+type BrowseProps = { authStatus: boolean; }
+
+export function Browse({ authStatus } : BrowseProps) {
     const [posts, setPosts] = useState<Post[] | null>()
 	const [offset, setOffset] = useState(0)
 	const [containerRef, itemRef, watcherRef ] = Array(3).map(() => useRef(null))
 
 	
 	async function getPosts() {
-		const raw = await fetch('http://localhost:8080/api/posts', {
+		const endpoint = authStatus ? 'feeds/posts/followed?limit=100&offset=0' : 'posts'
+		const raw = await fetch(`${API_BASE}/${endpoint}`, {
 			credentials:'include'
 		})
 		console.log(raw)

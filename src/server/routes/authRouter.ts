@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { refreshJwt, regNewUser, updateUser, userLogIn, userLogOut } from "../controllers/authController";
+import { refreshJwt, regNewUser, updateUser, userLogIn, userLogOut, userCheck } from "../controllers/authController";
 
 
 export const authRouter = Router();
@@ -9,3 +9,4 @@ authRouter.put('/api/users', updateUser)
 authRouter.post('/api/login', userLogIn)
 authRouter.get('/api/refresh', refreshJwt)
 authRouter.post('/api/logout', userLogOut)
+authRouter.get('/api/check', userCheck)
