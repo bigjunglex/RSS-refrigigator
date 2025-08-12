@@ -1,9 +1,13 @@
 .browse ul {
+    
     display: grid;
     gap: 20px;
-    grid-template-columns: repeat(3, minmax(200px, 1fr));
-    padding: 0 24px;
+    grid-template-columns: repeat(3, minmax(300px, 1fr));
+    grid-auto-rows: 400px;
+    padding: 24px;
     max-width: 1200px;
+    overflow-y: auto;
+    height: 100vh;
 }
 
 .post {
@@ -18,6 +22,8 @@
     transition: transform 0.3s cubic-bezier(0, 0, 0.3, 1);
     text-decoration: none;
     padding: 10px;
+    overflow-y: scroll;
+    overflow-x: hidden;
 }
 
 .post h4 {
@@ -29,12 +35,14 @@
 }
 
 .post:hover {
-    transform: translateY(-5px);
+    transform: translateX(-10px);
+    z-index: 100000;
     background: radial-gradient(75% 75% at 50% 100%, var(--main-suppor-color) 0%, var(--main-bg-color) 100%);
 }
 
 .post button {
     align-self: flex-end;
+    margin-top: auto;
 }
 
 .post p {
@@ -43,10 +51,16 @@
 }
 
 .post:hover {
-    transform: translate(-5px);
+    transform: translateY(-5px);
 }
 
 .browse .getpost {
     position: absolute;
     top: 0px;
+}
+
+@media (width < 900px) {
+    .browse ul {
+        grid-template-columns: repeat(1, 1fr);
+    }
 }

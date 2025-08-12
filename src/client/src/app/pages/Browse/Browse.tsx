@@ -1,24 +1,22 @@
-import { useState, useRef } from "react"
+import { useState } from "react"
 import { Route } from "../../router/Router"
-import { RSSItem } from "../../shared/RSSItem"
 import './Browse.css'
 import { API_BASE } from "../../config"
+import { VirtualPostList } from "../../utils/VirtualList"
 
 type BrowseProps = { authStatus: boolean; }
 
 export function Browse({ authStatus } : BrowseProps) {
     const [posts, setPosts] = useState<Post[] | null>()
 	const [offset, setOffset] = useState(0)
-	const [containerRef, itemRef, watcherRef ] = Array(3).map(() => useRef(null))
 
-	
 	async function getPosts() {
-		const endpoint = authStatus ? 'feeds/posts/followed?limit=100&offset=0' : 'posts'
+		const endpoint = authStatus ? `feeds/posts/followed?limit=100&offset=${offset}` : 'posts'
 		const raw = await fetch(`${API_BASE}/${endpoint}`, {
-			credentials:'include'
+			credentials: 'include'
 		})
 		console.log(raw)
-		if(raw.status !== 200) {
+		if (raw.status !== 200) {
 			alert(raw.status)
 			return;
 		}
@@ -26,14 +24,15 @@ export function Browse({ authStatus } : BrowseProps) {
 		setPosts(data)
 	}
 
+	const topIntersect = () => console.log('top intersection')
+	const botIntersect = () => console.log('bot intersection')
+
 	return (
 		<Route path={'/'}>
 			<>
 				<div className="browse">
-				<button className="gepost" onClick={getPosts}>get Posts</button>
-					<ul>
-						{posts?.map((post, i) => <RSSItem key={i} post={post} isAdded={false} />)}
-					</ul>
+					<button className="getpost" onClick={getPosts}>get Posts</button>
+					<VirtualPostList posts={posts as Post[]} buffer={5} onBot={botIntersect} onTop={topIntersect} />
 				</div>
 			</>
 		</Route>
