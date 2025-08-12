@@ -41,7 +41,7 @@ export async function getPostByID(id:string):Promise<Post> {
 }
 
 export async function getAllPosts():Promise<Post[]> {
-    const result = await db.select().from(posts)
+    const result = await db.select().from(posts).orderBy(desc(posts.published_at))
     return result
 }
 
@@ -50,6 +50,6 @@ export async function getPostsByFeed(feedId:string) {
         .select()
         .from(posts)
         .where(eq(posts.feed_id, feedId))
-        .orderBy(posts.published_at)
+        .orderBy(desc(posts.published_at))
     return result
 }
