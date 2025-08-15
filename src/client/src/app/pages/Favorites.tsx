@@ -3,13 +3,14 @@ import { Route } from "../router/Router"
 import './Browse/Browse.css'
 import { API_BASE } from "../config"
 import { RSSItem } from "../shared/RSSItem"
-import { addFavorite, removeFavorite } from "../utils/helpers"
+import { useFavorite } from "../utils/useFavorite"
 
 
 type FavoritesProps = { authStatus: boolean; }
 
 export function Favorites({ authStatus, } : FavoritesProps) {
-    const [posts, setPosts] = useState<Post[] | null>(null)
+    const [posts, setPosts] = useState<Post[] | null | undefined>(null)
+    const handler = useFavorite(posts, setPosts)
 
     async function getFavPosts() {
         const raw = await fetch(`${API_BASE}/feeds/posts/favorites`, {
@@ -23,35 +24,6 @@ export function Favorites({ authStatus, } : FavoritesProps) {
         return data.map(post => ({...post, isAdded: true }))
     }
     
-    function favBtnHandler(post:Post) {
-        if(!posts) {
-            return;
-        }
-        
-        const postIdx = posts?.findIndex(item => item.id === post.id)
-
-        if(postIdx < 0) {
-            return;
-        }
-
-        let isAdded = !!post.isAdded
-        const callback = () => setPosts(prev => {
-            if (!prev) return prev
-            return [...prev.slice(0, postIdx), {...post, isAdded: !isAdded}, ...prev.slice(postIdx + 1)]
-        })
-
-        try {
-            if (isAdded) {
-                removeFavorite(String(post.id), callback).then(() => console.log('%s removed', post.title))
-            } else {
-                addFavorite(String(post.id), callback).then(() => console.log('%s added', post.title))
-            }
-        } catch (error) {
-            console.log()
-            isAdded = !isAdded
-            callback()
-        }
-    }
 
     useEffect(() => {
         getFavPosts()
@@ -71,11 +43,13 @@ export function Favorites({ authStatus, } : FavoritesProps) {
     return (
         <Route path={'/favorites'}>
             <div className="browse">
-                {
-                    posts && posts.length > 0
-                        ? posts.map(post => <RSSItem key={post.id} post={post} clickHandler={favBtnHandler}/>)
-                        : <h1>No posts added yet</h1>
-                }
+                <ul>
+                    {
+                        posts && posts.length > 0
+                            ? posts.map(post => <RSSItem key={post.id} post={post} clickHandler={handler} />)
+                            : <h1>No posts added yet</h1>
+                    }
+                </ul>
             </div>
         </Route>
     )
