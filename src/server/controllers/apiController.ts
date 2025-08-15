@@ -86,6 +86,7 @@ export async function favoritePost(req:Request, res:Response, next: NextFunction
         const post = await getPostByID(id);
         if(!post) throw new Error('[POST]: post not foud')
         const entry = await createFavorite(user, post)
+        if(!entry) throw new Error('[FAVORITES]: favorite not found')
         console.log('[FAVORITES]: ', entry)
         res.status(200).json(entry)
     } catch (error) {
@@ -99,8 +100,10 @@ export async function unfavoritePost(req:Request, res:Response, next: NextFuncti
     try {
         const user = res.locals.user as User;
         const post = await getPostByID(id);
+        console.log(post)
         if(!post) throw new Error('[POST]: post not foud')
         const entry = await deleteFavorite(user, post)
+        if(!entry) throw new Error('[FAVORITES]: favorite not found')
         console.log('[FAVORITES]: removed from favorites ', entry)
         res.status(200).json(entry)
     } catch (error) {

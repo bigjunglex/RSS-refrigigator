@@ -7,6 +7,7 @@ export function Nav() {
             <Link to="/" children='Browse' />
             <Link to="/feeds" children='Feeds' />
             <Link to="/login" children='Login' />
+            <Link to="/favorites" children='🌟' />
         </nav>
     )
 }

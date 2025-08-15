@@ -3,12 +3,14 @@ import { Route } from "../../router/Router"
 import './Browse.css'
 import { API_BASE } from "../../config"
 import { VirtualPostList } from "../../utils/VirtualList"
+import { useFavorite } from "../../utils/useFavorite"
 
 type BrowseProps = { authStatus: boolean; }
 
 export function Browse({ authStatus } : BrowseProps) {
     const [posts, setPosts] = useState<Post[] | null>()
 	const [offset, setOffset] = useState(0)
+	const favBtnHandler = useFavorite(posts, setPosts)
 
 	async function getPosts() {
 		const endpoint = authStatus ? `feeds/posts/followed?limit=100&offset=${offset}` : 'posts'
@@ -32,7 +34,7 @@ export function Browse({ authStatus } : BrowseProps) {
 			<>
 				<div className="browse">
 					<button className="getpost" onClick={getPosts}>get Posts</button>
-					<VirtualPostList posts={posts as Post[]} buffer={5} onBot={botIntersect} onTop={topIntersect} />
+					<VirtualPostList posts={posts as Post[]} buffer={5} onBot={botIntersect} onTop={topIntersect} favBtnHandler={favBtnHandler}/>
 				</div>
 			</>
 		</Route>

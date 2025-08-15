@@ -20,4 +20,45 @@ export async function checkAuth():Promise<AuthCheckReturn>{
     }
 }
 
+/**
+ * @param callback on successfull add 
+ */
+export async function addFavorite(postID: string, callback:Function) {
+    try {
+        const res = await fetch(`${API_BASE}/feeds/${postID}/favorite`, {
+            credentials: 'include',
+            method: 'POST'
+        })
+        if(res.status === 200) {
+            callback()
+        } else {
+            throw new Error(`[FAVORITES] : didnt add ${postID}`)
+        }
+    } catch (error) {
+        if (error instanceof Error) {
+            console.log(error.message)
+        }
+    }
+}
+
+/**
+ * @param callback on successfull remove 
+ */
+export async function removeFavorite(postID: string, callback: Function) {
+    try {
+        const res = await fetch(`${API_BASE}/feeds/${postID}/favorite`, {
+            credentials: 'include',
+            method: 'DELETE'
+        })
+        if(res.status === 200) {
+            callback()
+        } else {
+            throw new Error(`[FAVORITES] : didnt remove ${postID}`)
+        }
+    } catch (error) {
+        if (error instanceof Error) {
+            console.log(error.message)
+        }
+    }
+}
 

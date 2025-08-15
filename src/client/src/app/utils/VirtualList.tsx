@@ -6,15 +6,17 @@ type VirtualPostProps = {
     onTop: Function;
     onBot: Function;
     buffer:number;
+    favBtnHandler:( post: Post) => void;
 }
 
 
 
-export function VirtualPostList({ posts, onTop, onBot, buffer }:VirtualPostProps) {
+export function VirtualPostList({ posts, onTop, onBot, buffer, favBtnHandler}:VirtualPostProps) {
     const watcherBotRef = useRef<HTMLLIElement>(null)
     const watcherTopRef = useRef<HTMLLIElement>(null)
     const itemRef = useRef<HTMLLIElement>(null)
     const containerRef = useRef<HTMLUListElement>(null)
+
 
     useEffect(() => {
         const obsOptions: IntersectionObserverInit = { root: containerRef.current, threshold: 0.5, }
@@ -36,7 +38,6 @@ export function VirtualPostList({ posts, onTop, onBot, buffer }:VirtualPostProps
             })
         }, obsOptions)
         
-        containerRef.current?.addEventListener('click', (e:MouseEvent) => console.log('x: %s | y: %s', e.clientX, e.clientY))
 
         if(watcherBotRef.current && watcherTopRef.current) {
             topWatcher.observe(watcherTopRef.current)
@@ -46,7 +47,6 @@ export function VirtualPostList({ posts, onTop, onBot, buffer }:VirtualPostProps
         return () => {
             topWatcher.disconnect()
             botWatcher.disconnect()
-            containerRef.current?.removeEventListener('click', (e:MouseEvent) => console.log('x: %s | y: %s', e.clientX, e.clientY))
         }
     }, [posts])
 
@@ -58,7 +58,7 @@ export function VirtualPostList({ posts, onTop, onBot, buffer }:VirtualPostProps
                     if (i === 0) ref = itemRef
                     if (i === buffer) ref = watcherTopRef
                     if (i === arr.length - buffer - 1) ref = watcherBotRef
-                    return <RSSItem ref={ref} key={i} post={post} isAdded={false} />
+                    return <RSSItem ref={ref} key={i} post={post} clickHandler={favBtnHandler} />
                 })
             }
         </ul>

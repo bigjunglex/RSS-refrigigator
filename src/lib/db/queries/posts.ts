@@ -1,9 +1,10 @@
 import { db } from "../db";
-import { desc, eq, inArray } from "drizzle-orm";
-import { feed_follows, posts} from "../schema";
+import { and, desc, eq } from "drizzle-orm";
+import { feed_follows, post_favorites, posts} from "../schema";
 import { getUser, User } from "./users";
 
 export type Post = typeof posts.$inferInsert;
+export type PostReturn = typeof posts.$inferSelect & { isAdded?: boolean }
 export type PostInsert = Omit<Post, "createdAt" | "updatedAt" | "id">;
 
 export async function createPost(post:PostInsert):Promise<Post> {
@@ -22,18 +23,38 @@ export async function createPost(post:PostInsert):Promise<Post> {
 }
 
 
-export async function getPostsForUser(user:User, limit:number, offset = 0):Promise<Post[]> {
+export async function getPostsForUser(user:User, limit:number, offset = 0):Promise<PostReturn[]> {
     const user_id = String(user.id)
     const result = await db
-        .select({ post: posts })
+        .select({
+            id: posts.id,
+            createdAt: posts.createdAt,
+            updatedAt: posts.updatedAt,
+            title: posts.title,
+            url: posts.title,
+            feed_id: posts.feed_id,
+            description: posts.description,
+            published_at:posts.published_at,
+            isAdded: post_favorites.post_id
+        })
         .from(feed_follows)
         .innerJoin(posts, eq(feed_follows.feed_id, posts.feed_id))
+        .leftJoin(
+            post_favorites,
+            and(
+                eq(post_favorites.post_id, posts.id),
+                eq(post_favorites.user_id, user_id)
+            )
+        )
         .where(eq(feed_follows.user_id, user_id))
         .orderBy(desc(posts.published_at))
         .limit(limit)
         .offset(offset);
-    return result.map(p => p.post)
+    return result.map(p => ({...p, isAdded: Boolean(p.isAdded)}))
 }
+
+
+
 
 export async function getPostByID(id:string):Promise<Post> {
     const [result] = await db.select().from(posts).where(eq(posts.id, id))
@@ -53,3 +74,4 @@ export async function getPostsByFeed(feedId:string) {
         .orderBy(desc(posts.published_at))
     return result
 }
+

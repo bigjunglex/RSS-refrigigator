@@ -1,8 +1,8 @@
 import { forwardRef } from "react";
 
-type PostProp = { post:Post; isAdded:boolean }
+type PostProp = { post:Post, clickHandler: Function }
 
-export const RSSItem = forwardRef<HTMLLIElement, PostProp>(({ post, isAdded }, ref) => {
+export const RSSItem = forwardRef<HTMLLIElement, PostProp>(({ post, clickHandler }, ref) => {
     const desc = new DOMParser().parseFromString(String(post.description), 'text/html')
     let formatted = desc.body.textContent ?? ''
     let link = null
@@ -23,7 +23,7 @@ export const RSSItem = forwardRef<HTMLLIElement, PostProp>(({ post, isAdded }, r
         ) : (
           <p>📝 {formatted?.length > 0 ? formatted : post.description}</p>
         )}
-        <button> {isAdded ? '🚫' : '🌟'} </button>
+        <button onClick={() => clickHandler(post)}> {post.isAdded ? '🚫' : '🌟'} </button>
       </li>
     )
   }

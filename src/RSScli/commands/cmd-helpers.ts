@@ -3,7 +3,7 @@ import { getUser, type User } from "src/lib/db/queries/users";
 import type { Follow } from "src/lib/db/queries/follows";
 import type { CommandHandler } from "./commands";
 import { readConfig } from "src/config";
-import { getAllPosts, Post } from "src/lib/db/queries/posts";
+import { getAllPosts, Post, PostReturn } from "src/lib/db/queries/posts";
 import * as readline from "node:readline"
 import { stdin as input, stdout as output } from "node:process";
 
@@ -64,15 +64,16 @@ export function parseTime(duration:string):[number, string] {
 }
 
 
-export function printPosts(posts: Post[]): void {
+export function printPosts(posts: PostReturn[]): void {
     for (const post of posts) {
+        const emoji = post.isAdded ? '🚫' : '🌟'
         const date = new Date(String(post.published_at)).toDateString()
         console.log('\n-------------------------------')
         console.log('📌 %s \n', post.title)
         console.log('📅 Published: %s\n', date)
         console.log('🌐 %s\n', post.url)
         console.log('📝 : %s', post.description)
-        console.log('\n🌟: ---- %s ----', post.id)
+        console.log('\n%s: ---- %s ----', emoji, post.id)
         console.log('\n-------------------------------')
     }
 }

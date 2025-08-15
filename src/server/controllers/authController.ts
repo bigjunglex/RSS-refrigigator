@@ -87,7 +87,11 @@ export async function refreshJwt(req: Request, res: Response, next: NextFunction
     const { refToken } = req.cookies
     const { target, method } = req.query
     try {
-        const { userId } = await getRefreshToken(refToken)
+        if(!refToken) throw new Error('[AUTH]: Refresh endpoint --> no RefToken')
+        console.log('[REFRESH REQUEST] refToken:', refToken);
+        const prevToken  = await getRefreshToken(refToken)
+        if (!prevToken) throw new Error('[AUTH]: Invalid Refresh TOken');
+        const { userId } = prevToken
         if (!userId) throw new Error('[AUTH]: Invalid Refresh TOken');
         const revoked = await revokeRefreshToken(refToken)
         const user = await getUserByID(userId)

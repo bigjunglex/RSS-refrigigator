@@ -9,6 +9,7 @@ type Post = {
     updatedAt?: string | undefined;
     description?: string | null | undefined;
     published_at?: string | Date | undefined | null;
+    isAdded?:boolean;
 }
 
 type Navigate = (to:string) => void
