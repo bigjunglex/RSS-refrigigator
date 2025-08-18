@@ -1,35 +1,19 @@
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { Route } from "../router/Router"
 import './Browse/Browse.css'
-import { API_BASE } from "../config"
 import { RSSItem } from "../shared/RSSItem"
 import { useFavorite } from "../utils/useFavorite"
+import { getFavPosts } from "../utils/helpers"
 
 
-type FavoritesProps = { authStatus: boolean; }
-
-export function Favorites({ authStatus, } : FavoritesProps) {
-    const [posts, setPosts] = useState<Post[] | null | undefined>(null)
-    const handler = useFavorite(posts, setPosts)
-
-    async function getFavPosts() {
-        const raw = await fetch(`${API_BASE}/feeds/posts/favorites`, {
-            credentials: 'include'
-        })
-        if (raw.status !== 200) {
-            console.log(raw.status)
-            return null;
-        }
-        const data = await raw.json() as Post[]
-        return data.map(post => ({...post, isAdded: true }))
-    }
-    
+export function Favorites({ authStatus, posts, setPosts, trigger, setTrigger} : PostsView) {
+    const handler = useFavorite(posts, setPosts, setTrigger)
 
     useEffect(() => {
         getFavPosts()
         .then(data => setPosts(data))
         .catch((e:any) => e instanceof Error ? console.log(e.message) : console.log(e))
-    }, [])
+    }, [trigger])
     
 
     if (!authStatus) {
@@ -46,7 +30,9 @@ export function Favorites({ authStatus, } : FavoritesProps) {
                 <ul>
                     {
                         posts && posts.length > 0
-                            ? posts.map(post => <RSSItem key={post.id} post={post} clickHandler={handler} />)
+                            ? posts.map(post => {
+                                return post.isAdded ? <RSSItem key={post.id} post={post} clickHandler={handler} /> : null
+                            })
                             : <h1>No posts added yet</h1>
                     }
                 </ul>

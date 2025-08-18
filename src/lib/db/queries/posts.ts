@@ -1,7 +1,8 @@
 import { db } from "../db";
 import { and, desc, eq } from "drizzle-orm";
 import { feed_follows, post_favorites, posts} from "../schema";
-import { getUser, User } from "./users";
+import { User } from "./users";
+
 
 export type Post = typeof posts.$inferInsert;
 export type PostReturn = typeof posts.$inferSelect & { isAdded?: boolean }
@@ -61,8 +62,13 @@ export async function getPostByID(id:string):Promise<Post> {
     return result
 }
 
-export async function getAllPosts():Promise<Post[]> {
-    const result = await db.select().from(posts).orderBy(desc(posts.published_at))
+export async function getAllPosts(limit:number, offset: number):Promise<Post[]> {
+    const result = await db
+        .select()
+        .from(posts)
+        .orderBy(desc(posts.published_at))
+        .limit(limit)
+        .offset(offset)
     return result
 }
 

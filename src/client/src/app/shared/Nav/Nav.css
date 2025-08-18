@@ -12,6 +12,7 @@ nav {
 nav a {
     text-decoration: none;
     color: var(--main-text-color);
+    text-align: center;
 }
 
 nav > div > a::before {

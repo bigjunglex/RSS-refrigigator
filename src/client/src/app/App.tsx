@@ -6,20 +6,36 @@ import { useEffect, useState } from 'react'
 import { checkAuth, type AuthCheckReturn } from './utils/helpers'
 import { Favorites } from './pages/Favorites'
 
+
 function App() {
 	const [authStatus, setAuthStatus] = useState<AuthCheckReturn>({check:false, name: null})
+	const [favPosts, setFavPosts] = useState<Post[] | null | undefined>(null)
+	const [posts, setPosts] = useState<Post[] | null | undefined>(null)
+	const [trigger, setTrigger] = useState(true)
 
 	useEffect(() => {
-		checkAuth().then(v => v ? setAuthStatus(v) : null)
+		checkAuth().then(status => status ? setAuthStatus(status) : null)
 	}, [])
 
 	return (
 		<div className='app-wrap'>
 			<Router>
-				<Nav/>
-				<Browse authStatus={authStatus.check} />
+				<Nav authStatus={authStatus} />
+				<Browse 
+					authStatus={authStatus.check}
+					posts={posts}
+					setPosts={setPosts}
+					trigger={trigger}
+					setTrigger={setTrigger}
+				/>
 				<Login handler={setAuthStatus} authStatus={authStatus.check} />
-				<Favorites authStatus={authStatus.check} />
+				<Favorites
+					authStatus={authStatus.check}
+					posts={favPosts}
+					setPosts={setFavPosts}
+					trigger={trigger}
+					setTrigger={setTrigger}
+				/>
 			</Router>
 		</div>
 	)

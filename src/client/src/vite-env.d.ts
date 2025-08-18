@@ -14,3 +14,11 @@ type Post = {
 
 type Navigate = (to:string) => void
 type RouterContext = { currentPath: string; navigate: Navigate }
+
+type PostsView = { 
+    authStatus: boolean; 
+    posts: Post[] | null | undefined; 
+    setPosts: Dispatch<SetStateAction<Post[]| null | undefined>>;
+    trigger: boolean;
+    setTrigger:  Dispatch<SetStateAction<boolean>>;
+}

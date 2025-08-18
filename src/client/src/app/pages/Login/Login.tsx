@@ -16,7 +16,7 @@ export function Login({ handler, authStatus } : LoginProps) {
         })
 
         if (res.status === 200) {
-            handler({name:null, check: false})
+            handler({name:null, check:false})
             console.log('logout successfull')
         }
     }
@@ -43,8 +43,8 @@ export function Login({ handler, authStatus } : LoginProps) {
             method:'POST',
             body: body
         })
-        if (res.status === 200) handler(p => ({ ...p, check: true }));
         const json = await res.json()
+        if (res.status === 200) handler({ name: json.name, check: true });
         console.log(json)
     }
     return (

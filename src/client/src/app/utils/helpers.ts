@@ -2,20 +2,14 @@ import { API_BASE } from "../config"
 
 export type AuthCheckReturn = {check:boolean; name: string | null;}
 
-export async function checkAuth():Promise<AuthCheckReturn>{
+export async function checkAuth():Promise<AuthCheckReturn> {
     try {
         const res = await fetch(`${API_BASE}/check`, { credentials: 'include' })
-        if (res.status !== 200 ) {
-            return {check: false, name: null }
-        }
-        
+        if ( res.status !== 200 ) throw new Error(`Fetch error with ${res.status}`)
         const payload = await res.json();
         return {check:true, name: payload?.name}
-
     } catch (error) {
-        if(error instanceof Error) {
-            console.error(error)
-        }
+        if(error instanceof Error) { console.error(error) }
         return {check:false, name:null}
     }
 }
@@ -62,3 +56,28 @@ export async function removeFavorite(postID: string, callback: Function) {
     }
 }
 
+export async function getFavPosts() {
+    const raw = await fetch(`${API_BASE}/feeds/posts/favorites`, {
+        credentials: 'include'
+    })
+    if (raw.status !== 200) {
+        console.log(raw.status)
+        return null;
+    }
+    const data = await raw.json() as Post[]
+    return data.map(post => ({ ...post, isAdded: true }))
+}
+
+export async function getPosts(limit: number, offset: number, authStatus: boolean) {
+    const endpoint = authStatus ? `feeds/posts/followed?limit=${limit}&offset=${offset}` : `posts?limit=100&offset=${offset}`
+    const raw = await fetch(`${API_BASE}/${endpoint}`, {
+        credentials: 'include'
+    })
+    console.log(raw)
+    if (raw.status !== 200) {
+        alert(raw.status)
+        return;
+    }
+    const data = await raw.json() as Post[]
+    return data
+}

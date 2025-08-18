@@ -1,13 +1,15 @@
 import { Link } from "../../router/Router";
 import './Nav.css'
 
-export function Nav() {
+export type NavProps = { authStatus: { check:boolean, name: string | null} }
+
+export function Nav({ authStatus }:NavProps) {
     return (
         <nav>
+            <Link to="/login" children={authStatus.check ? `${authStatus.name}` : 'Login'} />
             <Link to="/" children='Browse' />
-            <Link to="/feeds" children='Feeds' />
-            <Link to="/login" children='Login' />
             <Link to="/favorites" children='🌟' />
+            <Link to="/feeds" children='Feeds' />
         </nav>
     )
 }

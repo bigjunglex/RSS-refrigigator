@@ -2,7 +2,11 @@ import { type SetStateAction, type Dispatch } from "react";
 import { addFavorite, removeFavorite } from "./helpers";
 
 
-export function useFavorite( posts: Post[] | null | undefined, setPosts: Dispatch<SetStateAction<Post[]| null | undefined>> ) {
+export function useFavorite(
+    posts: Post[] | null | undefined,
+    setPosts: Dispatch<SetStateAction<Post[]| null | undefined>>,
+    setTrigger:Dispatch<SetStateAction<boolean>>,
+) {
     return function favBtnHandler(post:Post) {
         if (!posts) { return; }
         let isAdded = post.isAdded
@@ -20,6 +24,7 @@ export function useFavorite( posts: Post[] | null | undefined, setPosts: Dispatc
             } else {
                 addFavorite(String(post.id), callback).then(() => console.log('%s added', post.title))
             }
+            setTrigger(p => !p)
         } catch (error) {
             console.log()
             isAdded = !isAdded

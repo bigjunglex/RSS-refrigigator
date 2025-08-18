@@ -128,10 +128,13 @@ export async function getFavorites(req:Request, res:Response, next: NextFunction
 
 
 export async function getPosts(req:Request, res:Response, next: NextFunction) {
+    const limit = parseInt(String(req.query.limit)) || 100
+    const offset = parseInt(String(req.query.offset)) || 0
     try {
-        const posts = await getAllPosts()
+        const user = res.locals.user as User
+        const posts = await getAllPosts(limit, offset)
         if(posts.length < 1) {
-            throw new Error('[POSTS]: 0 post found');
+            throw new Error('[FEED]: Not Found')
         }
         res.status(200).json(posts)
     } catch (error) {

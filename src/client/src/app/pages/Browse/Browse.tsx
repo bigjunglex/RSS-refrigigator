@@ -1,40 +1,45 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Route } from "../../router/Router"
 import './Browse.css'
-import { API_BASE } from "../../config"
 import { VirtualPostList } from "../../utils/VirtualList"
 import { useFavorite } from "../../utils/useFavorite"
+import { getPosts } from "../../utils/helpers"
 
-type BrowseProps = { authStatus: boolean; }
 
-export function Browse({ authStatus } : BrowseProps) {
-    const [posts, setPosts] = useState<Post[] | null>()
+export function Browse({ authStatus, posts, setPosts, trigger, setTrigger } : PostsView) {
 	const [offset, setOffset] = useState(0)
-	const favBtnHandler = useFavorite(posts, setPosts)
+	const [limit, buffer] = [30, 10]
+	const favBtnHandler = useFavorite(posts, setPosts, setTrigger)
 
-	async function getPosts() {
-		const endpoint = authStatus ? `feeds/posts/followed?limit=100&offset=${offset}` : 'posts'
-		const raw = await fetch(`${API_BASE}/${endpoint}`, {
-			credentials: 'include'
-		})
-		console.log(raw)
-		if (raw.status !== 200) {
-			alert(raw.status)
-			return;
-		}
-		const data = await raw.json() as Post[]
-		setPosts(data)
+	useEffect(() => {
+		console.log(trigger, offset)
+		getPosts(limit, offset, authStatus)
+			.then(data => setPosts(data))
+			.catch(e => console.log(`${e instanceof Error ? e.message : e}`))
+	}, [trigger, offset])
+
+	const topIntersect = () => {
+		const estimatedOffset = offset - limit
+		if (estimatedOffset < 0) return;
+		setOffset(estimatedOffset)
+	}
+	const botIntersect = () => {
+		if (posts && posts.length < limit ) return;
+		setOffset(offset + limit)
 	}
 
-	const topIntersect = () => console.log('top intersection')
-	const botIntersect = () => console.log('bot intersection')
-
+	
 	return (
 		<Route path={'/'}>
 			<>
 				<div className="browse">
-					<button className="getpost" onClick={getPosts}>get Posts</button>
-					<VirtualPostList posts={posts as Post[]} buffer={5} onBot={botIntersect} onTop={topIntersect} favBtnHandler={favBtnHandler}/>
+					<VirtualPostList
+						posts={posts as Post[]}
+						buffer={buffer}
+						onBot={botIntersect}
+						onTop={topIntersect}
+						favBtnHandler={favBtnHandler}
+					/>
 				</div>
 			</>
 		</Route>

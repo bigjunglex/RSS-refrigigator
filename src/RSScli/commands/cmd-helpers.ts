@@ -120,7 +120,7 @@ export function clearTerminal() {
 }
 
 export async function getLimitByTerminalStats() {
-    const postsArr = await getAllPosts()
+    const postsArr = await getAllPosts(100, 0)
     const descAvg = Math.floor(postsArr.reduce((acc, p) => acc += p.description?.length || 0, 0) / postsArr.length)
     let [rows, cols] = [output.rows, output.columns]
     const avgPrintPostsRows = 12 + Math.ceil(descAvg / cols) 
