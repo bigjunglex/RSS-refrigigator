@@ -9,23 +9,29 @@ import { getPosts } from "../../utils/helpers"
 export function Browse({ authStatus, posts, setPosts, trigger, setTrigger } : PostsView) {
 	const [offset, setOffset] = useState(0)
 	const [limit, buffer] = [30, 10]
+	const [loading, setLoading] = useState(false)
+	const [isMore, setIsMore] = useState(true)
 	const favBtnHandler = useFavorite(posts, setPosts, setTrigger)
 
 	useEffect(() => {
-		console.log(trigger, offset)
+		if (loading || !isMore) return;
+		setLoading(true)
+		
 		getPosts(limit, offset, authStatus)
-			.then(data => setPosts(data))
+			.then(data => {
+				setPosts((prev:Post[]) => [...prev || [], ...data || []])
+				if (data && data.length < limit) {
+					setIsMore(false)
+				}
+			})
 			.catch(e => console.log(`${e instanceof Error ? e.message : e}`))
+			.finally(() => setLoading(false));		
+
 	}, [trigger, offset])
 
-	const topIntersect = () => {
-		const estimatedOffset = offset - limit
-		if (estimatedOffset < 0) return;
-		setOffset(estimatedOffset)
-	}
 	const botIntersect = () => {
-		if (posts && posts.length < limit ) return;
-		setOffset(offset + limit)
+		console.log('intersected')
+		setOffset(p => p + limit)
 	}
 
 	
@@ -37,7 +43,6 @@ export function Browse({ authStatus, posts, setPosts, trigger, setTrigger } : Po
 						posts={posts as Post[]}
 						buffer={buffer}
 						onBot={botIntersect}
-						onTop={topIntersect}
 						favBtnHandler={favBtnHandler}
 					/>
 				</div>

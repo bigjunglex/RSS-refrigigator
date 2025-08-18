@@ -22,3 +22,13 @@ type PostsView = {
     trigger: boolean;
     setTrigger:  Dispatch<SetStateAction<boolean>>;
 }
+
+type Feed = {
+    id: string;
+    name: string;
+    createdAt: string;
+    updatedAt: string;
+    user_id: string;
+    last_fetched_at: string | null;
+    url: string;
+}
