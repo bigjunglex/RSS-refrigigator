@@ -93,3 +93,42 @@ export async function getFeeds(authStatus: boolean) {
     const data = await raw.json() as Feed[]
     return data
 }
+
+
+export async function followFeed(feed: Feed, callback: Function) {
+    const { id } = feed
+    try {
+        const res = await fetch(`${API_BASE}/feeds/${id}/follow`, {
+            credentials: 'include',
+            method: 'POST'
+        })
+        if (res.status === 200) {
+            callback()
+        } else {
+            throw new Error(`[FOLLOWS] : didnt follow ${id}`)
+        }
+    } catch (error) {
+        if (error instanceof Error) {
+            console.log(error.message)
+        }
+    }
+}
+
+export async function unfollowFeed(feed: Feed, callback: Function) {
+    const { id } = feed
+    try {
+        const res = await fetch(`${API_BASE}/feeds/${id}/follow`, {
+            credentials: 'include',
+            method: 'DELETE'
+        })
+        if (res.status === 200) {
+            callback()
+        } else {
+            throw new Error(`[FOLLOWS] : didnt unfollow ${id}`)
+        }
+    } catch (error) {
+        if (error instanceof Error) {
+            console.log(error.message)
+        }
+    }
+}

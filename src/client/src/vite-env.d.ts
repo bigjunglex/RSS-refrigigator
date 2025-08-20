@@ -21,6 +21,7 @@ type PostsView = {
     setPosts: Dispatch<SetStateAction<Post[]| null | undefined>>;
     trigger: boolean;
     setTrigger:  Dispatch<SetStateAction<boolean>>;
+    followTrigger?: boolean;
 }
 
 type Feed = {

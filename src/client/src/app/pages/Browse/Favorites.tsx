@@ -2,12 +2,12 @@ import { useEffect } from "react"
 import { Route } from "../../router/Router"
 import './Browse.css'
 import { RSSItem } from "../../shared/RSSItem"
-import { useFavorite } from "../../utils/useFavorite"
+import { createFavoriteHandler } from "../../utils/createFavoriteHandler"
 import { getFavPosts } from "../../utils/helpers"
 
 
 export function Favorites({ authStatus, posts, setPosts, trigger, setTrigger} : PostsView) {
-    const handler = useFavorite(posts, setPosts, setTrigger)
+    const handler = createFavoriteHandler(posts, setPosts, setTrigger)
 
     useEffect(() => {
         getFavPosts()

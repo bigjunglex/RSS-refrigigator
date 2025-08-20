@@ -3,11 +3,13 @@ import './Feeds.css'
 import { getFeeds } from "../../utils/helpers";
 import { Route } from "../../router/Router";
 import { Feed } from "../../shared/Feed";
+import { createFollowHandler } from "../../utils/createFollowHandler";
 
-type FeedProps = Pick<PostsView, 'authStatus'>
+type FeedProps = Pick<PostsView, 'authStatus' | 'setTrigger'>
 
-export function Feeds({ authStatus }:FeedProps) {
+export function Feeds({ authStatus, setTrigger}:FeedProps) {
     const [feeds, setFeeds] = useState<Feed[] | null>()
+    const handler = createFollowHandler(feeds, setFeeds, setTrigger);
 
     useEffect(() => {
         getFeeds(authStatus)
@@ -16,14 +18,10 @@ export function Feeds({ authStatus }:FeedProps) {
     
     },[authStatus])
 
-    function manageFollows(feed:Feed) {
-        console.log(feed.isFollowed)
-    }
-
     return (
         <Route path={'/feeds'}>
             <ul>
-                { feeds ? feeds.map((feed: Feed) => <Feed key={feed.id} feed={feed} handler={manageFollows}/>) : null }
+                { feeds ? feeds.map((feed: Feed) => <Feed key={feed.id} feed={feed} handler={handler} />) : null }
             </ul>
         </Route>
     )

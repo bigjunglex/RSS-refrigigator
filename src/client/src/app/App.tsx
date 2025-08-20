@@ -13,6 +13,7 @@ function App() {
 	const [favPosts, setFavPosts] = useState<Post[] | null | undefined>(null)
 	const [posts, setPosts] = useState<Post[] | null | undefined>(null)
 	const [trigger, setTrigger] = useState(true)
+	const [followTrigger, setFollowTrigger] = useState(true)
 
 	useEffect(() => {
 		checkAuth().then(status => status ? setAuthStatus(status) : null)
@@ -28,6 +29,7 @@ function App() {
 					setPosts={setPosts}
 					trigger={trigger}
 					setTrigger={setTrigger}
+					followTrigger={followTrigger}
 				/>
 				<Login handler={setAuthStatus} authStatus={authStatus.check} />
 				<Favorites
@@ -37,7 +39,10 @@ function App() {
 					trigger={trigger}
 					setTrigger={setTrigger}
 				/>
-				<Feeds authStatus={authStatus.check}/>
+				<Feeds
+				 authStatus={authStatus.check}
+				 setTrigger={setFollowTrigger}
+				/>
 			</Router>
 		</div>
 	)

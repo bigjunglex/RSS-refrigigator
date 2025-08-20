@@ -63,16 +63,27 @@ export function parseTime(duration:string):[number, string] {
     return [interval, msg]
 }
 
+function formatHNDesc(link:string) {
+    if (link.startsWith('<a') && link.includes('Comments')) {
+        const end = link.indexOf('>') - 1
+        const url = link.slice(9, end)
+        return `\x1b]8;;${url}\x1b\\Comments\x1b]8;;\x1b\\`
+    }
+    return link
+}
 
 export function printPosts(posts: PostReturn[]): void {
     for (const post of posts) {
-        const emoji = post.isAdded ? '🚫' : '🌟'
+        const emoji = post.isAdded 
+        const hyperlink =`\x1b]8;;${post.url}\x1b\\Link\x1b]8;;\x1b\\`
         const date = new Date(String(post.published_at)).toDateString()
+        const desc = formatHNDesc(String(post.description))
+
         console.log('\n-------------------------------')
         console.log('📌 %s \n', post.title)
         console.log('📅 Published: %s\n', date)
-        console.log('🌐 %s\n', post.url)
-        console.log('📝 : %s', post.description)
+        console.log('🌐 %s\n', hyperlink)
+        console.log('📝 : %s', desc)
         console.log('\n%s: ---- %s ----', emoji, post.id)
         console.log('\n-------------------------------')
     }

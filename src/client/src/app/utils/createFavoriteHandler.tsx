@@ -2,7 +2,7 @@ import { type SetStateAction, type Dispatch } from "react";
 import { addFavorite, removeFavorite } from "./helpers";
 
 
-export function useFavorite(
+export function createFavoriteHandler(
     posts: Post[] | null | undefined,
     setPosts: Dispatch<SetStateAction<Post[]| null | undefined>>,
     setTrigger:Dispatch<SetStateAction<boolean>>,
@@ -26,7 +26,8 @@ export function useFavorite(
             }
             setTrigger(p => !p)
         } catch (error) {
-            console.log()
+            const msg = error instanceof Error ? error.message : '[ERROR]: @favoriteBtnHandler'
+            console.log('Rollback on error [- %s -]', msg)
             isAdded = !isAdded
             callback()
         }

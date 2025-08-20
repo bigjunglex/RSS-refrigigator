@@ -2,17 +2,19 @@ import { useEffect, useState } from "react"
 import { Route } from "../../router/Router"
 import './Browse.css'
 import { VirtualPostList } from "../../utils/VirtualList"
-import { useFavorite } from "../../utils/useFavorite"
+import { createFavoriteHandler } from "../../utils/createFavoriteHandler"
 import { getPosts } from "../../utils/helpers"
 
 
-export function Browse({ authStatus, posts, setPosts, trigger, setTrigger } : PostsView) {
+export function Browse({ authStatus, posts, setPosts, trigger, setTrigger, followTrigger } : PostsView) {
 	const [offset, setOffset] = useState(0)
 	const [limit, buffer] = [30, 10]
 	const [loading, setLoading] = useState(false)
 	const [isMore, setIsMore] = useState(true)
-	const favBtnHandler = useFavorite(posts, setPosts, setTrigger)
 
+	const favBtnHandler = createFavoriteHandler(posts, setPosts, setTrigger)
+
+	//fetch on offset + favTrigger
 	useEffect(() => {
 		if (loading || !isMore) return;
 		setLoading(true)
@@ -28,6 +30,18 @@ export function Browse({ authStatus, posts, setPosts, trigger, setTrigger } : Po
 			.finally(() => setLoading(false));		
 
 	}, [trigger, offset])
+
+	// initial fetch + refetch related posts after auth delay OR feed follow changes
+	useEffect(() => {
+		if (loading) return;
+		setLoading(true)
+		
+		getPosts(limit, offset, authStatus)
+			.then(data => { setPosts(data) })
+			.catch(e => console.log(`${e instanceof Error ? e.message : e}`))
+			.finally(() => setLoading(false));		
+
+	}, [authStatus, followTrigger])
 
 	const botIntersect = () => {
 		console.log('intersected')
