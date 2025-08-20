@@ -31,4 +31,5 @@ type Feed = {
     user_id: string;
     last_fetched_at: string | null;
     url: string;
+    isFollowed?: boolean;
 }

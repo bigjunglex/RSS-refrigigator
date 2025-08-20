@@ -73,11 +73,23 @@ export async function getPosts(limit: number, offset: number, authStatus: boolea
     const raw = await fetch(`${API_BASE}/${endpoint}`, {
         credentials: 'include'
     })
-    console.log(raw)
     if (raw.status !== 200) {
-        alert(raw.status)
+        console.log(raw.status)
         return;
     }
     const data = await raw.json() as Post[]
+    return data
+}
+
+export async function getFeeds(authStatus: boolean) {
+    const endpoint = authStatus ? 'feeds/followed' :'feeds/' 
+    const raw = await fetch(`${API_BASE}/${endpoint}`, {
+        credentials: 'include'
+    })
+    if (raw.status !== 200) {
+        console.log(raw.status)
+        return;
+    }
+    const data = await raw.json() as Feed[]
     return data
 }

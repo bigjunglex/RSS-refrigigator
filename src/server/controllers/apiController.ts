@@ -1,12 +1,13 @@
 import type { Response, Request, NextFunction } from "express"
 import { createFavorite, deleteFavorite, getFavoritePostsForUser } from "src/lib/db/queries/favorites";
-import { createFeedFollow, getAllFeeds, getFeedById } from "src/lib/db/queries/feeds"
+import { createFeedFollow, getAllFeeds, getAllWithUserFeeds, getFeedById } from "src/lib/db/queries/feeds"
 import { deleteFollow, getFeedFollowsForUser } from "src/lib/db/queries/follows";
 import { getAllPosts, getPostByID, getPostsByFeed, getPostsForUser } from "src/lib/db/queries/posts";
 import { type User } from "src/lib/db/queries/users";
 
 
 export async function getFeeds(req:Request, res:Response, next: NextFunction) {
+    console.log('getFeeds hit')
     try {
         const feeds = await getAllFeeds();
         if(feeds.length < 1) {
@@ -22,6 +23,7 @@ export async function getFeeds(req:Request, res:Response, next: NextFunction) {
 
 export async function getFeedWithID(req:Request, res:Response, next: NextFunction) {
     const { id } = req.params
+    console.log('getFeed with id hit')
     try {
         const feed = await getPostsByFeed(id)
         if(feed.length < 1) {
@@ -137,6 +139,18 @@ export async function getPosts(req:Request, res:Response, next: NextFunction) {
             throw new Error('[FEED]: Not Found')
         }
         res.status(200).json(posts)
+    } catch (error) {
+        next(error)
+    }
+}
+
+
+export async function getFeedsForUser(req:Request, res:Response, next: NextFunction) {
+    try {
+        const user = res.locals.user as User
+        const feeds = await getAllWithUserFeeds(user)
+        if(feeds.length < 1 ) throw new Error('[FEED]: Not Found');
+        res.status(200).json(feeds.map(feed => ({...feed, isFollowed: !!feed.isFollowed}) ))
     } catch (error) {
         next(error)
     }

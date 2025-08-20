@@ -1,4 +1,4 @@
-import { eq, sql } from "drizzle-orm";
+import { and, eq, sql, desc } from "drizzle-orm";
 import { readConfig } from "src/config";
 import { db } from "../db";
 import { users, feeds, feed_follows } from "../schema";
@@ -25,7 +25,7 @@ export async function getFeedByURL(url:string):Promise<Feed> {
  * @returns  Feed[] if formatNames false,
  * and  {name, url, userName}[] if true(by default)
  */
-export async function getAllFeeds(formatNames:boolean = true) {;
+export async function getAllFeeds(formatNames = false) {;
     if (formatNames) {
         const result = await db.select({
             name: feeds.name,
@@ -39,6 +39,28 @@ export async function getAllFeeds(formatNames:boolean = true) {;
         return result
     }
 }
+
+
+export async function getAllWithUserFeeds(user:User) {
+    const result = await db 
+        .select({
+            id: feeds.id,
+            url: feeds.url,
+            name: feeds.name,
+            createdAt: feeds.createdAt,
+            isFollowed: feed_follows.user_id
+        })
+        .from(feeds)
+        .leftJoin(
+            feed_follows,
+            and(
+                eq(feed_follows.feed_id, feeds.id),
+                eq(feed_follows.user_id, String(user.id))
+            )
+        )
+        .orderBy(desc(feeds.createdAt));
+    return result
+} 
 
 
 export async function createFeedFollow(user:User, feed:Feed) {

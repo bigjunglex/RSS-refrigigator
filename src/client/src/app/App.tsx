@@ -5,6 +5,7 @@ import { Favorites } from './pages/Browse/Favorites'
 import { Login } from './pages/Login/Login'
 import { useEffect, useState } from 'react'
 import { checkAuth, type AuthCheckReturn } from './utils/helpers'
+import { Feeds } from './pages/Feeds/Feeds'
 
 
 function App() {
@@ -36,6 +37,7 @@ function App() {
 					trigger={trigger}
 					setTrigger={setTrigger}
 				/>
+				<Feeds authStatus={authStatus.check}/>
 			</Router>
 		</div>
 	)

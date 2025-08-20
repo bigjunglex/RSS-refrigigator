@@ -13,7 +13,7 @@ export function Favorites({ authStatus, posts, setPosts, trigger, setTrigger} : 
         getFavPosts()
         .then(data => setPosts(data))
         .catch((e:any) => e instanceof Error ? console.log(e.message) : console.log(e))
-    }, [trigger])
+    }, [trigger, authStatus])
     
 
     if (!authStatus) {
