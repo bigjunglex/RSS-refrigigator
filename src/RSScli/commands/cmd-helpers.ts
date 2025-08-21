@@ -74,7 +74,7 @@ function formatHNDesc(link:string) {
 
 export function printPosts(posts: PostReturn[]): void {
     for (const post of posts) {
-        const emoji = post.isAdded 
+        const emoji = post.isAdded  ? '🚫' : '⭐'
         const hyperlink =`\x1b]8;;${post.url}\x1b\\Link\x1b]8;;\x1b\\`
         const date = new Date(String(post.published_at)).toDateString()
         const desc = formatHNDesc(String(post.description))
@@ -96,7 +96,6 @@ export async function getCurrentUser():Promise<User> {
 }
 
 /**
-
  *  @return String For forward / backward to for offset direction 
  */
 export async function browseNav(controller:AbortController): Promise<string> {

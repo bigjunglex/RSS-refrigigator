@@ -32,7 +32,7 @@ export async function getPostsForUser(user:User, limit:number, offset = 0):Promi
             createdAt: posts.createdAt,
             updatedAt: posts.updatedAt,
             title: posts.title,
-            url: posts.title,
+            url: posts.url,
             feed_id: posts.feed_id,
             description: posts.description,
             published_at:posts.published_at,

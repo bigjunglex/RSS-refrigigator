@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { Route } from "../../router/Router"
+import { Route } from "../../utils/Router"
 import './Browse.css'
 import { VirtualPostList } from "../../utils/VirtualList"
 import { createFavoriteHandler } from "../../utils/createFavoriteHandler"

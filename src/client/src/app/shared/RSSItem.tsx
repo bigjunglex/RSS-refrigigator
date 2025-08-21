@@ -3,6 +3,7 @@ import { forwardRef } from "react";
 type PostProp = { post:Post, clickHandler: Function }
 
 export const RSSItem = forwardRef<HTMLLIElement, PostProp>(({ post, clickHandler }, ref) => {
+    const date = new Date(String(post.createdAt)).toDateString()
     const desc = new DOMParser().parseFromString(String(post.description), 'text/html')
     let formatted = desc.body.textContent ?? ''
     let link = null
@@ -16,7 +17,7 @@ export const RSSItem = forwardRef<HTMLLIElement, PostProp>(({ post, clickHandler
     return (
       <li ref={ref} className="post">
         <h4>📌 {post.title}</h4>
-        <h5>📅 {post.createdAt}</h5>
+        <h5>📅 {date}</h5>
         <a href={post.url}>🌐 {post.url} </a>
         {link ? (
           <a href={link}> 💬 Comments </a>

@@ -8,9 +8,10 @@
     "dev": "tsx ./scripts/serve.ts",
     "dev-server": "tsx ./src/server/index.ts",
     "dev-client": "cd ./src/client && npm run dev",
-    "dev-server-db": "tsx --inspect-brk ./src/server/index.ts",
+    "dev-server-dbug": "tsx --inspect-brk ./src/server/index.ts",
     "generate": "drizzle-kit generate",
-    "migrate": "drizzle-kit migrate"
+    "migrate": "drizzle-kit migrate",
+    "dev-db": "sqlite3 local.db"
   },
   "keywords": [],
   "author": "",

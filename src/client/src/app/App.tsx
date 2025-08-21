@@ -1,4 +1,4 @@
-import { Router, } from './router/Router'
+import { Router, } from './utils/Router'
 import { Nav } from './shared/Nav/Nav'
 import { Browse } from './pages/Browse/Browse'
 import { Favorites } from './pages/Browse/Favorites'

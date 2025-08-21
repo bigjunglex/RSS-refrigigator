@@ -1,8 +1,8 @@
 :root {
-    --main-bg-color: #2c3421;
-    --main-text-color: #bd9764;
-    --main-suppor-color: #9b7348;
-    --nav-bar-bg-color: #525a48;
+    /* --main-bg-color: #2c3421;  Prev*/
+    --main-bg-color: #0a0a0a;
+    --main-text-color: #00cc66;
+    --main-suppor-color: #00cc66;
 
     --nav-bar-width: 100px;
     --nav-bar-padding-inner: 6px;
@@ -12,18 +12,6 @@
     background-color: var(--main-bg-color);
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: var(--main-bg-color);
-    background-color: var(--main-text-color);
-  }
-  a:hover {
-    color: var(--main-suppor-color);
-  }
-  button {
-    background-color: var(--main-suppor-color)
-  }
-}
 
 body {
     height: 100vh;
@@ -73,14 +61,3 @@ body::before {
         background-size: 100% 4px;
     }
 }
-
-
-
-/* 
-
-  background: var(--sidebar-bg);
-  height: 100vh;
-  width: calc(var(--sidebar-width) + var(--sidebar-inner-padding) * 2);
-  position: sticky; 
-
-  */

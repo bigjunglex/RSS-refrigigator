@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import './Feeds.css'
 import { getFeeds } from "../../utils/helpers";
-import { Route } from "../../router/Router";
+import { Route } from "../../utils/Router";
 import { Feed } from "../../shared/Feed";
 import { createFollowHandler } from "../../utils/createFollowHandler";
 
@@ -20,7 +20,7 @@ export function Feeds({ authStatus, setTrigger}:FeedProps) {
 
     return (
         <Route path={'/feeds'}>
-            <ul>
+            <ul className="feed-ul">
                 { feeds ? feeds.map((feed: Feed) => <Feed key={feed.id} feed={feed} handler={handler} />) : null }
             </ul>
         </Route>

@@ -1,5 +1,6 @@
 .browse ul {
     
+    font-family: 'Courier New', monospace;
     display: grid;
     gap: 20px;
     grid-template-columns: repeat(3, minmax(300px, 1fr));
@@ -22,32 +23,78 @@
     transition: transform 0.3s cubic-bezier(0, 0, 0.3, 1);
     text-decoration: none;
     padding: 10px;
-    overflow-y: scroll;
-    overflow-x: hidden;
+
 }
 
 .post h4 {
     color: #fff;
+    font-weight: bold;
 }
 
 .post a {
     color: var(--main-text-color);
 }
 
-.post:hover {
+/* .post:hover {
     transform: translateX(-10px);
-    z-index: 100000;
     background: radial-gradient(75% 75% at 50% 100%, var(--main-suppor-color) 0%, var(--main-bg-color) 100%);
+} */
+
+.post:hover {
+    background: rgba(0, 204, 102, 0.07);
+    border-color: rgba(0, 204, 102, 0.5);
+    transform: translateY(-2px);
 }
+
+.post:hover::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 204, 102, 0.1), transparent);
+    animation: scan 4s ease infinite;
+    pointer-events: none;
+}
+
+@keyframes scan {
+    0% {
+        opacity: 0;
+        transform: translateX(-50%); 
+    }
+    50% {
+        opacity: 1;
+    }
+    100% { 
+        opacity: 0;
+        transform: translateX(150%); 
+    }
+}
+
+
 
 .post button {
+    background: rgba(0, 204, 102, 0.07);
+    border: 1px solid rgba(0, 204, 102, 0.5);
     align-self: flex-end;
     margin-top: auto;
+    padding: 12px;
 }
 
+.post button:hover {
+    background: var(--main-text-color);
+    opacity: 0.8;
+}
+
+
+
 .post p {
+    color: #999999;
     flex: 2;
     text-wrap: wrap;
+        overflow-y: scroll;
+    overflow-x: hidden;
 }
 
 .post:hover {
@@ -64,3 +111,4 @@
         grid-template-columns: repeat(1, 1fr);
     }
 }
+

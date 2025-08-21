@@ -48,6 +48,7 @@ export async function getAllWithUserFeeds(user:User) {
             url: feeds.url,
             name: feeds.name,
             createdAt: feeds.createdAt,
+            last_fetched_at: feeds.last_fetched_at,
             isFollowed: feed_follows.user_id
         })
         .from(feeds)
