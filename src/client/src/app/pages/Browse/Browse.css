@@ -33,12 +33,19 @@
 
 .post a {
     color: var(--main-text-color);
+    overflow-x: hidden;
+    opacity: 0.5;
+    text-decoration: none;
 }
 
-/* .post:hover {
-    transform: translateX(-10px);
-    background: radial-gradient(75% 75% at 50% 100%, var(--main-suppor-color) 0%, var(--main-bg-color) 100%);
-} */
+
+.post a:hover {
+    opacity: 1;
+}
+
+.post h5 {
+    opacity: 0.8;
+}
 
 .post:hover {
     background: rgba(0, 204, 102, 0.07);
@@ -90,21 +97,13 @@
 
 
 .post p {
-    color: #999999;
+    color: #e8e0e0;
     flex: 2;
     text-wrap: wrap;
         overflow-y: scroll;
     overflow-x: hidden;
 }
 
-.post:hover {
-    transform: translateY(-5px);
-}
-
-.browse .getpost {
-    position: absolute;
-    top: 0px;
-}
 
 @media (width < 900px) {
     .browse ul {

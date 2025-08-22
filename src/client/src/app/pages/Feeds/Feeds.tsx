@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import './Feeds.css'
 import { getFeeds } from "../../utils/helpers";
-import { Route } from "../../utils/Router";
+import { Route } from "../../shared/Router";
 import { Feed } from "../../shared/Feed";
 import { createFollowHandler } from "../../utils/createFollowHandler";
 

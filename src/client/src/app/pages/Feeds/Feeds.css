@@ -50,7 +50,7 @@ ul {
 .feed a {
     padding: 12px 0;
     text-decoration: none;
-    color: #00cc66;
+    color: var(--main-text-color);
     opacity: 0.5;
 }
 

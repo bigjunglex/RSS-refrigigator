@@ -1,5 +1,5 @@
 import { type Dispatch, type FormEvent, type SetStateAction} from "react";
-import { Route } from "../../router/Router";
+import { Route } from "../../shared/Router";
 import './Login.css'
 import type { AuthCheckReturn } from "../../utils/helpers";
 import { API_BASE } from "../../config";

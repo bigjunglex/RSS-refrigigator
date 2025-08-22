@@ -1,4 +1,4 @@
-import { Link } from "../../utils/Router";
+import { Link } from "../Router";
 import './Nav.css'
 
 export type NavProps = { authStatus: { check:boolean, name: string | null} }

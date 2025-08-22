@@ -1,5 +1,5 @@
 import { useEffect } from "react"
-import { Route } from "../../utils/Router"
+import { Route } from "../../shared/Router"
 import './Browse.css'
 import { RSSItem } from "../../shared/RSSItem"
 import { createFavoriteHandler } from "../../utils/createFavoriteHandler"
