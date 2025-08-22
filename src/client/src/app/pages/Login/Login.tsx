@@ -3,9 +3,11 @@ import { Route } from "../../shared/Router";
 import './Login.css'
 import type { AuthCheckReturn } from "../../utils/helpers";
 import { API_BASE } from "../../config";
+import { Glitch } from "../../shared/Glich/Gltich";
 
 
-type LoginProps = {handler: Dispatch<SetStateAction<AuthCheckReturn>>; authStatus: boolean}
+
+type LoginProps = {handler: Dispatch<SetStateAction<AuthCheckReturn>>; authStatus: {check: boolean; name: string | null}}
 
 export function Login({ handler, authStatus } : LoginProps) {
 
@@ -21,10 +23,14 @@ export function Login({ handler, authStatus } : LoginProps) {
         }
     }
 
-    if (authStatus) {
+    if (authStatus.check) {
         return (
             <Route path={'/login'}>
-                <button className="logout-btn" onClick={logout}>⚠️ Logout ⚠️</button>
+                <div className="login-wrapper">
+                    <Glitch />
+                    <h1>{authStatus.name}</h1>
+                    <button className="logout-btn" onClick={logout}>⚠️ Logout ⚠️</button>
+                </div>
             </Route>
         )
     }
@@ -49,14 +55,11 @@ export function Login({ handler, authStatus } : LoginProps) {
     }
     return (
         <Route path={'/login'}>
-            <div className="loginWrapper">
-                <h1>login page</h1>
-                <form onSubmit={logSubmit}>
-                    <label htmlFor="name">name</label>
-                    <input type="text" id="name" name="name" />
-
-                    <label htmlFor="password">password</label>
-                    <input type="password" id="password" name="password" />
+            <div className="login-wrapper">
+                <Glitch />
+                <form id="login-form" onSubmit={logSubmit}>
+                    <input type="text" id="name" name="name" placeholder="Username"/>
+                    <input type="password" id="password" name="password" placeholder="Password"/>
                     <button type="submit">done</button>
                 </form>
             </div>

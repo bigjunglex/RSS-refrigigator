@@ -31,7 +31,7 @@ function App() {
 					setTrigger={setTrigger}
 					followTrigger={followTrigger}
 				/>
-				<Login handler={setAuthStatus} authStatus={authStatus.check} />
+				<Login handler={setAuthStatus} authStatus={authStatus} />
 				<Favorites
 					authStatus={authStatus.check}
 					posts={favPosts}

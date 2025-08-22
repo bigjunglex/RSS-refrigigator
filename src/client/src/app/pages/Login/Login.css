@@ -1,6 +1,29 @@
 .logout-btn {
-    position: absolute;
-    top: 10%;
-    left: 50%;
-    transform: translate(-50% -50%);
+    margin-top: 3em;
+}
+
+.login-wrapper h1 {
+    padding: 12px 0;
+    color: var(--main-text-color);
+    opacity: 0.8;
+    font-weight: bold;
+}
+
+.login-wrapper {
+    padding-top: 2em;
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+    align-items: center;
+}
+
+.login-wrapper input {
+    color: var(--main-text-color);
+}
+
+#login-form {
+    margin-top: 2em;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
 }
