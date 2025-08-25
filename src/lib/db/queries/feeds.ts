@@ -1,5 +1,5 @@
 import { and, eq, sql, desc } from "drizzle-orm";
-import { readConfig } from "src/config";
+import { readConfig } from "../../../config";
 import { db } from "../db";
 import { users, feeds, feed_follows } from "../schema";
 import { type User } from "./users";

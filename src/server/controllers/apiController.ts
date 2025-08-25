@@ -1,9 +1,9 @@
 import type { Response, Request, NextFunction } from "express"
-import { createFavorite, deleteFavorite, getFavoritePostsForUser } from "src/lib/db/queries/favorites";
-import { createFeedFollow, getAllFeeds, getAllWithUserFeeds, getFeedById } from "src/lib/db/queries/feeds"
-import { deleteFollow, getFeedFollowsForUser } from "src/lib/db/queries/follows";
-import { getAllPosts, getPostByID, getPostsByFeed, getPostsForUser } from "src/lib/db/queries/posts";
-import { type User } from "src/lib/db/queries/users";
+import { createFavorite, deleteFavorite, getFavoritePostsForUser } from "../../lib/db/queries/favorites";
+import { createFeedFollow, getAllFeeds, getAllWithUserFeeds, getFeedById } from "../../lib/db/queries/feeds"
+import { deleteFollow, getFeedFollowsForUser } from "../../lib/db/queries/follows";
+import { getAllPosts, getPostByID, getPostsByFeed, getPostsForUser } from "../../lib/db/queries/posts";
+import { type User } from "../../lib/db/queries/users";
 
 
 export async function getFeeds(req:Request, res:Response, next: NextFunction) {

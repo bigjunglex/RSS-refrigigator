@@ -4,7 +4,7 @@
         "target": "esnext",
         "module": "esnext",
         "strict": true,
-        "outDir": "dist",
+        "outDir": "dist-server/src",
         "rootDir": "./src",
         "moduleResolution": "node",
         "esModuleInterop": true,

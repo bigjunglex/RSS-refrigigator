@@ -11,7 +11,10 @@
     "dev-server-dbug": "tsx --inspect-brk ./src/server/index.ts",
     "generate": "drizzle-kit generate",
     "migrate": "drizzle-kit migrate",
-    "dev-db": "sqlite3 local.db"
+    "dev-db": "sqlite3 local.db",
+    "build": "tsc && ts-add-js-extension --dir=dist-server",
+    "preview": "node dist-server/src/server/index.js",
+    "exec-prod": "NODE_ENV=prod node dist-server/src/server/index.js"
   },
   "keywords": [],
   "author": "",
@@ -24,6 +27,7 @@
     "@types/express": "^5.0.3",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^22.15.30",
+    "ts-add-js-extension": "^1.6.6",
     "tsx": "^4.19.4",
     "typescript": "^5.8.3"
   },

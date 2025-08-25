@@ -1,8 +1,8 @@
 import type { Request, Response, NextFunction } from "express";
-import { createUser, getUser, getUserByID, updateUserPasswordById, UserSelect } from "src/lib/db/queries/users";
+import { createUser, getUser, getUserByID, updateUserPasswordById, UserSelect } from "../../lib/db/queries/users";
 import { hashPassword, makeJWT, makeRefreshToken, validateJWT, validatePassword } from "../auth";
 import { formatUserRegResponse } from "../helpers";
-import { getRefreshToken, newRefreshToken, revokeRefreshToken } from "src/lib/db/queries/refreshTokens";
+import { getRefreshToken, newRefreshToken, revokeRefreshToken } from "../../lib/db/queries/refreshTokens";
 
 const JWTexpires = process.env.JWT_EXP ? parseInt(process.env.JWT_EXP) : 3600
 const REFexpires = process.env.REFRESH_EXP ? parseInt(process.env.REFRESH_EXP) : 60
