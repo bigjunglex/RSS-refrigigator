@@ -7,10 +7,6 @@ const app = express()
 const PORT = 8080
 
 
-if (process.env.NODE_ENV !== 'prod') {
-    app.use(cors({ origin: 'http://localhost:5173', credentials: true }));
-} 
-
 
 app.disable("x-powered-by")
 app.use(middleWares)
