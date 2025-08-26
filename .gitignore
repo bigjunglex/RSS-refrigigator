@@ -5,3 +5,5 @@ drizzle/
 .env
 local.db
 serverLog.txt
+dist-server/
+dist-client/
