@@ -33,7 +33,7 @@
 
 .post a {
     color: var(--main-text-color);
-    overflow-x: hidden;
+    overflow: hidden;
     opacity: 0.5;
     text-decoration: none;
 }

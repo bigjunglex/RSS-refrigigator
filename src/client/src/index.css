@@ -13,9 +13,11 @@
 }
 
 
-body {
-    height: 100vh;
-    overflow-y: hidden;
+html, body {
+  overflow: hidden;
+  height: 100%;
+  position: fixed;
+  width: 100%;
 }
 
 .app-wrap {

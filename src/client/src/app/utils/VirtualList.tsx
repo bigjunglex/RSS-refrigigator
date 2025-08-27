@@ -33,10 +33,13 @@ export function VirtualPostList({ posts, onBot, buffer, favBtnHandler}:VirtualPo
 
     }, [posts])
 
+    // костыль, 
+    const noDup = [...new Set(posts)]    
+
     return (
         <ul ref={containerRef}>
             {
-                posts?.map((post, i, arr) => {
+                noDup?.map((post, i, arr) => {
                     let ref = null
                     if (i === 0) ref = itemRef
                     if (i === arr.length - buffer - 1) ref = watcherBotRef
