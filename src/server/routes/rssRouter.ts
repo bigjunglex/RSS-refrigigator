@@ -9,7 +9,8 @@ import {
     getPosts,
     unfavoritePost,
     unfollowFeed,
-    getFeedsForUser 
+    getFeedsForUser,
+    getSearch
 } from "../controllers/apiController";
 import { authMiddleware } from "../middlewares";
 
@@ -22,6 +23,7 @@ export const protectedRouter = Router()
 rssRouter.get('/api/feeds', getFeeds)
 rssRouter.get('/api/feeds/:id/feed', getFeedWithID)
 rssRouter.get('/api/posts', getPosts)
+rssRouter.get('/api/search', getSearch)
 
 protectedRouter.use(authMiddleware)
 protectedRouter.get('/followed', getFeedsForUser)

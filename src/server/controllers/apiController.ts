@@ -2,7 +2,7 @@ import type { Response, Request, NextFunction } from "express"
 import { createFavorite, deleteFavorite, getFavoritePostsForUser } from "src/lib/db/queries/favorites";
 import { createFeedFollow, getAllFeeds, getAllWithUserFeeds, getFeedById } from "src/lib/db/queries/feeds"
 import { deleteFollow, getFeedFollowsForUser } from "src/lib/db/queries/follows";
-import { getAllPosts, getPostByID, getPostsByFeed, getPostsForUser } from "src/lib/db/queries/posts";
+import { getAllPosts, getPostByID, getPostByQuery, getPostsByFeed, getPostsForUser } from "src/lib/db/queries/posts";
 import { type User } from "src/lib/db/queries/users";
 
 
@@ -133,7 +133,6 @@ export async function getPosts(req:Request, res:Response, next: NextFunction) {
     const limit = parseInt(String(req.query.limit)) || 100
     const offset = parseInt(String(req.query.offset)) || 0
     try {
-        const user = res.locals.user as User
         const posts = await getAllPosts(limit, offset)
         if(posts.length < 1) {
             throw new Error('[FEED]: Not Found')
@@ -151,6 +150,23 @@ export async function getFeedsForUser(req:Request, res:Response, next: NextFunct
         const feeds = await getAllWithUserFeeds(user)
         if(feeds.length < 1 ) throw new Error('[FEED]: Not Found');
         res.status(200).json(feeds.map(feed => ({...feed, isFollowed: !!feed.isFollowed}) ))
+    } catch (error) {
+        next(error)
+    }
+}
+
+/**
+ * TODO: make search more advanced by splitting query
+ */
+export async function getSearch(req:Request, res:Response, next: NextFunction) {
+    let query = req.query.query as string
+    try {
+        query = query.replace('-', ' ').toLowerCase()
+        if(!query) throw new Error('[SEARCH]: invalid search query provided')
+        console.log(query)
+        const posts = await getPostByQuery(query.trim())
+        if(posts.length < 1) throw new Error('[SEARCH]: Not Found')
+        res.status(200).json(posts)
     } catch (error) {
         next(error)
     }

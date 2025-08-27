@@ -1,5 +1,5 @@
 import { db } from "../db";
-import { and, desc, eq } from "drizzle-orm";
+import { and, desc, eq, like, or, sql } from "drizzle-orm";
 import { feed_follows, post_favorites, posts} from "../schema";
 import { User } from "./users";
 
@@ -81,3 +81,16 @@ export async function getPostsByFeed(feedId:string) {
     return result
 }
 
+export async function getPostByQuery(query:string) {
+    const result = await db
+        .select()
+        .from(posts)
+        .where(
+            or(
+                like(sql`LOWER(${posts.title})`, `%${query}%`),
+                like(sql`LOWER(${posts.description})`, `%${query}%`)
+            )
+        )
+        .orderBy(desc(posts.published_at))
+    return result
+}

@@ -30,6 +30,7 @@ type PostsView = {
     trigger: boolean;
     setTrigger:  Dispatch<SetStateAction<boolean>>;
     followTrigger?: boolean;
+    setFollowTrigger?:Dispatch<SetStateAction<boolean>>;
 }
 
 type Feed = {

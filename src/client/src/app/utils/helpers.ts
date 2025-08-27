@@ -131,3 +131,19 @@ export async function unfollowFeed(feed: Feed, callback: Function) {
         }
     }
 }
+
+
+export async function getSearch(query:string):Promise<Post[]> {
+    const noSpace = query.replace(' ', '-')
+    try {
+        const res = await fetch(`${API_BASE}/search?query=${noSpace}`);
+        if (res.status !== 200) throw new Error(`[SEARCH]: response: ${res.status}`);
+        const data = await res.json() as Post[]
+        return data
+    } catch (error) {
+        if (error instanceof Error) {
+            console.log(error.message)
+        }
+        return []
+    }
+}

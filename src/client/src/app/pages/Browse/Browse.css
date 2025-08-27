@@ -1,14 +1,15 @@
+
 .browse ul {
-    
     font-family: 'Courier New', monospace;
     display: grid;
     gap: 20px;
     grid-template-columns: repeat(3, minmax(300px, 1fr));
     grid-auto-rows: 400px;
-    padding: 24px;
+    padding: 75px 24px 24px 24px;
     max-width: 1200px;
     overflow-y: auto;
     height: 100vh;
+    box-sizing: border-box;
 }
 
 .post {
@@ -111,3 +112,74 @@
     }
 }
 
+#search-bar {
+    position: fixed;
+    top: 10px;
+    left: calc(var(--nav-bar-width) + 10%);
+
+    display: flex;
+    align-items: center;
+    background: rgba(0, 204, 102, 0.07);
+    border: 1px solid rgba(0, 204, 102, 0.5);
+    border-radius: 4px;
+    padding: 8px 12px;
+    width: 200px;
+    backdrop-filter: blur(1px);
+    box-shadow:
+        0 0 15px rgba(0, 204, 102, 0.3),
+        inset 0 0 10px rgba(0, 204, 102, 0.1);
+    z-index: 1000;
+    transition: all 0.3s ease;
+}
+
+#search-bar:focus-within {
+    width: 300px;
+    box-shadow:
+        0 0 20px rgba(0, 204, 102, 0.5),
+        inset 0 0 15px rgba(0, 204, 102, 0.2);
+    backdrop-filter: blur(10px);
+}
+
+#search-bar input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: #00cc66;
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    padding: 6px 10px;
+    outline: none;
+    caret-color: #00cc66;
+}
+
+#search-bar input:focus::placeholder {
+    color: transparent;
+}
+
+#search-bar button {
+    background: transparent;
+    border: 1px solid rgba(0, 204, 102, 0.3);
+    color: #00cc66;
+    font-size: 16px;
+    width: 32px;
+    height: 32px;
+    margin-left: 6px;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: all 0.3s ease;
+    display: none;
+}
+
+#search-bar:focus-within button {
+    display: block;
+}
+
+#search-bar button:hover {
+    background: rgba(0, 204, 102, 0.2);
+    border-color: rgba(0, 204, 102, 0.7);
+    box-shadow: 0 0 10px rgba(0, 204, 102, 0.4);
+}
+
+#search-bar button:active {
+    transform: scale(0.95);
+}

@@ -4,13 +4,15 @@ import './Browse.css'
 import { VirtualPostList } from "../../utils/VirtualList"
 import { createFavoriteHandler } from "../../utils/createFavoriteHandler"
 import { getPosts } from "../../utils/helpers"
+import { Search } from "../../shared/Search"
 
 
-export function Browse({ authStatus, posts, setPosts, trigger, setTrigger, followTrigger } : PostsView) {
+export function Browse({ authStatus, posts, setPosts, trigger, setTrigger, followTrigger, setFollowTrigger } : PostsView) {
 	const [offset, setOffset] = useState(0)
 	const [limit, buffer] = [30, 10]
 	const [loading, setLoading] = useState(false)
 	const [isMore, setIsMore] = useState(true)
+	const [stopObs, setStopObs] = useState(false)
 
 	const favBtnHandler = createFavoriteHandler(posts, setPosts, setTrigger)
 
@@ -34,17 +36,19 @@ export function Browse({ authStatus, posts, setPosts, trigger, setTrigger, follo
 	// initial fetch + refetch related posts after auth delay OR feed follow changes
 	useEffect(() => {
 		if (loading || !authStatus.isChecked) return;
-		setLoading(true)
 		
-		getPosts(limit, offset, authStatus.check)
-			.then(data => { setPosts(data) })
-			.catch(e => console.log(`${e instanceof Error ? e.message : e}`))
-			.finally(() => setLoading(false));		
-
+		setLoading(true)
+		setOffset(0)
+		
+		getPosts(limit, 0, authStatus.check)
+		.then(data => { setPosts(data) })
+		.catch(e => console.log(`${e instanceof Error ? e.message : e}`))
+		.finally(() => setLoading(false));		
+		
 	}, [authStatus, followTrigger])
 
 	const botIntersect = () => {
-		console.log('intersected')
+		if(stopObs) return;
 		setOffset(p => p + limit)
 	}
 
@@ -53,6 +57,12 @@ export function Browse({ authStatus, posts, setPosts, trigger, setTrigger, follo
 		<Route path={'/'}>
 			<>
 				<div className="browse">
+					<Search
+						posts={posts}
+						setPosts={setPosts}
+						setTrigger={setFollowTrigger}
+						setStop={setStopObs}
+					/>
 					<VirtualPostList
 						posts={posts as Post[]}
 						buffer={buffer}
