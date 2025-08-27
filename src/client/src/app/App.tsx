@@ -4,12 +4,17 @@ import { Browse } from './pages/Browse/Browse'
 import { Favorites } from './pages/Browse/Favorites'
 import { Login } from './pages/Login/Login'
 import { useEffect, useState } from 'react'
-import { checkAuth, type AuthCheckReturn } from './utils/helpers'
+import { checkAuth } from './utils/helpers'
 import { Feeds } from './pages/Feeds/Feeds'
 
+const authPlaceholder:AuthCheckReturn = {
+	check:false,
+	name: null,
+	isChecked: false
+}
 
 function App() {
-	const [authStatus, setAuthStatus] = useState<AuthCheckReturn>({check:false, name: null})
+	const [authStatus, setAuthStatus] = useState<AuthCheckReturn>(authPlaceholder)
 	const [favPosts, setFavPosts] = useState<Post[] | null | undefined>(null)
 	const [posts, setPosts] = useState<Post[] | null | undefined>(null)
 	const [trigger, setTrigger] = useState(true)
@@ -24,7 +29,7 @@ function App() {
 			<Router>
 				<Nav authStatus={authStatus} />
 				<Browse 
-					authStatus={authStatus.check}
+					authStatus={authStatus}
 					posts={posts}
 					setPosts={setPosts}
 					trigger={trigger}
@@ -33,14 +38,14 @@ function App() {
 				/>
 				<Login handler={setAuthStatus} authStatus={authStatus} />
 				<Favorites
-					authStatus={authStatus.check}
+					authStatus={authStatus}
 					posts={favPosts}
 					setPosts={setFavPosts}
 					trigger={trigger}
 					setTrigger={setTrigger}
 				/>
 				<Feeds
-				 authStatus={authStatus.check}
+				 authStatus={authStatus}
 				 setTrigger={setFollowTrigger}
 				/>
 			</Router>

@@ -12,7 +12,8 @@ export function Feeds({ authStatus, setTrigger}:FeedProps) {
     const handler = createFollowHandler(feeds, setFeeds, setTrigger);
 
     useEffect(() => {
-        getFeeds(authStatus)
+        if (!authStatus.isChecked) return;
+        getFeeds(authStatus.check)
             .then(data => setFeeds(data))
             .catch(e => console.log(`${e instanceof Error ? e.message : e}`))
     

@@ -19,7 +19,7 @@ export function Browse({ authStatus, posts, setPosts, trigger, setTrigger, follo
 		if (loading || !isMore) return;
 		setLoading(true)
 		
-		getPosts(limit, offset, authStatus)
+		getPosts(limit, offset, authStatus.check)
 			.then(data => {
 				setPosts((prev:Post[]) => [...prev || [], ...data || []])
 				if (data && data.length < limit) {
@@ -33,10 +33,10 @@ export function Browse({ authStatus, posts, setPosts, trigger, setTrigger, follo
 
 	// initial fetch + refetch related posts after auth delay OR feed follow changes
 	useEffect(() => {
-		if (loading) return;
+		if (loading || !authStatus.isChecked) return;
 		setLoading(true)
 		
-		getPosts(limit, offset, authStatus)
+		getPosts(limit, offset, authStatus.check)
 			.then(data => { setPosts(data) })
 			.catch(e => console.log(`${e instanceof Error ? e.message : e}`))
 			.finally(() => setLoading(false));		

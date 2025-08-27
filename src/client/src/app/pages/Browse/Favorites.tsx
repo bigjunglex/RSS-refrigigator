@@ -10,6 +10,7 @@ export function Favorites({ authStatus, posts, setPosts, trigger, setTrigger} : 
     const handler = createFavoriteHandler(posts, setPosts, setTrigger)
 
     useEffect(() => {
+        if (!authStatus.isChecked) return;
         getFavPosts()
         .then(data => setPosts(data))
         .catch((e:any) => e instanceof Error ? console.log(e.message) : console.log(e))

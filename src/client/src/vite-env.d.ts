@@ -1,5 +1,13 @@
 /// <reference types="vite/client" />
 
+type AuthCheckReturn = {
+    check:boolean;
+    name: string | null;
+    isChecked:boolean;
+
+}
+
+
 type Post = {
     url: string;
     feed_id: string;
@@ -16,7 +24,7 @@ type Navigate = (to:string) => void
 type RouterContext = { currentPath: string; navigate: Navigate }
 
 type PostsView = { 
-    authStatus: boolean; 
+    authStatus: AuthCheckReturn; 
     posts: Post[] | null | undefined; 
     setPosts: Dispatch<SetStateAction<Post[]| null | undefined>>;
     trigger: boolean;
