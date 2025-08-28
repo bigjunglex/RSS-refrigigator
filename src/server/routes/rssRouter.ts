@@ -27,7 +27,7 @@ rssRouter.get('/api/posts', getPosts)
 rssRouter.get('/api/search', getSearch)
 
 protectedRouter.use(authMiddleware)
-protectedRouter.post('/addfeed', addFeed)
+protectedRouter.post('/add', addFeed)
 protectedRouter.get('/followed', getFeedsForUser)
 protectedRouter.post('/:id/follow', followFeed)
 protectedRouter.delete('/:id/follow', unfollowFeed)

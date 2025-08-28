@@ -147,3 +147,24 @@ export async function getSearch(query:string):Promise<Post[]> {
         return []
     }
 }
+
+export async function addNewFeed(name:string, url:string) {
+    try {
+        const body = JSON.stringify({ name:name, url:url });
+        console.log(body)
+        const res = await fetch(`${API_BASE}/feeds/add`, {
+            credentials: 'include',
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: body,
+        });
+        if (res.status !== 200) throw new Error(`[ADDFEED]: server response ${res.status}`)
+        const entry = (await res.json()).entry
+        return entry
+    } catch (error) {
+        if (error instanceof Error) {
+            console.log(error.message)
+        }
+        return null
+    }
+}

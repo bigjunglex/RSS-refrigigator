@@ -4,7 +4,7 @@ import './Browse.css'
 import { VirtualPostList } from "../../utils/VirtualList"
 import { createFavoriteHandler } from "../../utils/createFavoriteHandler"
 import { getPosts } from "../../utils/helpers"
-import { Search } from "../../shared/Search"
+import { Search } from "./Search"
 
 
 export function Browse({ authStatus, posts, setPosts, trigger, setTrigger, followTrigger, setFollowTrigger } : PostsView) {

@@ -1,12 +1,11 @@
-ul {
-    display: flex;
-    flex-direction: column;
+.feed-wrap ul {
     padding: 20px;
-    overflow-y: auto;
+    overflow-y: scroll;
     font-family: 'Courier New', monospace;
-    color: var(--main-text-color)   
+    color: var(--main-text-color);
+    height: 100vh;
+    box-sizing: border-box;
 }
-
 
 .feed {
     background: rgba(26, 26, 26, 0.6);
@@ -56,4 +55,72 @@ ul {
 
 .feed a:hover {
     opacity: 1;
+}
+
+
+
+.feed-wrap form {
+    margin-left: 20px;
+    margin-top: 10px;
+    background: rgba(0, 204, 102, 0.07);
+    border: 1px solid rgba(0, 204, 102, 0.5);
+    border-radius: 4px;
+    padding: 8px 12px;
+    width: 300px;
+    height: 80px;
+    backdrop-filter: blur(1px);
+    box-shadow:
+        0 0 15px rgba(0, 204, 102, 0.3),
+        inset 0 0 10px rgba(0, 204, 102, 0.1);
+    z-index: 1000;
+    transition: all 0.3s ease;
+    display: flex;
+}
+
+.feed-wrap form input {
+    background: transparent;
+    border: solid rgba(255, 255, 255, 0.05);
+    color: #00cc66;
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    padding: 6px 10px;
+    outline: none;
+    caret-color: #00cc66;
+    margin-bottom: 10px;
+}
+
+.feed-wrap form input:focus-within {
+    box-shadow:
+        0 0 20px rgba(0, 204, 102, 0.5),
+        inset 0 0 15px rgba(0, 204, 102, 0.2);
+    backdrop-filter: blur(10px);
+    border:  rgba(0, 204, 102, 0);
+}
+
+.feed-wrap form input:focus-within::placeholder{
+    color: transparent;
+}
+
+.feed-wrap form button {
+    background: transparent;
+    border: 1px solid rgba(0, 204, 102, 0.3);
+    color: #00cc66;
+    font-size: 16px;
+    width: 32px;
+    height: 32px;
+    margin-left: 6px;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: all 0.3s ease;
+    margin-bottom: 12px;
+}
+
+.feed-wrap form button:hover {
+    background: rgba(0, 204, 102, 0.2);
+    border-color: rgba(0, 204, 102, 0.7);
+    box-shadow: 0 0 10px rgba(0, 204, 102, 0.4);
+}
+
+.feed-wrap form button:active {
+    transform: scale(0.95);
 }

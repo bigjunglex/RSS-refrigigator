@@ -1,5 +1,5 @@
 import { useState, type ChangeEventHandler, type Dispatch, type FormEventHandler, type MouseEventHandler } from "react"
-import { getSearch } from "../utils/helpers";
+import { getSearch } from "../../utils/helpers";
 
 type SearchProps = Pick<PostsView, 'posts' | 'setPosts' | 'setTrigger'> & {
     setStop:Dispatch<React.SetStateAction<boolean>>

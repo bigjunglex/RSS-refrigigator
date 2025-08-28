@@ -174,13 +174,13 @@ export async function getSearch(req:Request, res:Response, next: NextFunction) {
 
 
 export async function addFeed(req:Request, res:Response, next: NextFunction) {
+    const { name, url } = req.body;
     try {
         const user = res.locals.user as User;
-        const { name, url } = req.body;
         if ( !user || !name || !url ) throw new Error('[ADDFEED]: Not Valid Entry');
         const entry = await createFeed(name, url, user);
         if(!entry) throw new Error('[ADDFEED]: Not Valid Entry');
-        res.status(200).json(entry);
+        res.status(200).json({ entry: entry});
     } catch (error) {
         next(error)
     }
