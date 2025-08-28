@@ -1,7 +1,7 @@
 import type { Response, Request, NextFunction } from "express"
 import { createFavorite, deleteFavorite, getFavoritePostsForUser } from "src/lib/db/queries/favorites";
-import { createFeedFollow, getAllFeeds, getAllWithUserFeeds, getFeedById } from "src/lib/db/queries/feeds"
-import { deleteFollow, getFeedFollowsForUser } from "src/lib/db/queries/follows";
+import { createFeed, createFeedFollow, getAllFeeds, getAllWithUserFeeds, getFeedById } from "src/lib/db/queries/feeds"
+import { deleteFollow } from "src/lib/db/queries/follows";
 import { getAllPosts, getPostByID, getPostByQuery, getPostsByFeed, getPostsForUser } from "src/lib/db/queries/posts";
 import { type User } from "src/lib/db/queries/users";
 
@@ -167,6 +167,20 @@ export async function getSearch(req:Request, res:Response, next: NextFunction) {
         const posts = await getPostByQuery(query.trim())
         if(posts.length < 1) throw new Error('[SEARCH]: Not Found')
         res.status(200).json(posts)
+    } catch (error) {
+        next(error)
+    }
+}
+
+
+export async function addFeed(req:Request, res:Response, next: NextFunction) {
+    try {
+        const user = res.locals.user as User;
+        const { name, url } = req.body;
+        if ( !user || !name || !url ) throw new Error('[ADDFEED]: Not Valid Entry');
+        const entry = await createFeed(name, url, user);
+        if(!entry) throw new Error('[ADDFEED]: Not Valid Entry');
+        res.status(200).json(entry);
     } catch (error) {
         next(error)
     }

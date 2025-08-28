@@ -10,7 +10,8 @@ import {
     unfavoritePost,
     unfollowFeed,
     getFeedsForUser,
-    getSearch
+    getSearch,
+    addFeed
 } from "../controllers/apiController";
 import { authMiddleware } from "../middlewares";
 
@@ -26,6 +27,7 @@ rssRouter.get('/api/posts', getPosts)
 rssRouter.get('/api/search', getSearch)
 
 protectedRouter.use(authMiddleware)
+protectedRouter.post('/addfeed', addFeed)
 protectedRouter.get('/followed', getFeedsForUser)
 protectedRouter.post('/:id/follow', followFeed)
 protectedRouter.delete('/:id/follow', unfollowFeed)

@@ -100,7 +100,8 @@ export async function handleAgg(cmd: string, ...args: string[]) {
  */
 export async function handleAddFeed(cmd: string, ...args: string[]) {
     const [name, url] = args.slice(0, 2);
-    const [feed, user] = await createFeed(name, url);
+    const user = await getUser(readConfig().currentUserName);
+    const feed = await createFeed(name, url, user);
     const follow = await createFeedFollow(user, feed)
 
     printFeed(feed, user, follow);

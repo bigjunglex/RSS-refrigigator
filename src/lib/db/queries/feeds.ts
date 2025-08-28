@@ -1,5 +1,4 @@
 import { and, eq, sql, desc } from "drizzle-orm";
-import { readConfig } from "src/config";
 import { db } from "../db";
 import { users, feeds, feed_follows } from "../schema";
 import { type User } from "./users";
@@ -9,12 +8,13 @@ export type Feed = typeof feeds.$inferSelect;
 export type FeedTuple = [Feed, User]
 export type FeedFormated = {name:string; url:string; user:string | null;}
 
-export async function createFeed(name:string, url: string):Promise<FeedTuple> {
-    const user = readConfig().currentUserName;
-    const [user_rec] = await db.select().from(users).where(eq(users.name, user));
-    const [result] = await db.insert(feeds).values({name: name, url: url, user_id: user_rec.id}).returning();
-    
-    return [result, user_rec]
+export async function createFeed(name:string, url: string, user:User):Promise<Feed> {
+    const [result] = await db
+        .insert(feeds)
+        .values({name: name, url: url, user_id: String(user.id)})
+        .onConflictDoNothing()
+        .returning();
+    return result
 }
 
 export async function getFeedByURL(url:string):Promise<Feed> {
