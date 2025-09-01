@@ -5,7 +5,7 @@ type SearchProps = Pick<PostsView, 'posts' | 'setPosts' | 'setTrigger'> & {
     setStop:Dispatch<React.SetStateAction<boolean>>
 }
 
-export function Search({ setPosts, setTrigger, setStop }:SearchProps) {
+export default function Search({ setPosts, setTrigger, setStop }:SearchProps) {
     const [input, setInput] = useState('');
 
     const inputHanlder:ChangeEventHandler<HTMLInputElement> = (e) => setInput(e.target.value);

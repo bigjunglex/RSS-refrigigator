@@ -1,7 +1,7 @@
 import { Router, } from './shared/Router'
 import { Nav } from './shared/Nav/Nav'
 import { Browse } from './pages/Browse/Browse'
-import { useEffect, useState, lazy, Suspense} from 'react'
+import { useEffect, useState, lazy, Suspense } from 'react'
 import { checkAuth } from './utils/helpers'
 
 const Feeds = lazy(() => import('./pages/Feeds/Feeds'))
@@ -29,7 +29,7 @@ function App() {
 		<div className='app-wrap'>
 			<Router>
 				<Nav authStatus={authStatus} />
-				<Browse 
+				<Browse
 					authStatus={authStatus}
 					posts={posts}
 					setPosts={setPosts}
@@ -39,18 +39,21 @@ function App() {
 					setFollowTrigger={setFollowTrigger}
 				/>
 				<Suspense>
-					<Login handler={setAuthStatus} authStatus={authStatus} />
-					<Favorites
-						authStatus={authStatus}
-						posts={favPosts}
-						setPosts={setFavPosts}
-						trigger={trigger}
-						setTrigger={setTrigger}
-					/>
-					<Feeds
-						authStatus={authStatus}
-						setTrigger={setFollowTrigger}
-					/>
+					{ posts && (<>
+							<Login handler={setAuthStatus} authStatus={authStatus} />
+							<Favorites
+								authStatus={authStatus}
+								posts={favPosts}
+								setPosts={setFavPosts}
+								trigger={trigger}
+								setTrigger={setTrigger}
+							/>
+							<Feeds
+								authStatus={authStatus}
+								setTrigger={setFollowTrigger}
+							/>
+						</>
+					)}
 				</Suspense>
 			</Router>
 		</div>

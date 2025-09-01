@@ -1,11 +1,13 @@
-import { useEffect, useState } from "react"
+import { lazy, Suspense, useEffect, useState } from "react"
 import { Route } from "../../shared/Router"
 import './Browse.css'
-import { VirtualPostList } from "../../utils/VirtualList"
+// import { VirtualPostList } from "../../utils/VirtualList"
 import { createFavoriteHandler } from "../../utils/createFavoriteHandler"
 import { getPosts } from "../../utils/helpers"
-import { Search } from "./Search"
+// import { Search } from "./Search"
 
+const Search = lazy(() => import('./Search'))
+const VirtualPostList = lazy(() => import('../../utils/VirtualList'))
 
 export function Browse({ authStatus, posts, setPosts, trigger, setTrigger, followTrigger, setFollowTrigger } : PostsView) {
 	const [offset, setOffset] = useState(0)
@@ -58,18 +60,24 @@ export function Browse({ authStatus, posts, setPosts, trigger, setTrigger, follo
 		<Route path={'/'}>
 			<>
 				<div className="browse">
-					<Search
-						posts={posts}
-						setPosts={setPosts}
-						setTrigger={setFollowTrigger}
-						setStop={setStopObs}
-					/>
-					<VirtualPostList
-						posts={posts as Post[]}
-						buffer={buffer}
-						onBot={botIntersect}
-						favBtnHandler={favBtnHandler}
-					/>
+					<Suspense>
+
+					{posts && <>
+						<Search
+							posts={posts}
+							setPosts={setPosts}
+							setTrigger={setFollowTrigger}
+							setStop={setStopObs}
+							/>
+						<VirtualPostList
+							posts={posts as Post[]}
+							buffer={buffer}
+							onBot={botIntersect}
+							favBtnHandler={favBtnHandler}
+							/>
+					</>
+					}
+					</Suspense>
 				</div>
 			</>
 		</Route>

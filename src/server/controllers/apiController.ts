@@ -163,7 +163,6 @@ export async function getSearch(req:Request, res:Response, next: NextFunction) {
     try {
         query = query.replace('-', ' ').toLowerCase()
         if(!query) throw new Error('[SEARCH]: invalid search query provided')
-        console.log(query)
         const posts = await getPostByQuery(query.trim())
         if(posts.length < 1) throw new Error('[SEARCH]: Not Found')
         res.status(200).json(posts)

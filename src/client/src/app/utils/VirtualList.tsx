@@ -13,7 +13,7 @@ type VirtualPostProps = {
  * WARNING!
  * ugly placeholder, TODO: vix fith virtual list later
  **/
-export function VirtualPostList({ posts, onBot, buffer, favBtnHandler}:VirtualPostProps) {
+export default function VirtualPostList({ posts, onBot, buffer, favBtnHandler}:VirtualPostProps) {
     const watcherBotRef = useRef<HTMLLIElement>(null)
     const itemRef = useRef<HTMLLIElement>(null)
     const containerRef = useRef<HTMLUListElement>(null)
