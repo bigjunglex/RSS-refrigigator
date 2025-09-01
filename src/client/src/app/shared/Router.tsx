@@ -1,6 +1,6 @@
 import { useContext, useState, createContext, type ReactNode, useEffect } from "react";
 
-export const routerContext = createContext<RouterContext>({currentPath: '', navigate: (to:string) => null})
+export const routerContext = createContext<RouterContext>({currentPath: '', navigate: (to:string) => to})
 
 export function Router({ children }: {children: ReactNode}) {
     const [path, setPath] = useState(window.location.pathname)

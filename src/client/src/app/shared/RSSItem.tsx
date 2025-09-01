@@ -24,7 +24,7 @@ export const RSSItem = forwardRef<HTMLLIElement, PostProp>(({ post, clickHandler
         ) : (
           <p>📝 {formatted?.length > 0 ? formatted : post.description}</p>
         )}
-        <button onClick={() => clickHandler(post)}> {post.isAdded ? '🚫' : '🌟'} </button>
+        <button onClick={() => clickHandler(post)} title="add/remove from favorites"> {post.isAdded ? '🚫' : '🌟'} </button>
       </li>
     )
   }

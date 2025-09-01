@@ -14,9 +14,8 @@
 
 
 html, body {
-  overflow: hidden;
+  overflow: auto;
   height: 100%;
-  position: fixed;
   width: 100%;
 }
 

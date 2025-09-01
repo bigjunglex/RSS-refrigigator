@@ -1,11 +1,12 @@
 import { Router, } from './shared/Router'
 import { Nav } from './shared/Nav/Nav'
 import { Browse } from './pages/Browse/Browse'
-import { Favorites } from './pages/Browse/Favorites'
-import { Login } from './pages/Login/Login'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, lazy, Suspense} from 'react'
 import { checkAuth } from './utils/helpers'
-import { Feeds } from './pages/Feeds/Feeds'
+
+const Feeds = lazy(() => import('./pages/Feeds/Feeds'))
+const Login = lazy(() => import('./pages/Login/Login'))
+const Favorites = lazy(() => import('./pages/Browse/Favorites'))
 
 const authPlaceholder:AuthCheckReturn = {
 	check:false,
@@ -37,18 +38,20 @@ function App() {
 					followTrigger={followTrigger}
 					setFollowTrigger={setFollowTrigger}
 				/>
-				<Login handler={setAuthStatus} authStatus={authStatus} />
-				<Favorites
-					authStatus={authStatus}
-					posts={favPosts}
-					setPosts={setFavPosts}
-					trigger={trigger}
-					setTrigger={setTrigger}
-				/>
-				<Feeds
-				 authStatus={authStatus}
-				 setTrigger={setFollowTrigger}
-				/>
+				<Suspense>
+					<Login handler={setAuthStatus} authStatus={authStatus} />
+					<Favorites
+						authStatus={authStatus}
+						posts={favPosts}
+						setPosts={setFavPosts}
+						trigger={trigger}
+						setTrigger={setTrigger}
+					/>
+					<Feeds
+						authStatus={authStatus}
+						setTrigger={setFollowTrigger}
+					/>
+				</Suspense>
 			</Router>
 		</div>
 	)

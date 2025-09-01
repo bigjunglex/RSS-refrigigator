@@ -6,7 +6,7 @@ import { createFavoriteHandler } from "../../utils/createFavoriteHandler"
 import { getFavPosts } from "../../utils/helpers"
 
 
-export function Favorites({ authStatus, posts, setPosts, trigger, setTrigger} : PostsView) {
+export default function Favorites({ authStatus, posts, setPosts, trigger, setTrigger} : PostsView) {
     const handler = createFavoriteHandler(posts, setPosts, setTrigger)
 
     useEffect(() => {

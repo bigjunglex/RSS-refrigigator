@@ -1,7 +1,6 @@
 import { type Dispatch, type FormEvent, type SetStateAction} from "react";
 import { Route } from "../../shared/Router";
 import './Login.css'
-import type { AuthCheckReturn } from "../../utils/helpers";
 import { API_BASE } from "../../config";
 import { Glitch } from "../../shared/Glich/Gltich";
 
@@ -9,7 +8,7 @@ import { Glitch } from "../../shared/Glich/Gltich";
 
 type LoginProps = {handler: Dispatch<SetStateAction<AuthCheckReturn>>; authStatus: {check: boolean; name: string | null}}
 
-export function Login({ handler, authStatus } : LoginProps) {
+export default function Login({ handler, authStatus } : LoginProps) {
 
     async function logout() {
         const res = await fetch(`${API_BASE}/logout`, {
@@ -18,7 +17,7 @@ export function Login({ handler, authStatus } : LoginProps) {
         })
 
         if (res.status === 200) {
-            handler({name:null, check:false})
+            handler({ name:null, check:false, isChecked: true })
             console.log('logout successfull')
         }
     }
@@ -50,7 +49,7 @@ export function Login({ handler, authStatus } : LoginProps) {
             body: body
         })
         const json = await res.json()
-        if (res.status === 200) handler({ name: json.name, check: true });
+        if (res.status === 200) handler({ name: json.name, check: true, isChecked: true});
         console.log(json)
     }
     return (

@@ -1,6 +1,6 @@
 .feed-wrap ul {
     padding: 20px;
-    overflow-y: scroll;
+    overflow-y: auto;
     font-family: 'Courier New', monospace;
     color: var(--main-text-color);
     height: 100vh;
@@ -57,7 +57,10 @@
     opacity: 1;
 }
 
-
+.feed-wrap {
+    box-sizing: border-box;
+    overflow-y: auto;
+}
 
 .feed-wrap form {
     margin-left: 20px;

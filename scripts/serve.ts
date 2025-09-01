@@ -10,6 +10,7 @@ const events:NodeJS.Signals[] = [
 const commands:[string, string[]][] = [
     ['npm', ['run', 'dev-server']],
     ['npm', ['run', 'dev-client']],
+    ['npm', ['run', 'start', 'agg', '1h']]
 ]
 
 const killSlaves = (slaves:ChildProcess[]) => slaves.forEach(s => s.kill())

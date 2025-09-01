@@ -18,9 +18,9 @@ export function Browse({ authStatus, posts, setPosts, trigger, setTrigger, follo
 
 	//fetch on offset + favTrigger
 	useEffect(() => {
-		if (loading || !isMore) return;
+		if (loading || !isMore || !authStatus.isChecked) return;
 		setLoading(true)
-		
+		console.log('fires a offset fech')
 		getPosts(limit, offset, authStatus.check)
 			.then(data => {
 				setPosts((prev:Post[]) => [...prev || [], ...data || []])
@@ -37,6 +37,7 @@ export function Browse({ authStatus, posts, setPosts, trigger, setTrigger, follo
 	useEffect(() => {
 		if (loading || !authStatus.isChecked) return;
 		
+		console.log('fires a base fech')
 		setLoading(true)
 		setOffset(0)
 		

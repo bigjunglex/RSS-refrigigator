@@ -8,7 +8,7 @@ import { createFollowHandler } from "../../utils/createFollowHandler";
 type FeedProps = Pick<PostsView, 'authStatus' | 'setTrigger'>
 type FeedForm = { name:string | undefined; url:string | undefined }
 
-export function Feeds({ authStatus, setTrigger}:FeedProps) {
+export default function Feeds({ authStatus, setTrigger}:FeedProps) {
     const [feeds, setFeeds] = useState<Feed[] | null>();
     const [input, setInput] = useState<FeedForm>({ name: '', url: ''});
     const handler = createFollowHandler(feeds, setFeeds, setTrigger);
@@ -43,7 +43,7 @@ export function Feeds({ authStatus, setTrigger}:FeedProps) {
                             className="search-bar"
                             type="text"
                             name="name"
-                            placeholder="name your feed"
+                            placeholder="feed's name"
                             value={input.name}
                             onChange={(e) => setInput(p => ({ ...p, name: e.target.value }))}
                             />
@@ -57,8 +57,8 @@ export function Feeds({ authStatus, setTrigger}:FeedProps) {
                             />
                     </div>
                     <div className="buttons">
-                        <button type="submit">+</button>
-                        <button type="reset">↺</button>
+                        <button title="add Feed" type="submit">+</button>
+                        <button title="reset form" type="reset">↺</button>
                     </div>
                 </form>
                 <ul className="feed-ul">
