@@ -7,3 +7,4 @@ local.db
 serverLog.txt
 dist-server/
 dist-client/
+.docker/caddy/data/
