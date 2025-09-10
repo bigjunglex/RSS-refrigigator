@@ -1,6 +1,6 @@
-import { handleError } from "./commands/cmd-handlers";
-import { runCommand } from "./commands/commands";
-import { initRegistry } from "./commands/registry";
+import { handleError } from "./commands/cmd-handlers.js";
+import { runCommand } from "./commands/commands.js";
+import { initRegistry } from "./commands/registry.js";
 
 
 async function main() {

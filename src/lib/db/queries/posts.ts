@@ -1,7 +1,7 @@
-import { db } from "../db";
+import { db } from "../db.js";
 import { and, desc, eq, like, or, sql } from "drizzle-orm";
-import { feed_follows, post_favorites, posts} from "../schema";
-import { User } from "./users";
+import { feed_follows, post_favorites, posts} from "../schema.js";
+import { User } from "./users.js";
 
 
 export type Post = typeof posts.$inferInsert;

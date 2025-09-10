@@ -1,9 +1,9 @@
-import type { Feed } from "src/lib/db/queries/feeds";
-import { getUser, type User } from "src/lib/db/queries/users";
-import type { Follow } from "src/lib/db/queries/follows";
-import type { CommandHandler } from "./commands";
-import { readConfig } from "src/config";
-import { getAllPosts, Post, PostReturn } from "src/lib/db/queries/posts";
+import type { Feed } from "src/lib/db/queries/feeds.js";
+import { getUser, type User } from "src/lib/db/queries/users.js";
+import type { Follow } from "src/lib/db/queries/follows.js";
+import type { CommandHandler } from "./commands.js";
+import { readConfig } from "src/config.js";
+import { getAllPosts, Post, PostReturn } from "src/lib/db/queries/posts.js";
 import * as readline from "node:readline"
 import { stdin as input, stdout as output } from "node:process";
 

@@ -14,9 +14,9 @@ import {
     handleUsers,
     handleAddFavorites,
     handleRemoveFavorites
-    } from "./cmd-handlers";
-import { isLogged } from "./cmd-helpers";
-import { type CommnandRegistry, registerCommand } from "./commands";
+    } from "./cmd-handlers.js";
+import { isLogged } from "./cmd-helpers.js";
+import { type CommnandRegistry, registerCommand } from "./commands.js";
 
 export function initRegistry():CommnandRegistry {
     const registry:CommnandRegistry = {};

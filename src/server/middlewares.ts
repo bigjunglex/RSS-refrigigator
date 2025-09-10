@@ -2,9 +2,9 @@ import type { Request, Response, NextFunction } from "express";
 import express from "express"
 import helmet from "helmet"
 import cookieParser from "cookie-parser"
-import { validateJWT } from "./auth";
-import { getRefreshToken } from "src/lib/db/queries/refreshTokens";
-import { getUserByID, UserSelect } from "src/lib/db/queries/users";
+import { validateJWT } from "./auth.js";
+import { getRefreshToken } from "../lib/db/queries/refreshTokens.js";
+import { getUserByID, UserSelect } from "../lib/db/queries/users.js";
 
 
 export const middleWares = [

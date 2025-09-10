@@ -1,0 +1,12 @@
+node_modules
+dist
+dist-client
+.git
+.gitignore
+README.md
+coverage
+.local
+*.log
+src/client
+serverLog.txt
+npm-debug.log

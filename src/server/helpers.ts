@@ -1,4 +1,4 @@
-import type { User } from "src/lib/db/queries/users"
+import type { User } from "../lib/db/queries/users.js"
 
 export function formatUserRegResponse(user:User) {
     return {

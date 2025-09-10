@@ -1,4 +1,16 @@
 services:
+  server:
+    container_name: server
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    restart: unless-stopped
+    volumes:
+      - ./.docker/server/local.db:/app/local.db
   caddy:
     image: caddy
     container_name: caddy
@@ -8,3 +20,13 @@ services:
     volumes:
       - ./.docker/caddy/Caddyfile:/etc/caddy/Caddyfile
       - ./.docker/caddy/data:/data
+      - ./dist-client/:/var/www/html
+  cli:
+    build:
+      context: .
+      dockerfile: Dockerfile.cli
+    env_file:
+      - .env
+    volumes:
+      - ./.docker/server/local.db:/app/local.db
+    profiles: ["cli"]

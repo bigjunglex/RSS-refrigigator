@@ -12,8 +12,8 @@ import {
     getFeedsForUser,
     getSearch,
     addFeed
-} from "../controllers/apiController";
-import { authMiddleware } from "../middlewares";
+} from "../controllers/apiController.js";
+import { authMiddleware } from "../middlewares.js";
 
 
 

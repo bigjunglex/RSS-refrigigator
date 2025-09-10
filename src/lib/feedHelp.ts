@@ -1,6 +1,6 @@
-import { Feed, getAllFeeds, getNextFeedToFetch, markFeedFetched } from "./db/queries/feeds";
-import { createPost, PostInsert } from "./db/queries/posts";
-import { fetchFeed } from "./fetchFeed";
+import { Feed, getAllFeeds, getNextFeedToFetch, markFeedFetched } from "./db/queries/feeds.js";
+import { createPost, PostInsert } from "./db/queries/posts.js";
+import { fetchFeed } from "./fetchFeed.js";
 
 export async function scrapeFeed(target:Feed) {
     let count = 0;

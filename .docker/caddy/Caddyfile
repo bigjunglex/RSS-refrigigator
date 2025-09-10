@@ -1,3 +1,6 @@
-:2015
-
-respond "Hello, world!"
+localhost:2015 {
+    encode gzip
+    root /var/www/html
+    try_files {path} /index.html
+    file_server 
+}

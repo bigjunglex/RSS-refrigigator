@@ -1,5 +1,5 @@
-import { db } from "../db";
-import { refresh_tokens } from "../schema";
+import { db } from "../db.js";
+import { refresh_tokens } from "../schema.js";
 import { eq, and, isNull } from "drizzle-orm";
 
 export type RefreshToken = typeof refresh_tokens.$inferInsert

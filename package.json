@@ -11,7 +11,9 @@
     "dev-server-dbug": "tsx --inspect-brk ./src/server/index.ts",
     "generate": "drizzle-kit generate",
     "migrate": "drizzle-kit migrate",
-    "dev-db": "sqlite3 local.db"
+    "dev-db": "sqlite3 local.db",
+    "build": "npx tsc && cp",
+    "docker-scrape": "docker compose run --rm cli agg 1h"
   },
   "keywords": [],
   "author": "",

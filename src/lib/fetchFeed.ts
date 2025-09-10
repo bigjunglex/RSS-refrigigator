@@ -1,5 +1,5 @@
 import { XMLParser } from "fast-xml-parser";
-import { fetchRetry } from "./feedHelp";
+import { fetchRetry } from "./feedHelp.js";
 
 export type RSSFeed = {
     channel: {

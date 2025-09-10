@@ -1,7 +1,7 @@
 import express from "express";
-import { rssRouter, protectedRouter } from "./routes/rssRouter";
-import { errorCatcher, middleWares } from "./middlewares";
-import { authRouter } from "./routes/authRouter";
+import { rssRouter, protectedRouter } from "./routes/rssRouter.js";
+import { errorCatcher, middleWares } from "./middlewares.js";
+import { authRouter } from "./routes/authRouter.js";
 import cors from "cors"
 
 const app = express()

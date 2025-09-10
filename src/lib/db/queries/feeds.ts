@@ -1,7 +1,7 @@
 import { and, eq, sql, desc } from "drizzle-orm";
-import { db } from "../db";
-import { users, feeds, feed_follows } from "../schema";
-import { type User } from "./users";
+import { db } from "../db.js";
+import { users, feeds, feed_follows } from "../schema.js";
+import { type User } from "./users.js";
 
 
 export type Feed = typeof feeds.$inferSelect;

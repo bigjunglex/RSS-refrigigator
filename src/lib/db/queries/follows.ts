@@ -1,8 +1,8 @@
-import { db } from "../db";
+import { db } from "../db.js";
 import { eq, and } from "drizzle-orm";
-import { feeds, feed_follows } from "../schema";
-import { getUser, User } from "./users";
-import { Feed } from "./feeds";
+import { feeds, feed_follows } from "../schema.js";
+import { getUser, User } from "./users.js";
+import { Feed } from "./feeds.js";
 
 export type Follow = typeof feed_follows.$inferInsert;
 

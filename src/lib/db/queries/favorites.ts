@@ -1,8 +1,8 @@
-import { post_favorites, posts} from "../schema";
+import { post_favorites, posts} from "../schema.js";
 import { eq, and, desc } from "drizzle-orm";
-import { db } from "../db";
-import { User } from "./users";
-import { Post, PostReturn } from "./posts";
+import { db } from "../db.js";
+import { User } from "./users.js";
+import { Post, PostReturn } from "./posts.js";
 
 
 export async function createFavorite(user:User, post:Post) {

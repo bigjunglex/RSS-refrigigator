@@ -1,13 +1,13 @@
-import { readConfig, setUser } from "../../config";
-import { createUser, getUser, dropUsers, getUsers } from "../../lib/db/queries/users";
-import { createFeed, getAllFeeds, createFeedFollow, getFeedByURL } from "src/lib/db/queries/feeds";
-import { browseNav, clearTerminal, createResizeController, getCurrentUser, getLimitByTerminalStats, parseTime, printFeed, printPosts } from "./cmd-helpers";
-import { deleteFollow, getFeedFollowsForUser } from "src/lib/db/queries/follows";
-import { scrapeFeeds } from "src/lib/feedHelp";
-import {getPostByID, getPostsForUser } from "src/lib/db/queries/posts";
-import { createFavorite, deleteFavorite, getFavoritePostsForUser } from "src/lib/db/queries/favorites";
-import { hashPassword } from "src/server/auth";
-import { formatUserRegResponse } from "src/server/helpers";
+import { readConfig, setUser } from "../../config.js";
+import { createUser, getUser, dropUsers, getUsers } from "../../lib/db/queries/users.js";
+import { createFeed, getAllFeeds, createFeedFollow, getFeedByURL } from "../../lib/db/queries/feeds.js";
+import { browseNav, clearTerminal, createResizeController, getCurrentUser, getLimitByTerminalStats, parseTime, printFeed, printPosts } from "./cmd-helpers.js";
+import { deleteFollow, getFeedFollowsForUser } from "../../lib/db/queries/follows.js";
+import { scrapeFeeds } from "../../lib/feedHelp.js";
+import {getPostByID, getPostsForUser } from "../../lib/db/queries/posts.js";
+import { createFavorite, deleteFavorite, getFavoritePostsForUser } from "../../lib/db/queries/favorites.js";
+import { hashPassword } from "../../server/auth.js";
+import { formatUserRegResponse } from "../../server/helpers.js";
 
 
 
