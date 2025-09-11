@@ -13,10 +13,11 @@ Main goal is to create ready to deploy RSS aggregator for your own use + share w
 ```
 npm run start register "NAME" : "PASSWORD"
 ```
+- requires sqlite3 to run ```dev-db``` command
 
 - check CLI commands at registry.ts
 
-- requires .env files both in root directory and in client directory (examples provided)  with in the root
+- requires .env files both in root directory and in client directory (examples provided)
 
 - modify Caddyfile in .docker/caddy
 - Before running docker compose up, you need to bundle client
