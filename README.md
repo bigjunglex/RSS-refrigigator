@@ -6,7 +6,21 @@ Main goal is to create ready to deploy RSS aggregator for your own use + share w
 
 🚧 ⚠️ 🚧  **UNDER CONSTRUCTION** 🚧 ⚠️ 🚧 
 
-requires .env file with in the root
+
+### SETUP
+
+- to register new users for rss aggregator
 ```
-DATABASE_URL=file:yourfile
+npm run start register "NAME" : "PASSWORD"
+```
+
+- check CLI commands at registry.ts
+
+- requires .env files both in root directory and in client directory (examples provided)  with in the root
+
+- modify Caddyfile in .docker/caddy
+- Before running docker compose up, you need to bundle client
+
+```
+ cd src/client && npm run build
 ```
