@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser"
 import { validateJWT } from "./auth.js";
 import { getRefreshToken } from "../lib/db/queries/refreshTokens.js";
 import { getUserByID, UserSelect } from "../lib/db/queries/users.js";
+import { BaseError, ERR_MESSAGES, ERRORS } from "./errors.js";
 
 
 export const middleWares = [
@@ -13,12 +14,19 @@ export const middleWares = [
     cookieParser()
 ]
 
-export function errorCatcher(err:any, req:Request, res:Response, next: NextFunction) {
-    if (err instanceof Error) {
-        const [msg, stack] = [err.message, err.stack]
-        console.log('[ERROR]: %s\n%s', msg, stack)     
-        res.status(500).json({ error: msg })
+export function errorCatcher(err:BaseError, req:Request, res:Response, next: NextFunction) {
+    const stack = err.stack
+    let msg, code;
+    if(ERRORS.find(error => err instanceof error)) {
+        [msg, code] = ERR_MESSAGES[err.errKey];
+        if (err.message.length > 1) msg = err.message;
+    } else {
+        [msg, code] = ERR_MESSAGES.internal;
     }
+    console.log('[ERROR]: %s\n%s', msg, stack)
+
+    res.status(code).json(msg)
+
 }
 
 
