@@ -37,7 +37,7 @@ export async function scrapeFeeds(limit = 4) {
     await promisePool(feeds, limit)
 }
 
-async function promisePool(tasks:(() => Promise<any>)[], limit:number) {
+export async function promisePool(tasks:(() => Promise<any>)[], limit:number) {
     let i = 0;
     const limitedPromises = Array(limit).fill(0).map(() => callback());
     await Promise.all(limitedPromises)

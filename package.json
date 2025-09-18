@@ -13,7 +13,8 @@
     "migrate": "drizzle-kit migrate",
     "dev-db": "sqlite3 local.db",
     "build": "npx tsc",
-    "build-client": "cd src/client && npm run build"
+    "build-client": "cd src/client && npm run build",
+    "test": "vitest"
   },
   "keywords": [],
   "author": "",
@@ -27,7 +28,8 @@
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^22.15.30",
     "tsx": "^4.19.4",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.4"
   },
   "dependencies": {
     "@libsql/client": "^0.15.10",

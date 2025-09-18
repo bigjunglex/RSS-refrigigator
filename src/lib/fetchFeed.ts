@@ -45,6 +45,8 @@ export async function fetchFeed(feedUrl: string) {
         output.channel['item'] = []
         if (Array.isArray(channel.item)) {
             output.channel['item'] = channel.item.filter((i: any) => validateItem(i)).map((i: any) => formatItem(i))
+        } else {
+            output.channel['item'] = channel.item
         }
 
         return output
@@ -54,7 +56,7 @@ export async function fetchFeed(feedUrl: string) {
 }
 
 function validateItem(item: any) {
-    return typeof item === 'object' && item.title && item.link && item.description && item.pubDate
+    return typeof item === 'object' && item.link && item.description && item.pubDate
 }
 
 function formatItem(item: any) {
