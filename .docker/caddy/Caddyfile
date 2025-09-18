@@ -1,6 +1,14 @@
 localhost:2015 {
     encode gzip
-    root /var/www/html
-    try_files {path} /index.html
-    file_server 
+    
+    handle /api/* {
+        reverse_proxy server:8080
+    }
+    
+    handle {
+        root /var/www/html
+        try_files {path} /index.html
+        file_server 
+    }
+
 }

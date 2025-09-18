@@ -12,7 +12,8 @@
     "generate": "drizzle-kit generate",
     "migrate": "drizzle-kit migrate",
     "dev-db": "sqlite3 local.db",
-    "build": "npx tsc && cp"
+    "build": "npx tsc",
+    "build-client": "cd src/client && npm run build"
   },
   "keywords": [],
   "author": "",
