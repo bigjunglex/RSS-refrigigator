@@ -2,6 +2,7 @@ import bcrypt from "bcrypt"
 import crypto from "node:crypto"
 import jwt, { type JwtPayload } from "jsonwebtoken"
 import type { Request } from "express"
+import { UnathorizedError } from "./errors"
 
 export type Payload = Pick<JwtPayload , 'iss' | 'sub' | 'iat' | 'exp'>
 
@@ -35,20 +36,20 @@ export function validateJWT(token:string, secret:string) {
         return userId 
     } catch (error) {
         if (error instanceof Error) {
-            throw new Error(`[AUTH]:[JWT] ${error.message}`)
+            throw new UnathorizedError(`[AUTH]:[JWT] ${error.message}`)
         }
     }
 }
 
 export function getBearerToken(req:Request):string {
     try {
-        const token = req.headers['authorization']
-        if(!token && !token?.startsWith('Bearer ')) {
+        const token = req.headers['authorization'] as string
+        if(!token || !token.startsWith('Bearer ')) {
             throw new Error()
         }
         return token.substring(7)
     } catch (error) {
-        throw new Error('[AUTH]: Invalid Auth Token')
+        throw new UnathorizedError('[AUTH]: Invalid Auth Token')
     }
 }
 

@@ -1,3 +1,5 @@
+![test-badge-ci](https://github.com/bigjunglex/RSS-refrigigator/actions/workflows/tests.yml/badge.svg)
+
 ## 🧊 RSS refrigiration 🧊
 
 ### 🚀 Deploy And Forget RSS aggregator
