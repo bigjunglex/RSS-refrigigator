@@ -44,7 +44,7 @@ export function validateJWT(token:string, secret:string) {
 export function getBearerToken(req:Request):string {
     try {
         const token = req.headers['authorization'] as string
-        if(!token || !token.startsWith('Bearer ')) {
+        if(!token || token.length < 14) {
             throw new Error()
         }
         return token.substring(7)
