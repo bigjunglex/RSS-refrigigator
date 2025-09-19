@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
 import { promisePool } from "src/lib/feedHelp"
-import { timeout } from "../utils"
+import { lengthObserver, timeout } from "../utils"
 
 describe('[UNIT]: promise pool', () => {
 
@@ -33,7 +33,7 @@ describe('[UNIT]: promise pool', () => {
 
         const promises = target.map((number) => () => callback(number))
         await promisePool(promises, 1)
-        await timeout(true)
+        await lengthObserver(out, target.length)
 
         expect(out).toEqual(target)
     })

@@ -1,3 +1,4 @@
+import { resolve } from "node:path";
 import { vi } from "vitest";
 
 export function fetchMock(data:string) {
@@ -17,4 +18,18 @@ export function fetchMock(data:string) {
 export function timeout(big = false):Promise<void> {
     const multi = big ? 1000 : 100
     return new Promise(resolve => setTimeout(resolve, Math.random() * multi))
+}
+
+
+export function lengthObserver(arr: any[], limit: number): Promise<void> {
+    return new Promise(resolve => {
+        if (arr.length >= limit) { resolve(); return }
+
+        const timer = setInterval(() => {
+            if (arr.length >= limit) {
+                clearInterval(timer);
+                resolve();
+            }
+        }, 100)
+    })
 }
