@@ -171,7 +171,9 @@ export async function getSearch(req:Request, res:Response, next: NextFunction) {
     }
 }
 
-
+/**
+ * successfully added feed will be parsed in next AGG interval (if one currently running) 
+ */
 export async function addFeed(req:Request, res:Response, next: NextFunction) {
     const { name, url } = req.body;
     try {

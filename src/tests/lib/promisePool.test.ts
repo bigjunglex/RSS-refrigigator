@@ -22,7 +22,6 @@ describe('[UNIT]: promise pool', () => {
     })
 
     it('right order of execution', async () => {
-        const limit = 1
         const target = [1,2,3,4,5]
         const out:number[] = [];
 

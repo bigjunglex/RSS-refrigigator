@@ -1,5 +1,6 @@
-import { resolve } from "node:path";
+import fs from "node:fs";
 import { vi } from "vitest";
+
 
 export function fetchMock(data:string) {
     vi.spyOn(global, 'fetch').mockResolvedValue({
@@ -32,4 +33,20 @@ export function lengthObserver(arr: any[], limit: number): Promise<void> {
             }
         }, 100)
     })
+
+}
+
+/**
+ * setsup env with env test values
+ */
+export function setupEnv(path: fs.PathLike) {
+    const env = fs.readFileSync(path).toString();
+    const out = env.split('\n').reduce((acc, entry:string) => {
+        const [key, val] = entry.split('=')
+        acc[key] = val;
+        return acc
+    }, {} as Record<string, string>)
+    return out
+
+
 }
