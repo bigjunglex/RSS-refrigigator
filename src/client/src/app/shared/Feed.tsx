@@ -14,7 +14,7 @@ export function Feed({ feed, handler }: FeedProps ) {
             <h4>📌 {feed.name}</h4>
             <h5>📅 Added: {date}</h5>
             <h5> {`Last updated: ${upDate}`}</h5>
-            <a href={feed.url}>🌐 {feed.url} </a>
+            <a target="_blank" href={feed.url}>🌐 {feed.url} </a>
             <button onClick={() => handler(feed)}>{isFollowed ? 'Unfollow' : 'Follow'}</button>
         </li>
     )

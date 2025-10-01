@@ -18,7 +18,7 @@ export const RSSItem = forwardRef<HTMLLIElement, PostProp>(({ post, clickHandler
       <li ref={ref} className="post">
         <h4>📌 {post.title}</h4>
         <h5>📅 {date}</h5>
-        <a href={post.url}>🌐 {post.url} </a>
+        <a target="_blank" href={post.url}>🌐 {post.url} </a>
         {link ? (
           <a href={link}> 💬 Comments </a>
         ) : (
