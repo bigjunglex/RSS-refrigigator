@@ -2,8 +2,10 @@ import request from 'supertest';
 import { describe, it, vitest, beforeAll, afterAll } from 'vitest';
 import { setupEnv } from '../utils';
 import createApp from 'src/server';
+import { existsSync } from 'fs';
 
-process.loadEnvFile()
+if (existsSync('.env')) process.loadEnvFile();
+
 const OGenv = process.env;
 const app = createApp();
 
