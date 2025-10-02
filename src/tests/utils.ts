@@ -1,5 +1,5 @@
 import fs from "node:fs";
-import { vi } from "vitest";
+import { expect, vi } from "vitest";
 
 
 export function fetchMock(data:string) {
@@ -45,8 +45,21 @@ export function setupEnv(path: fs.PathLike) {
         const [key, val] = entry.split('=')
         acc[key] = val;
         return acc
-    }, {} as Record<string, string>)
+    }, {} as {[key:string]: string})
     return out
+}
 
+export function setupTestDB(original: fs.PathLike) {
+    const destination = original
+        .toString()
+        .replace('test.db', 'TEMP.db')
+        .replace('file:', '');
+    fs.copyFileSync(original.toString().replace('file:', ''), destination);
+    fs.chmodSync(destination, 0o666)
+    return `file:${destination}`
+}
 
+export function clearTestDB(path: fs.PathLike) {
+    path = path.toString().replace('file:', '')
+    fs.unlinkSync(path)    
 }
