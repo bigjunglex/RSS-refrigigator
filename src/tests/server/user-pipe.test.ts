@@ -51,6 +51,7 @@ describe('User Pipe line: ', async () => {
         expect(code).toBe(200)
     })
 
+
     it('#4 logouts with new tokens', async () => {
         const res = await request(app).post('/api/logout').set('Cookie', cookies as string[]);
         const code = res.statusCode;
@@ -66,6 +67,15 @@ describe('User Pipe line: ', async () => {
         const code = res.statusCode
         expect(code).toBe(500)
     })
+
+    it('#6 gets 500 on attempt to add feed after logout', async () => {
+        const res = await request(app)
+            .post('/api/feeds/add')
+            .set('Cookie', cookies[1])
+            .send({name: 'Big Feed', url: 'http://trueurldot.com/xml'})
+        expect(res.statusCode).toBe(500)
+    })
+
 
     afterAll(() => {
         clearTestDB(testDBref)
