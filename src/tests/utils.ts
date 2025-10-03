@@ -1,5 +1,5 @@
 import fs from "node:fs";
-import { expect, vi } from "vitest";
+import { vi } from "vitest";
 
 
 export function fetchMock(data:string) {
