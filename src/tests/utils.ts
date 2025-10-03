@@ -47,6 +47,8 @@ export function setupEnv(path: fs.PathLike) {
         return acc
     }, {} as {[key:string]: string})
     return out
+
+    //ci fix
 }
 
 export function setupTestDB(original: fs.PathLike) {
