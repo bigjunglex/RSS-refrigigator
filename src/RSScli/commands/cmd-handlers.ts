@@ -43,6 +43,8 @@ export async function handleRegister(cmd:string, ...args:string[]) {
 
     console.log(`[REGISTER]: %s was registred`, username)
     console.log(formatUserRegResponse(result))
+
+    return result;
 }
 /**
  * drop users table   

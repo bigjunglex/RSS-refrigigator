@@ -28,9 +28,8 @@ describe('User Pipe line: ', async () => {
     let cookies: string | string[];
 
     it('#1 Creates valid user through CLI', async () => {
-        await handleRegister('', name, password);
-        const target = readConfig().currentUserName;
-        expect(target).toBe(name)
+        const target = await handleRegister('', name, password); 
+        expect(target.name).toBe(name)
     })
     
     it('#2 Logs in through api', async () => {
