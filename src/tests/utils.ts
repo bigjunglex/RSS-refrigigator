@@ -64,4 +64,6 @@ export function setupTestDB(original: fs.PathLike) {
 export function clearTestDB(path: fs.PathLike) {
     path = path.toString().replace('file:', '')
     fs.unlinkSync(path)    
+    }, {} as Record<string, string>)
+    return out
 }
