@@ -47,8 +47,6 @@ export function setupEnv(path: fs.PathLike) {
         return acc
     }, {} as {[key:string]: string})
     return out
-
-    //ci fix
 }
 
 export function setupTestDB(original: fs.PathLike) {
@@ -64,6 +62,5 @@ export function setupTestDB(original: fs.PathLike) {
 export function clearTestDB(path: fs.PathLike) {
     path = path.toString().replace('file:', '')
     fs.unlinkSync(path)    
-    }, {} as Record<string, string>)
-    return out
+    //ci fix
 }
