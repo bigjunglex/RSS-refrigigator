@@ -2,7 +2,6 @@ import request from 'supertest';
 import { describe, it, vitest, beforeAll, afterAll, expect } from 'vitest';
 import { clearTestDB, setupEnv, setupTestDB } from '../utils';
 import { existsSync } from 'fs';
-import { getUser } from 'src/lib/db/queries/users';
 
 if (existsSync('.env')) process.loadEnvFile();
 
