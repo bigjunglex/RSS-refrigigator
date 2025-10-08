@@ -9,3 +9,4 @@ serverLog.txt
 dist-server/
 dist-client/
 .docker/caddy/data/
+logs/log.txt
