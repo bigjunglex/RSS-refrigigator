@@ -4,8 +4,11 @@ import pino, { Logger } from "pino";
 const cwd = process.cwd();
 const logPath = `${cwd}/logs/log.txt`;
 if (!fs.existsSync(logPath)) {
-    console.log(logPath)
-    fs.writeFileSync(logPath, 'start')
+    const dir = logPath.replace('/log.txt', '')
+    if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir)
+    }
+    fs.writeFileSync(logPath, '[ | LOGS | ]')
 }
 
 export const logger: Logger = pino({

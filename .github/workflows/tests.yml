@@ -21,8 +21,5 @@ jobs:
       - name: install
         run: npm ci
 
-      - name: Add logging file
-        run: touch logs/log.txt
-        
       - name: Run tests
         run: npm run test
