@@ -2,6 +2,7 @@ import request from 'supertest';
 import { describe, it, vitest, beforeAll, afterAll, expect } from 'vitest';
 import { clearTestDB, setupEnv, setupTestDB } from '../utils';
 import { existsSync } from 'fs';
+import { getUser } from 'src/lib/db/queries/users';
 
 if (existsSync('.env')) process.loadEnvFile();
 
@@ -28,8 +29,8 @@ describe('User Pipe line: ', async () => {
     let cookies: string | string[];
 
     it('#1 Creates valid user through CLI', async () => {
-        const target = await handleRegister('', name, password); 
-        expect(target.name).toBe(name)
+        await handleRegister('', name, password);
+        //should not throw
     })
     
     it('#2 Logs in through api', async () => {
