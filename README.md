@@ -4,6 +4,8 @@
 
 ### 🚀 Deploy And Forget RSS aggregator
 
+### [DEMO](https://grugtotem.space/) 
+
 Main goal is to create ready to deploy RSS aggregator for your own use + share with freinds either through CLI or SPA clients
 
 🚧 ⚠️ 🚧  **UNDER CONSTRUCTION** 🚧 ⚠️ 🚧 
@@ -32,3 +34,11 @@ npm run start register "NAME" : "PASSWORD"
 ```
 docker compose run cli (registered command)
 ```
+
+#### TODO
+ 
+- [ ] OAUTH through github
+- [ ] adapt for mobile view
+- [ ] RSS validation before accepting feed
+- [ ] RSS parser cases for v1 feeds
+
