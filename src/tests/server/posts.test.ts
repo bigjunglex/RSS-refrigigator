@@ -1,6 +1,7 @@
 import { describe, it, vitest, afterAll, expect } from 'vitest';
 import { clearTestDB, setupEnv, setupTestDB } from '../utils';
 import { existsSync } from 'fs';
+import { hashPassword } from 'src/server/auth';
 import request from 'supertest';
 
 //Posts pipeline
@@ -20,7 +21,7 @@ describe('Posts logic + pipeline: ', async () => {
 
     }
 
-    const { handleRegister } = await import('src/RSScli/commands/cmd-handlers');
+    const { createUser } = await import('src/lib/db/queries/users');
     const { createPost } = await import('src/lib/db/queries/posts');
     const { createFeed } = await import('src/lib/db/queries/feeds')
 
@@ -29,7 +30,8 @@ describe('Posts logic + pipeline: ', async () => {
     const [name, password] = ['bigtestv12', 'testTest']
     const app = createApp()
     
-    const user = await handleRegister('', name, password);
+    const hashed = await hashPassword(password)
+    const user = await createUser(name, hashed);
     const feed = await createFeed('test', 'testo', user)
     const targetPost = { title: 'not a test', url: 'for sure', feed_id: feed.id } 
     const post = await createPost(targetPost);
