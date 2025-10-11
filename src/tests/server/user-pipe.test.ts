@@ -19,7 +19,6 @@ describe('User Pipe line: ', async () => {
     }
 
     const { handleRegister } = await import('src/RSScli/commands/cmd-handlers');
-    const { readConfig } = await import('src/config');
     const createApp = (await import('src/server')).default;
     
     const [name, password] = ['bigtestv6', 'testTest']
