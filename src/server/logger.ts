@@ -4,7 +4,7 @@ import pino, { Logger } from "pino";
 const cwd = process.cwd();
 const logPath = `${cwd}/logs/log.txt`;
 if (!fs.existsSync(logPath)) {
-    const dir = logPath.replace('/log.txt', '')
+    const dir = logPath.replace('log.txt', '')
     if (!fs.existsSync(dir)) {
         fs.mkdirSync(dir)
     }
