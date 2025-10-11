@@ -39,7 +39,7 @@ export async function handleRegister(cmd:string, ...args:string[]) {
     if (check) throw Error('[REGISTER]: user already registred');
     
     const result = await createUser(username, hashed);
-    try { setUser(username) } catch {}
+    setUser(username)
 
     console.log(`[REGISTER]: %s was registred`, username)
     console.log(formatUserRegResponse(result))
