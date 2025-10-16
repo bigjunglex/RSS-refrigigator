@@ -6,7 +6,7 @@ import { validateJWT } from "./auth.js";
 import { getRefreshToken } from "../lib/db/queries/refreshTokens.js";
 import { getUserByID, UserSelect } from "../lib/db/queries/users.js";
 import { BaseError, ERR_MESSAGES, ERRORS } from "./errors.js";
-import { logger } from './logger.js'
+import logger from './logger.js'
 
 export const middleWares = [
     express.json(),
