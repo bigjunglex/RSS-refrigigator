@@ -2,7 +2,7 @@ import bcrypt from "bcrypt"
 import crypto from "node:crypto"
 import jwt, { type JwtPayload } from "jsonwebtoken"
 import type { Request } from "express"
-import { UnathorizedError } from "./errors"
+import { UnathorizedError } from "./errors.js"
 
 export type Payload = Pick<JwtPayload , 'iss' | 'sub' | 'iat' | 'exp'>
 
