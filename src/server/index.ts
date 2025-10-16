@@ -3,12 +3,13 @@ import { rssRouter, protectedRouter } from "./routes/rssRouter.js";
 import { errorCatcher, middleWares } from "./middlewares.js";
 import { authRouter } from "./routes/authRouter.js";
 import cors from "cors"
+import logger from "./logger.js";
 
 const PORT = 8080
 const app = createApp()
 
 app.listen(PORT, () => {
-    console.log('API listining on ', PORT)
+    logger.info(`API listining on ${PORT}`)
 })
 
 export default function createApp() {

@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import { homedir } from "node:os";
 import path from "node:path";
+import logger from "./server/logger";
 
 
 const CONFIG = '.gatorconfig.json'
@@ -43,7 +44,7 @@ export function readConfig():Config {
         const raw = JSON.parse(fs.readFileSync(getConfigFilePath(), {encoding: 'utf-8'}))
         out = validateConfig(raw)
     } catch (error) {
-        console.error(`Failed to read config ${error}`)
+        logger.error(`Failed to read config ${error}`)
     }
     return out
 }

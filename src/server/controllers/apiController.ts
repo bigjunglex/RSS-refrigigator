@@ -4,10 +4,10 @@ import { createFeed, createFeedFollow, getAllFeeds, getAllWithUserFeeds, getFeed
 import { deleteFollow } from "../../lib/db/queries/follows.js";
 import { getAllPosts, getPostByID, getPostByQuery, getPostsByFeed, getPostsForUser } from "../../lib/db/queries/posts.js";
 import { type User } from "../../lib/db/queries/users.js";
+import logger from "../logger.js";
 
 
 export async function getFeeds(req:Request, res:Response, next: NextFunction) {
-    console.log('getFeeds hit')
     try {
         const feeds = await getAllFeeds();
         if(feeds.length < 1) {
@@ -23,7 +23,6 @@ export async function getFeeds(req:Request, res:Response, next: NextFunction) {
 
 export async function getFeedWithID(req:Request, res:Response, next: NextFunction) {
     const { id } = req.params
-    console.log('getFeed with id hit')
     try {
         const feed = await getPostsByFeed(id)
         if(feed.length < 1) {
@@ -89,7 +88,7 @@ export async function favoritePost(req:Request, res:Response, next: NextFunction
         if(!post) throw new Error('[POST]: post not foud')
         const entry = await createFavorite(user, post)
         if(!entry) throw new Error('[FAVORITES]: favorite not found')
-        console.log('[FAVORITES]: ', entry)
+        logger.info(`[FAVORITES]: entry`)
         res.status(200).json(entry)
     } catch (error) {
         next(error)        
@@ -102,11 +101,11 @@ export async function unfavoritePost(req:Request, res:Response, next: NextFuncti
     try {
         const user = res.locals.user as User;
         const post = await getPostByID(id);
-        console.log(post)
+        logger.info(post)
         if(!post) throw new Error('[POST]: post not foud')
         const entry = await deleteFavorite(user, post)
         if(!entry) throw new Error('[FAVORITES]: favorite not found')
-        console.log('[FAVORITES]: removed from favorites ', entry)
+        logger.info(`[FAVORITES]: removed from favorites ${entry}`)
         res.status(200).json(entry)
     } catch (error) {
         next(error)        

@@ -3,6 +3,7 @@ import { createUser, getUser, getUserByID, updateUserPasswordById, UserSelect } 
 import { hashPassword, makeJWT, makeRefreshToken, validateJWT, validatePassword } from "../auth.js";
 import { formatUserRegResponse } from "../helpers.js";
 import { getRefreshToken, newRefreshToken, revokeRefreshToken } from "../../lib/db/queries/refreshTokens.js";
+import logger from "../logger.js";
 
 const JWTexpires = process.env.JWT_EXP ? parseInt(process.env.JWT_EXP) : 3600
 const REFexpires = process.env.REFRESH_EXP ? parseInt(process.env.REFRESH_EXP) : 60
@@ -88,7 +89,7 @@ export async function refreshJwt(req: Request, res: Response, next: NextFunction
     const { target, method } = req.query
     try {
         if(!refToken) throw new Error('[AUTH]: Refresh endpoint --> no RefToken')
-        console.log('[REFRESH REQUEST] refToken:', refToken);
+        logger.info(`[REFRESH REQUEST] refToken: ${refToken}`);
         const prevToken  = await getRefreshToken(refToken)
         if (!prevToken) throw new Error('[AUTH]: Invalid Refresh TOken');
         const { userId } = prevToken
@@ -100,8 +101,8 @@ export async function refreshJwt(req: Request, res: Response, next: NextFunction
         const accessToken = makeJWT(userId, JWTexpires, SECRET)
         const refreshToken = await newRefreshToken(token, userId, time)
         
-        console.log('[REVOKED]: ', revoked)
-        console.log('[REFRESH]: ', refreshToken)
+        logger.info(`[REVOKED]: ${revoked}`)
+        logger.info(`[REFRESH]: ${refreshToken}`)
 
         res.cookie('accToken', accessToken, { maxAge: JWTexpires * 1000, httpOnly: true })
         res.cookie('refToken', token, { maxAge: REFexpires * 24 * 60 * 60 * 1000, httpOnly: true })
